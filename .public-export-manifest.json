@@ -1,0 +1,2171 @@
+{
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "files": [
+    {
+      "path": ".env.example",
+      "sha256": "5780d731c02d22a42d86248a81fee0fed09ba4a0f8f22f3e405f247e54a3c598",
+      "source": ".env.example"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "302266a0b9a482b15b10e052bdde95531ddd827a64b2b674243cebdc91299720",
+      "source": ".gitattributes"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "sha256": "dab18f7946d910797bb9b3b89d0c1ae94264f3c808e81c92dd2d5b0f83fdd15d",
+      "source": ".github/ISSUE_TEMPLATE/bug_report.yml"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "sha256": "9d7bf4bf308c36b2fb4e30218f2c3e1f4b72a28c4001879d35c4ca461f7b152e",
+      "source": ".github/ISSUE_TEMPLATE/config.yml"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "sha256": "d374f6065552f61b23708a5c65adefc166ca9fdc708ad407a1ba8b15bbcb67a2",
+      "source": ".github/ISSUE_TEMPLATE/feature_request.yml"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "sha256": "af57e3f137d0c448541abe6d599e8d5bb8305704e49c71c5346395f2fd21d3ba",
+      "source": ".github/pull_request_template.md"
+    },
+    {
+      "path": ".github/workflows/release-gate.yml",
+      "sha256": "e6927aa68c28e46f0406137f2224da38c10f7a841c9ea9e0d89605bd2b1e2da9",
+      "source": "public-release/release-gate.yml"
+    },
+    {
+      "path": ".github/workflows/secret-scan.yml",
+      "sha256": "1542d26ad018ea4896217936325b2ea05c35b48a39b64bebfe82d7bbb47fe452",
+      "source": "public-release/secret-scan.yml"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "e84e812ee9ac18c48f41dc5381cd208b1dea405f808266395dc8455bfd0fe131",
+      "source": ".gitignore"
+    },
+    {
+      "path": "CLA.md",
+      "sha256": "391164c3d734b6510f9509a95d5077ff000df01c7335381e87e2bc9aadd88bc2",
+      "source": "CLA.md"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "sha256": "a4d84ae878ec92d3c3fbaca988914985490353c8136d757d9e80d40b1009a2cc",
+      "source": "CODE_OF_CONDUCT.md"
+    },
+    {
+      "path": "COMMERCIAL-LICENSING.md",
+      "sha256": "5141dcaaddb26d34b85fc35f757b062d808241249e03f9a05efaba747f9340f0",
+      "source": "COMMERCIAL-LICENSING.md"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "93ae1ec08f4e41d18451a00f8fb72020232e7439848349f6d22d7bbef0b86b6d",
+      "source": "CONTRIBUTING.md"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "source": "LICENSE"
+    },
+    {
+      "path": "NOTICE",
+      "sha256": "0556d5c423b7402b21336b3795bc6282521fd68a08112366552d866251795d83",
+      "source": "NOTICE"
+    },
+    {
+      "path": "README.md",
+      "sha256": "0b2f87e201c75de5913b6e1f22e04fe80dd4362bc2e00423cb44043679016234",
+      "source": "public-release/README.md"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "6fec6fcd386acda84f37153489f8155414d65947bbd7217863ef0ceef5703664",
+      "source": "SECURITY.md"
+    },
+    {
+      "path": "START HERE - Install Ezra Mail.bat",
+      "sha256": "dd1015f5667a2564f5abef21c5e4f8af28a011b350a483cec44a76e147c2dfdf",
+      "source": "START HERE - Install Ezra Mail.bat"
+    },
+    {
+      "path": "SUPPORT.md",
+      "sha256": "9197df6c3078ed8c741b78a3bfba5201047b5601e412e72fdb622249fc2c290b",
+      "source": "SUPPORT.md"
+    },
+    {
+      "path": "config/models/Qwen3-14B-MaxContext.Modelfile",
+      "sha256": "c6fe52a2c2b21e9d94bba81ecc4a36393199471e055a4174ad45cbb34f8b897a",
+      "source": "config/models/Qwen3-14B-MaxContext.Modelfile"
+    },
+    {
+      "path": "config/models/Qwen3-8B-MaxContext.Modelfile",
+      "sha256": "0789fd82f5749cdeb2583051bb35dfdacb1d9f46bee84b5115d23ff10a2a4420",
+      "source": "config/models/Qwen3-8B-MaxContext.Modelfile"
+    },
+    {
+      "path": "config/models/Qwen3.5-9B-MaxContext.Modelfile",
+      "sha256": "378008d4729a338b1f41117d3d1022f4a3f55b9085232ac3408cc13761a28fe7",
+      "source": "config/models/Qwen3.5-9B-MaxContext.Modelfile"
+    },
+    {
+      "path": "config/public-export.json",
+      "sha256": "9c09f144b7f58e95e16644c6d4c2b25ba5f1514af8c39a77db4c6921a4224a17",
+      "source": "config/public-export.json"
+    },
+    {
+      "path": "docs/DEPENDENCY_LICENSES.md",
+      "sha256": "c52cabe74677a0b77a378f3eb3a2e562cac68cbfee08db187751355971cdd103",
+      "source": "docs/DEPENDENCY_LICENSES.md"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "sha256": "0fb07bd9df963a4e77b7dab2c7dec9e7f1dbf0d8a8cd6ccce138b5952feeb928",
+      "source": "public-release/DEPLOYMENT.md"
+    },
+    {
+      "path": "docs/EMAIL_AGENT_SETUP.md",
+      "sha256": "6921b7a355a14228286e699b03fbf2f0cb8852ba34a5c4dff6e80326fb721be9",
+      "source": "docs/EMAIL_AGENT_SETUP.md"
+    },
+    {
+      "path": "docs/EZRA_CLOUD.md",
+      "sha256": "be54ae107034acb3d2c403245d77b14e7f172a45c3a2f406e95e02cd8ff7f795",
+      "source": "docs/EZRA_CLOUD.md"
+    },
+    {
+      "path": "docs/EZRA_MAIL_ROADMAP.md",
+      "sha256": "3f4760ec08e8d8396468e261cbb3d0ac3cb6998c1a1edaf7673cc2e8cee8bf47",
+      "source": "public-release/EZRA_MAIL_ROADMAP.md"
+    },
+    {
+      "path": "docs/PRIVACY.md",
+      "sha256": "b669ca7516fa0f67eddd4d5b74823f4b97b0f102ea914ce1d3c1c2d1de3b5c77",
+      "source": "public-release/PRIVACY.md"
+    },
+    {
+      "path": "docs/TERMS.md",
+      "sha256": "047fed68fb42df93f99f14d7993e0818d46d6c79ced568f52afb4eed7f1bdd3c",
+      "source": "public-release/TERMS.md"
+    },
+    {
+      "path": "docs/branding/README.md",
+      "sha256": "53689978bdac2d27fd978bbebb00fd64805ada8568c64fc76fe2d6be492960e5",
+      "source": "docs/branding/README.md"
+    },
+    {
+      "path": "docs/branding/ezra-mail-github-social.png",
+      "sha256": "2b4772366b5a9d0226aa9c973603b49dec065d5b8badc826cf0e3877260733a5",
+      "source": "docs/branding/ezra-mail-github-social.png"
+    },
+    {
+      "path": "docs/branding/ezra-mail-logo-d4-app-512.png",
+      "sha256": "8ad43ef669edf7541fc156117cf96fea51d8edf722e55432c93cdd38cae67cd8",
+      "source": "docs/branding/ezra-mail-logo-d4-app-512.png"
+    },
+    {
+      "path": "docs/branding/ezra-mail-logo-d4-google-120.png",
+      "sha256": "11297816151488a70b81d370231ac0d1ee127bd690725fbd2d04cbb51990a5e9",
+      "source": "docs/branding/ezra-mail-logo-d4-google-120.png"
+    },
+    {
+      "path": "docs/branding/ezra-mail-logo-d4-master.png",
+      "sha256": "0ffd5a749250201e6ba77615bdafab8c496a34b1fb697aef4c14f42c6cfb4afe",
+      "source": "docs/branding/ezra-mail-logo-d4-master.png"
+    },
+    {
+      "path": "docs/branding/ezra-mail-today-demo.png",
+      "sha256": "56bb2758634dae3e2c9c19fcb4bf68aeaa7ec6bc7c19b0b961675dfb9cd50910",
+      "source": "docs/branding/ezra-mail-today-demo.png"
+    },
+    {
+      "path": "docs/proxy-example.conf",
+      "sha256": "129d0070fbe6633de24a14720ab5e77e4bd8a603cbcfc2cc5568dbea4fe563af",
+      "source": "public-release/proxy-example.conf"
+    },
+    {
+      "path": "installer/EzraMailSetup.ps1",
+      "sha256": "b3850c926e956718ed15a0be4663b355320ad6ed963fa54af0902971d03c0437",
+      "source": "installer/EzraMailSetup.ps1"
+    },
+    {
+      "path": "installer/Install Ezra Mail.cmd",
+      "sha256": "14304185d63a1ce1f460fdf01c47eb7250b71cbb740132af55b626b87e883115",
+      "source": "installer/Install Ezra Mail.cmd"
+    },
+    {
+      "path": "installer/START HERE - Install Ezra Mail.bat",
+      "sha256": "d1e298c17bc0f5437efd6aa785060eaa891ce64df33f43136259c716a5635e90",
+      "source": "installer/START HERE - Install Ezra Mail.bat"
+    },
+    {
+      "path": "installer/install-ezra-ubuntu.sh",
+      "sha256": "9a44da9b4a9bba8f1eb83576358727a14a8155fd542322540536fa9e3db952e7",
+      "source": "installer/install-ezra-ubuntu.sh"
+    },
+    {
+      "path": "next-env.d.ts",
+      "sha256": "85ae5aee75f011967cf2d25cbc342f62d69314e9d925f7f4aa3456fc2cffcca6",
+      "source": "next-env.d.ts"
+    },
+    {
+      "path": "next.config.mjs",
+      "sha256": "66e634c668e04580f16d3bb7c8cb7b53334737a7b7cdd7e286859de5fd2d0a13",
+      "source": "next.config.mjs"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "d6bb1e09a792168453b7b123e5c31d86fc7d90dea23d073ec2bf83e720332ebf",
+      "source": "package-lock.json"
+    },
+    {
+      "path": "package.json",
+      "sha256": "45ae8dcda44f827d0b93a5951e745ed33113e505b15195403a26926ee598728a",
+      "source": "package.json"
+    },
+    {
+      "path": "patches/exceljs+4.4.1-prerelease.0.patch",
+      "sha256": "ffd33d77bda6f5fc6fd31adb828c628c20ce39f0e3de2e9f850331de554ba23c",
+      "source": "patches/exceljs+4.4.1-prerelease.0.patch"
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "2eaa5a3cec79889172e4f31e6aee1b983b5ba46e480d0c1f67353b489adca4e8",
+      "source": "playwright.config.ts"
+    },
+    {
+      "path": "public/branding/ezra-mail-logo-d4-120.png",
+      "sha256": "11297816151488a70b81d370231ac0d1ee127bd690725fbd2d04cbb51990a5e9",
+      "source": "public/branding/ezra-mail-logo-d4-120.png"
+    },
+    {
+      "path": "public/branding/ezra-mail-logo-d4-192.png",
+      "sha256": "99ef82e03e5a0fffb1323c544557529589756826a38760d97a3f92a9e4a2e30e",
+      "source": "public/branding/ezra-mail-logo-d4-192.png"
+    },
+    {
+      "path": "public/branding/ezra-mail-logo-d4-512.png",
+      "sha256": "8ad43ef669edf7541fc156117cf96fea51d8edf722e55432c93cdd38cae67cd8",
+      "source": "public/branding/ezra-mail-logo-d4-512.png"
+    },
+    {
+      "path": "public/ezra-sw.js",
+      "sha256": "5a3f42b126e8455a9e666c631818aad4562fcb6910203716a46edadd73579635",
+      "source": "public/ezra-sw.js"
+    },
+    {
+      "path": "public/manifest.webmanifest",
+      "sha256": "7a18ceb95a09bf074649718236f86db77960f1d7694e8e38e4836f728d0c36b7",
+      "source": "public/manifest.webmanifest"
+    },
+    {
+      "path": "scripts/apply-dependency-patches.mjs",
+      "sha256": "88e62f3bb1e09405c0d76f55b37532d0a6bbb2dedf6c03111e1c4eb94952c400",
+      "source": "scripts/apply-dependency-patches.mjs"
+    },
+    {
+      "path": "scripts/build-public-mirror.ts",
+      "sha256": "748cba340c16117ca427d0711aa0546dc35ac875630893981c5db033e3366022",
+      "source": "scripts/build-public-mirror.ts"
+    },
+    {
+      "path": "scripts/check-dependency-licenses.ts",
+      "sha256": "21343bf38240b307519dab6a177734630f473a225dc1419273ca82b516ad0263",
+      "source": "scripts/check-dependency-licenses.ts"
+    },
+    {
+      "path": "scripts/cleanup-test-databases.mjs",
+      "sha256": "b6e6d64d3dab49c1731026073ae2f504d7496bb946ef83785ba02dde7bfe5d05",
+      "source": "scripts/cleanup-test-databases.mjs"
+    },
+    {
+      "path": "scripts/create-email-backup.ts",
+      "sha256": "14d4f8bbc20a13de1e608a9507a092704e9953dcc52d8ce2a019743ffd280b7f",
+      "source": "scripts/create-email-backup.ts"
+    },
+    {
+      "path": "scripts/email-worker.ts",
+      "sha256": "57b7fe8a6580f9ed9d45280dea3b0420ef913ecc855e58f2b318ea38f0a59514",
+      "source": "scripts/email-worker.ts"
+    },
+    {
+      "path": "scripts/ensure-web-build.ps1",
+      "sha256": "e259bad83f0464957d5c703dbabf8c1328f9064a983ccf2366b29ed2d82ae23f",
+      "source": "scripts/ensure-web-build.ps1"
+    },
+    {
+      "path": "scripts/ezra-tray.ps1",
+      "sha256": "8fc797a03e5b37f7efc3babdf074a44d3f646b7388e60ae9a6ac071c1f0a822a",
+      "source": "scripts/ezra-tray.ps1"
+    },
+    {
+      "path": "scripts/first-owner-bootstrap.ts",
+      "sha256": "69aa0f25102d2f4360dd85bb6ea72c240d31700e4d0b8fdb69573ce5d67a7c92",
+      "source": "scripts/first-owner-bootstrap.ts"
+    },
+    {
+      "path": "scripts/generate-branding-assets.mjs",
+      "sha256": "d41746203bf8ce51b8e931714eaa448d46597c268863400dd91918a72e6f9cbc",
+      "source": "scripts/generate-branding-assets.mjs"
+    },
+    {
+      "path": "scripts/hash-auth-password.ts",
+      "sha256": "28637eb5920945c2de9ba8e643ec022c2f1087fdfec92c2f2357177191721967",
+      "source": "scripts/hash-auth-password.ts"
+    },
+    {
+      "path": "scripts/install-ezra-backup-timers.sh",
+      "sha256": "690cab18fb6d26919d03cbbb15f395abd3367f6118b813f005a7e57665834c83",
+      "source": "scripts/install-ezra-backup-timers.sh"
+    },
+    {
+      "path": "scripts/install-ezra-systemd.sh",
+      "sha256": "910c667e95142e8b6edfc571770aceda6e3cf698ecc3c7e986ecdec8035e386b",
+      "source": "scripts/install-ezra-systemd.sh"
+    },
+    {
+      "path": "scripts/install-startup.ps1",
+      "sha256": "67a06003f6dcb9ddcdf75856723a83dc71457ac09a308ee27cbe29aae354e5ae",
+      "source": "scripts/install-startup.ps1"
+    },
+    {
+      "path": "scripts/interactive-hidden-input.ts",
+      "sha256": "248890a55094a9a1a8559e60b295c0163db1a0b2e49f5fc51bc0f88475094106",
+      "source": "scripts/interactive-hidden-input.ts"
+    },
+    {
+      "path": "scripts/mcp-server.ts",
+      "sha256": "b89f6f0d365773f51a301ffde2f8b6cc0a20017d48eec7a94d10fb8d481214d2",
+      "source": "scripts/mcp-server.ts"
+    },
+    {
+      "path": "scripts/migrate-database.ts",
+      "sha256": "05a46d5d818e7c2db41873bda9885952fdf195e741d61ecd7cf679c2ceb448e1",
+      "source": "scripts/migrate-database.ts"
+    },
+    {
+      "path": "scripts/model-benchmark.ts",
+      "sha256": "aea6feff2adf912f797560b53eab8a6de970520407f60de4ea5604a6487b8287",
+      "source": "scripts/model-benchmark.ts"
+    },
+    {
+      "path": "scripts/public-mirror-policy.ts",
+      "sha256": "1c3b13858808d7e66a8c27cfabb73f3c4a6839657503f4d890905981f9c85d7f",
+      "source": "scripts/public-mirror-policy.ts"
+    },
+    {
+      "path": "scripts/recover-owner-auth.ts",
+      "sha256": "85426203d6e6c5cf6b9687cb47c1096791a630aa417ee7be9c8ea10d56e221cd",
+      "source": "scripts/recover-owner-auth.ts"
+    },
+    {
+      "path": "scripts/rehearse-email-restore.ts",
+      "sha256": "34ee500cc61aef01244b66148440bc66ede936ea2bc978aaf7251a1c7deef96c",
+      "source": "scripts/rehearse-email-restore.ts"
+    },
+    {
+      "path": "scripts/setup-models.ps1",
+      "sha256": "075c033562ab2f7a5674ebbc83c2fe5dae75046c32db66bfc91fc761f88ef709",
+      "source": "scripts/setup-models.ps1"
+    },
+    {
+      "path": "scripts/update-model.ts",
+      "sha256": "42c9892938bc72503d25929ddd6acd55409898325b53c13ef7ef269b032fcf2b",
+      "source": "scripts/update-model.ts"
+    },
+    {
+      "path": "scripts/verify-install-release.ts",
+      "sha256": "8548d2c05f3967494759130da7421c124598e66b8ebaae2d19686c48c75749ed",
+      "source": "scripts/verify-install-release.ts"
+    },
+    {
+      "path": "scripts/verify-latest-backup.ts",
+      "sha256": "de9442932baf46b559e37b0a16046999bbc6f9fb7f1188df81879eb8e7497756",
+      "source": "scripts/verify-latest-backup.ts"
+    },
+    {
+      "path": "src/app/api/accounts/connect/route.ts",
+      "sha256": "ad89316afb8641c83a84f92e1c7a0623bc85733fdfa25ce4959607c34a6903b2",
+      "source": "src/app/api/accounts/connect/route.ts"
+    },
+    {
+      "path": "src/app/api/accounts/discover/route.ts",
+      "sha256": "c642a2d8bd0c507fb8de9541f4a3978128ea96f032180d771c130ba18a271bc8",
+      "source": "src/app/api/accounts/discover/route.ts"
+    },
+    {
+      "path": "src/app/api/accounts/route.ts",
+      "sha256": "e7ea6f48a73eb36a0b0281d601ce18204314edebdaf3fe2ee9447869c256ff8d",
+      "source": "src/app/api/accounts/route.ts"
+    },
+    {
+      "path": "src/app/api/accounts/test/route.ts",
+      "sha256": "1254e049ded0f6fc6ff60fc00647e142f274833a020a2b9bd8b7a6dd657aa57b",
+      "source": "src/app/api/accounts/test/route.ts"
+    },
+    {
+      "path": "src/app/api/actions/center/route.ts",
+      "sha256": "ab68e1ba039db6c75cd3bfce0ab3c6d1600a854fec3b21eb297a9aa5366c41e6",
+      "source": "src/app/api/actions/center/route.ts"
+    },
+    {
+      "path": "src/app/api/activity/actions/[actionId]/route.ts",
+      "sha256": "44720aae93e242bfcec8b6171621bc0ef36acb1a1a8a4d158148cd29cd8a33b8",
+      "source": "src/app/api/activity/actions/[actionId]/route.ts"
+    },
+    {
+      "path": "src/app/api/activity/route.ts",
+      "sha256": "ae7f1cfb049f1bd7260fa7fb31e04573767d2792d5a423720e6c140a6d4de7cd",
+      "source": "src/app/api/activity/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/devices/[deviceId]/route.ts",
+      "sha256": "376b98ffb981e3ebc02926eb15ee8e8ea28a8b5ca74cc3656df61ff7a4d7ad31",
+      "source": "src/app/api/auth/devices/[deviceId]/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/devices/enroll/options/route.ts",
+      "sha256": "ec00d1c507b299ff9b2f6be750c929cd05c3710d77ec324f2fd3976de7b9a374",
+      "source": "src/app/api/auth/devices/enroll/options/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/devices/enroll/verify/route.ts",
+      "sha256": "49ca22f43da8df62522226afc4c01fb01d1c75b0ab07ca65314126c31f70685f",
+      "source": "src/app/api/auth/devices/enroll/verify/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/devices/route.ts",
+      "sha256": "1f6d841533c45511647439d6e566e1a3660cb5208ae2184b65ca3d0dd96583be",
+      "source": "src/app/api/auth/devices/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/login/route.ts",
+      "sha256": "258104c53afb93079025490a0281b638a500e5e927e32ecf3dd8b7fe04dc3236",
+      "source": "src/app/api/auth/login/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/logout/route.ts",
+      "sha256": "8f429009e63357fc00d761af2c27e6b1197362daaddf967656d88a321c4eecd7",
+      "source": "src/app/api/auth/logout/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/passkeys/register/options/route.ts",
+      "sha256": "56d36fdc04e5588c5aeb8486a3a7f7800ccfe92103c2b5790551fcc297d42fff",
+      "source": "src/app/api/auth/passkeys/register/options/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/passkeys/register/verify/route.ts",
+      "sha256": "45372341fa208ee0f9c3dfba63d3af28b231f530ef8082395f0bb61ba4fb2ccd",
+      "source": "src/app/api/auth/passkeys/register/verify/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/policy/route.ts",
+      "sha256": "a70daa1e4548db32a8a18c2f2cf24460d2f44463ce7b7863333fd216f21d4f39",
+      "source": "src/app/api/auth/policy/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/session/route.ts",
+      "sha256": "58ce2055859351974033d65d19740d4919a1c585e0db3a1905b6c4fe4a978460",
+      "source": "src/app/api/auth/session/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/step-up/options/route.ts",
+      "sha256": "6001b804dd9e3f4cdbba564953fcc533ccaf909294724f2fea3127c0185deb0b",
+      "source": "src/app/api/auth/step-up/options/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/step-up/verify/route.ts",
+      "sha256": "f9190b6d23c74fc5fd8f9cc8a38c1fb84244eb037621a82d619444e945026858",
+      "source": "src/app/api/auth/step-up/verify/route.ts"
+    },
+    {
+      "path": "src/app/api/calendar/actions/route.ts",
+      "sha256": "024876b10c33c25a6deedce461a2ed6c3e9d0a3566038f8e524ffce26d410f88",
+      "source": "src/app/api/calendar/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/calendar/route.ts",
+      "sha256": "5c6e2e7458a68388e3a43ca645509ad0a7fd017f4055830b44db8dacd752128f",
+      "source": "src/app/api/calendar/route.ts"
+    },
+    {
+      "path": "src/app/api/contacts/actions/route.ts",
+      "sha256": "e1ce0a5275ac3ad9e91fac1138d309092021ce532b649dc4861661c8429888dd",
+      "source": "src/app/api/contacts/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/contacts/route.ts",
+      "sha256": "4514b0d9606b9345a65b359effd28ab4fcdfdf1f8f396f1b02703a91583fc5d7",
+      "source": "src/app/api/contacts/route.ts"
+    },
+    {
+      "path": "src/app/api/drafts/route.ts",
+      "sha256": "a5be8356a2fc66c7eadfb2d98ce181f7a6f402e367d13886d899a98a36c1ebc8",
+      "source": "src/app/api/drafts/route.ts"
+    },
+    {
+      "path": "src/app/api/email/route.ts",
+      "sha256": "9c5ee51c69848e6916fdba68d9f73c3cd29c9c433670e348ad7056860993626b",
+      "source": "src/app/api/email/route.ts"
+    },
+    {
+      "path": "src/app/api/health/route.ts",
+      "sha256": "f0ddea2331f00e0f4bd97b94dbf46a74031d651b0f673203a0eb65739b480e38",
+      "source": "src/app/api/health/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/[id]/attachments/[attachmentId]/preview/route.ts",
+      "sha256": "a8ac92287fc586aa1aba674d68ba24f463e3571ba52680637e82dabb39e92081",
+      "source": "src/app/api/mail/[id]/attachments/[attachmentId]/preview/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/[id]/attachments/[attachmentId]/route.ts",
+      "sha256": "abf715b694e2216e2061c490fc20880bdb4fc49c7c2ab5b8159f5411856557e9",
+      "source": "src/app/api/mail/[id]/attachments/[attachmentId]/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/[id]/route.ts",
+      "sha256": "4a3efdb3a84c08606679d45ddf78c6df7cd88edadf78f7e8adbb2488ed83fa7c",
+      "source": "src/app/api/mail/[id]/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/actions/route.ts",
+      "sha256": "897b32f324acea6513f78250eb226fecfac1f71d0bc17300c0394c70293a993b",
+      "source": "src/app/api/mail/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/ask/route.ts",
+      "sha256": "33c4055b1e3d01f62a40358a276cbb562c76d9beef7023035199a3c8c91e80a3",
+      "source": "src/app/api/mail/ask/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/meta/route.ts",
+      "sha256": "6af481493b2ebbdcfe79754c3bad601001d3e849ce9faa72933d69672defa8b0",
+      "source": "src/app/api/mail/meta/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/route.ts",
+      "sha256": "61ffc31cca7f25831d2168629903ebce2257148b714fead4945d0e06313a04be",
+      "source": "src/app/api/mail/route.ts"
+    },
+    {
+      "path": "src/app/api/mail/search-provider/route.ts",
+      "sha256": "34c28084468ee9367242f3a1e438122820c09dd8255cf2ae8cd758d7f4264b4a",
+      "source": "src/app/api/mail/search-provider/route.ts"
+    },
+    {
+      "path": "src/app/api/metrics/route.ts",
+      "sha256": "f372074d734e4dbbdce29fad37ac02101189cd3adf75750523cc9ae87a639717",
+      "source": "src/app/api/metrics/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/claims/route.ts",
+      "sha256": "7ca917d7954c2fa5daa5731e0432c46ec216bf2ace27eefaee9845f291c29f82",
+      "source": "src/app/api/notifications/claims/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/devices/[deviceId]/route.ts",
+      "sha256": "6ba27be769fbc7900d4b6b5751f9843842611d1b7513c1f139d3f573049d28af",
+      "source": "src/app/api/notifications/devices/[deviceId]/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/devices/[deviceId]/subscription/route.ts",
+      "sha256": "a70d7486933eb6b45fa3edd8c87a7c203eb3342d5ea51824a65be189cc775228",
+      "source": "src/app/api/notifications/devices/[deviceId]/subscription/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/devices/route.ts",
+      "sha256": "c837a30e01d385df0ce0562143c1ad308a03a50a0bf62456eb12b7eb08a9fa98",
+      "source": "src/app/api/notifications/devices/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/feedback/route.ts",
+      "sha256": "f96b5ea9fb6927d0667ff0d2e6d0f2c2a40b3ea1aaf967d0187b85f894a11f30",
+      "source": "src/app/api/notifications/feedback/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/foreground/route.ts",
+      "sha256": "3d75f4dbf25127b6c74ccfeb63e9119e3fe2b14964f810f5b4ef8ea2fdd79151",
+      "source": "src/app/api/notifications/foreground/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/history/route.ts",
+      "sha256": "f397aa46e2f3b07c6cd009114f3011463af45d80f51e53b8c56c71c2e2b994f7",
+      "source": "src/app/api/notifications/history/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/policy/route.ts",
+      "sha256": "d5b6d4fa6dbe0204b71c5dcd8fcfe719108d79d14c1a419dcbb2dc01c0b21d1b",
+      "source": "src/app/api/notifications/policy/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/receipts/route.ts",
+      "sha256": "fcdc005b6022e72e3b2de84131bdf3ddd4934817ce09acd3331979ed7d78c61c",
+      "source": "src/app/api/notifications/receipts/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/setup/begin/route.ts",
+      "sha256": "1030e69e137905f893fdb3f22766923aceba332c077797eb735cf60cd680c574",
+      "source": "src/app/api/notifications/setup/begin/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/setup/complete/route.ts",
+      "sha256": "433633204f4f776cb6a7177b2e2fbe2a018553cd23d972494883b7744af212c8",
+      "source": "src/app/api/notifications/setup/complete/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/setup/recover/route.ts",
+      "sha256": "3dea14383fbbab021008e18f2bff4fb7f5b5d13fc482ce464dce4b96b00fdcb7",
+      "source": "src/app/api/notifications/setup/recover/route.ts"
+    },
+    {
+      "path": "src/app/api/notifications/setup/route.ts",
+      "sha256": "4a38b9b32a54566e08abe42378ce283b2b79db327bec0e899cc97d20531ac3b1",
+      "source": "src/app/api/notifications/setup/route.ts"
+    },
+    {
+      "path": "src/app/api/onboarding/route.ts",
+      "sha256": "12226ce1dd91f3f7830f3d3f3e34c64471aa132ebfb0231a9b9783ede31eb528",
+      "source": "src/app/api/onboarding/route.ts"
+    },
+    {
+      "path": "src/app/api/outbox/[draftId]/attachments/route.ts",
+      "sha256": "0b5cf3ba1ee52806692c0b16746bffd666bc72eb8a6dd3235239084f22d3e1e2",
+      "source": "src/app/api/outbox/[draftId]/attachments/route.ts"
+    },
+    {
+      "path": "src/app/api/outbox/actions/route.ts",
+      "sha256": "82099d25eef3f61902695166621f0b29a57bb0d11cd3739beca67747aa244713",
+      "source": "src/app/api/outbox/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/outbox/route.ts",
+      "sha256": "dbd798ae69bbf11e351711cf61eed4505582a88b3c00db2523be44ced1a6b4d6",
+      "source": "src/app/api/outbox/route.ts"
+    },
+    {
+      "path": "src/app/api/permissions/route.ts",
+      "sha256": "391bf75ef0b28ab9cef9ff9aacdede1dbfbdbf6730192715fc24ae4fd4de0d9f",
+      "source": "src/app/api/permissions/route.ts"
+    },
+    {
+      "path": "src/app/api/providers/route.ts",
+      "sha256": "97f530724d0d7f4ee2b33092f8ce564282f33a71dafe40872246cdddc93435eb",
+      "source": "src/app/api/providers/route.ts"
+    },
+    {
+      "path": "src/app/api/rules/route.ts",
+      "sha256": "cf6e1e7aa0670ecec42a20c88db74ac983d61d7575da9f0eabcc7c1ccca3371d",
+      "source": "src/app/api/rules/route.ts"
+    },
+    {
+      "path": "src/app/api/search/actions/route.ts",
+      "sha256": "d827dd06eec6776ad0ecaec161392c819178bb5f68f95b1bf202d37f95c3f6fd",
+      "source": "src/app/api/search/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/search/route.ts",
+      "sha256": "253e427e4a8afe2f4a83dec02de98cc3eb110bf1f4882f40ffcbdece21070310",
+      "source": "src/app/api/search/route.ts"
+    },
+    {
+      "path": "src/app/api/settings/route.ts",
+      "sha256": "2b9c2c0f6d721d2d211a81073aab96808b9380beafaaf0cc6a51b3f7ed5e6b3d",
+      "source": "src/app/api/settings/route.ts"
+    },
+    {
+      "path": "src/app/api/settings/writing/route.ts",
+      "sha256": "a1907c090d604a1404600a568207a412ea962d9caf4f9786a58271612182873f",
+      "source": "src/app/api/settings/writing/route.ts"
+    },
+    {
+      "path": "src/app/api/setup/first-owner/route.ts",
+      "sha256": "c971819bce92b3d9ba2452deb7047717f29aa00c5c8d6974d87ec9d6f4caff2b",
+      "source": "src/app/api/setup/first-owner/route.ts"
+    },
+    {
+      "path": "src/app/api/system/recovery/export/route.ts",
+      "sha256": "e47c563d655946d537b1e4e36c1fe4ccc089aed5ddf70c80ba826af85363dc97",
+      "source": "src/app/api/system/recovery/export/route.ts"
+    },
+    {
+      "path": "src/app/api/system/recovery/route.ts",
+      "sha256": "d4b9fd4096681fc8164c731047632908db9b9779028ea479d4f7971b16b46013",
+      "source": "src/app/api/system/recovery/route.ts"
+    },
+    {
+      "path": "src/app/api/telegram/route.ts",
+      "sha256": "a00310ffcc3560853093d178c4d768a4c05e2121ec0f0b47706d3a5d015bb10c",
+      "source": "src/app/api/telegram/route.ts"
+    },
+    {
+      "path": "src/app/api/today/items/route.ts",
+      "sha256": "d625045e28c71780777c2497f501d02575f80fef49b9c1333843989a471a42ba",
+      "source": "src/app/api/today/items/route.ts"
+    },
+    {
+      "path": "src/app/api/today/route.ts",
+      "sha256": "d685bea7b039a12de70ad8bad3ab4cd39af86a011f4a41d819eedfde8ae9f35c",
+      "source": "src/app/api/today/route.ts"
+    },
+    {
+      "path": "src/app/api/views/actions/route.ts",
+      "sha256": "0f2d268baa07a95fc2ac1f84ec69e909cfd5abdf91f42ae5dd4647019913f12b",
+      "source": "src/app/api/views/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/views/route.ts",
+      "sha256": "8995de101442479965a8452702a599180209e004aa8a1427ee1220b44a34f31f",
+      "source": "src/app/api/views/route.ts"
+    },
+    {
+      "path": "src/app/globals.css",
+      "sha256": "1b85d1c7b8deb6a99c423e8102cff529f986723559e875007add5feb433ffc92",
+      "source": "src/app/globals.css"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "sha256": "dea605960c41f5b9475d9e27ffc62453921e5fcca1032b50199cfc7b29d1177e",
+      "source": "src/app/layout.tsx"
+    },
+    {
+      "path": "src/app/metrics/page.tsx",
+      "sha256": "d613c1a7b50cb7a81fc6b4aa1b2634a29bae7e7c610105d4aa458132f8b3d823",
+      "source": "src/app/metrics/page.tsx"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "sha256": "796979ec40a33947b31c78e6627777c8915dfb8b45c3ec11a7b29947c194d079",
+      "source": "src/app/page.tsx"
+    },
+    {
+      "path": "src/app/setup/first-owner/page.tsx",
+      "sha256": "7e21c62b7f3d04f56f0f7cf1f95c43ea81821eb894be514cb70a165545bf8d3c",
+      "source": "src/app/setup/first-owner/page.tsx"
+    },
+    {
+      "path": "src/components/EmailCockpit.tsx",
+      "sha256": "17919e218797cb9e3b914e148cb4d6d153969929312d6550e87ace17d177d4ed",
+      "source": "src/components/EmailCockpit.tsx"
+    },
+    {
+      "path": "src/components/MetricsPage.tsx",
+      "sha256": "f9a2e7791088bbff70973616ebf62b971e96228d1a4bbc848dceb4742cb193c5",
+      "source": "src/components/MetricsPage.tsx"
+    },
+    {
+      "path": "src/components/ezra/ActionCenterView.tsx",
+      "sha256": "984efc788ee1e4258d4a83085c3570d912480a37070ac47b308a54ac11d03f6e",
+      "source": "src/components/ezra/ActionCenterView.tsx"
+    },
+    {
+      "path": "src/components/ezra/ActivityTimelineView.tsx",
+      "sha256": "b9e01faad275b2c2fdcdcde8b6596704dfa72f57a7023616448b621fc7e09723",
+      "source": "src/components/ezra/ActivityTimelineView.tsx"
+    },
+    {
+      "path": "src/components/ezra/BrowserNotificationControls.tsx",
+      "sha256": "ca2df9652768adabf942aff734c1b5d4bdf832b046ec129ad18f116f9d6dc4fe",
+      "source": "src/components/ezra/BrowserNotificationControls.tsx"
+    },
+    {
+      "path": "src/components/ezra/CalendarView.tsx",
+      "sha256": "438f5e6f408cc9c7664d16dd8fb241871d1265b167ba5a7cb0aef63b93cc9d27",
+      "source": "src/components/ezra/CalendarView.tsx"
+    },
+    {
+      "path": "src/components/ezra/DraftsView.tsx",
+      "sha256": "08db4dd48fb5fca87dc19ecc14aadca9a83d0e6742cb63440e395c2ba045c057",
+      "source": "src/components/ezra/DraftsView.tsx"
+    },
+    {
+      "path": "src/components/ezra/EzraMail.module.css",
+      "sha256": "4a7f93e1ccea808863e1d60b9930c469bf17591993bf49be5a11b7809d942759",
+      "source": "src/components/ezra/EzraMail.module.css"
+    },
+    {
+      "path": "src/components/ezra/EzraMailApp.tsx",
+      "sha256": "75e04afb3d64c203873dbd88f8609ad69cb4dfc5e562ab8b18ca1c828602bb29",
+      "source": "src/components/ezra/EzraMailApp.tsx"
+    },
+    {
+      "path": "src/components/ezra/FirstOwnerSetup.tsx",
+      "sha256": "d0d2f96240ea1a71510a4fa2aee4990bd60bb0af05882642ab27470068e9334f",
+      "source": "src/components/ezra/FirstOwnerSetup.tsx"
+    },
+    {
+      "path": "src/components/ezra/ForegroundNotificationListener.tsx",
+      "sha256": "11c44403fb1fbb6300282187ed719c891a248162b6261115f0999a95f9e90237",
+      "source": "src/components/ezra/ForegroundNotificationListener.tsx"
+    },
+    {
+      "path": "src/components/ezra/LoginScreen.tsx",
+      "sha256": "c89a2be6e751d73436b63ce0246f0b6684a1acb4604ecc7ee57b73c444c6a156",
+      "source": "src/components/ezra/LoginScreen.tsx"
+    },
+    {
+      "path": "src/components/ezra/MailView.tsx",
+      "sha256": "31eaece5b95dc7b1751a59a1a75474a20cbbda5659def2a5c70b16a26b57f0a6",
+      "source": "src/components/ezra/MailView.tsx"
+    },
+    {
+      "path": "src/components/ezra/MessagePane.tsx",
+      "sha256": "bf3e37e8e379b3818aa6bb64ce70a2e18d20bfbe284f55c28f1d706c7820733a",
+      "source": "src/components/ezra/MessagePane.tsx"
+    },
+    {
+      "path": "src/components/ezra/MessageReader.tsx",
+      "sha256": "bcc643ab8b5fc6b421e1a985e8e62ec518aecd03514de66f0bd49759772aeaa5",
+      "source": "src/components/ezra/MessageReader.tsx"
+    },
+    {
+      "path": "src/components/ezra/NotificationAttentionControls.tsx",
+      "sha256": "203ebc47a70de7f56fbfbde48aaa3a2fc186d73c202831fa535f61b52b2ea097",
+      "source": "src/components/ezra/NotificationAttentionControls.tsx"
+    },
+    {
+      "path": "src/components/ezra/NotificationDeviceControls.tsx",
+      "sha256": "645a7d307e55cc6d491fc3a769138c5294382f55609ff2bb4f759059f1ebe44d",
+      "source": "src/components/ezra/NotificationDeviceControls.tsx"
+    },
+    {
+      "path": "src/components/ezra/OpenSourceNotice.tsx",
+      "sha256": "1b3bc361f51ae4c33d66ac8d6604b22454557d353f5983081b5401510ac983ab",
+      "source": "src/components/ezra/OpenSourceNotice.tsx"
+    },
+    {
+      "path": "src/components/ezra/OutboxView.tsx",
+      "sha256": "34747f8f77f1c639111caf04e675e8c1054fca10e3b59fbf0542377850a6b8f8",
+      "source": "src/components/ezra/OutboxView.tsx"
+    },
+    {
+      "path": "src/components/ezra/PwaControls.tsx",
+      "sha256": "60e149fe999be5596e7ec5e460e06722741299062386469d341a85ece1398ae0",
+      "source": "src/components/ezra/PwaControls.tsx"
+    },
+    {
+      "path": "src/components/ezra/PwaProvider.tsx",
+      "sha256": "ad2f5236bf122db29f53557d677649c1a8eb80773331ca78ec9b876859bd84cf",
+      "source": "src/components/ezra/PwaProvider.tsx"
+    },
+    {
+      "path": "src/components/ezra/RecipientField.tsx",
+      "sha256": "1823b7886ab824a4a43828277bd9b24cda66c8a78d5a544e03674499a46a4090",
+      "source": "src/components/ezra/RecipientField.tsx"
+    },
+    {
+      "path": "src/components/ezra/ReplyStudio.tsx",
+      "sha256": "484f4b946498754238f471e05be88ab93f78ad22943d390662fc3e2aff1019d3",
+      "source": "src/components/ezra/ReplyStudio.tsx"
+    },
+    {
+      "path": "src/components/ezra/SettingsView.tsx",
+      "sha256": "9800358a0720b35f5fbf9265514ad79e59174702fc641a7fee8da6e00458e978",
+      "source": "src/components/ezra/SettingsView.tsx"
+    },
+    {
+      "path": "src/components/ezra/TelegramNotificationSettings.tsx",
+      "sha256": "b516ff37c3798546b50c4bdf012bb7468c0aa7f9c2ec80b48a5668374a84c4f2",
+      "source": "src/components/ezra/TelegramNotificationSettings.tsx"
+    },
+    {
+      "path": "src/components/ezra/TodayMorningBrief.tsx",
+      "sha256": "f044c60e4d03527b1521e8582d47a35e497a2b58792a9519d4331edcf9e231f1",
+      "source": "src/components/ezra/TodayMorningBrief.tsx"
+    },
+    {
+      "path": "src/components/ezra/TodayView.tsx",
+      "sha256": "a69978cdcc0ebdba9f3042ce831ea12cff1081271108abf27146c14c212ee030",
+      "source": "src/components/ezra/TodayView.tsx"
+    },
+    {
+      "path": "src/components/ezra/WritingPreferencesPanel.tsx",
+      "sha256": "2ed47c2ee62704fb9680db3cb4510b6f13f585c4c894c6267210bbb9e0d92525",
+      "source": "src/components/ezra/WritingPreferencesPanel.tsx"
+    },
+    {
+      "path": "src/components/ezra/api.ts",
+      "sha256": "aa3dbfae458f49fbab879108432a475aacf37daf959f6152feae70a03fe754ea",
+      "source": "src/components/ezra/api.ts"
+    },
+    {
+      "path": "src/components/ezra/browserNotifications.ts",
+      "sha256": "c8a534982f97d1617042cade3ab19679a04c1d958e1c64bae5bbe1ecbb60c05a",
+      "source": "src/components/ezra/browserNotifications.ts"
+    },
+    {
+      "path": "src/components/ezra/calendarViewState.ts",
+      "sha256": "115b50b6b212dc141009f289f687ddb3651839658abe91347cfe8200c0dc894e",
+      "source": "src/components/ezra/calendarViewState.ts"
+    },
+    {
+      "path": "src/components/ezra/mailActionSummary.ts",
+      "sha256": "a056ab410e04a1f90f26066c94846f3ed992cf3942ba582982ff5881b054bf30",
+      "source": "src/components/ezra/mailActionSummary.ts"
+    },
+    {
+      "path": "src/components/ezra/mailSelection.ts",
+      "sha256": "6784ff810bf4aa4743d7d2a0b405b06038db98d9880da69ab5d319b6cea67d0d",
+      "source": "src/components/ezra/mailSelection.ts"
+    },
+    {
+      "path": "src/components/ezra/notificationClient.ts",
+      "sha256": "ff3a2a62dd4231db66b56e3191ef6582a73d0797200f2727ba64c2c4b3b7e100",
+      "source": "src/components/ezra/notificationClient.ts"
+    },
+    {
+      "path": "src/components/ezra/pushNotifications.ts",
+      "sha256": "faaa3d03115b5ca624ad09a60815e2b72b16cc6ed52a3bd32b4f14a059ae6ce0",
+      "source": "src/components/ezra/pushNotifications.ts"
+    },
+    {
+      "path": "src/components/ezra/refreshState.ts",
+      "sha256": "4ec6e705c6b62874720f7089e3728b522061c1ffd269a626961a13272e16bc58",
+      "source": "src/components/ezra/refreshState.ts"
+    },
+    {
+      "path": "src/components/ezra/replyStudioState.ts",
+      "sha256": "4bb9cb7c16338316354c0a341405559e1100396104ec4a4fdfde4c77c81c33dc",
+      "source": "src/components/ezra/replyStudioState.ts"
+    },
+    {
+      "path": "src/components/ezra/shortcuts.ts",
+      "sha256": "ed683f8e9b1308ed3d609db2798409616ff90b066cb9d5523960e46466be8dbf",
+      "source": "src/components/ezra/shortcuts.ts"
+    },
+    {
+      "path": "src/components/ezra/useLatestRequest.ts",
+      "sha256": "e2462c9b766d8de203f3bcc76b704dbbf01455c063d3b18dc940419833e6f29b",
+      "source": "src/components/ezra/useLatestRequest.ts"
+    },
+    {
+      "path": "src/components/ezra/version.ts",
+      "sha256": "5dc22cc5934d2ad8a043b7e49f623c5779bf669356af694d7156c54f5c4379f8",
+      "source": "src/components/ezra/version.ts"
+    },
+    {
+      "path": "src/lib/email/account-health.ts",
+      "sha256": "850c9e0f2ec21130e5ccbd82ba486fe48105cd0de574a0a3245f9ee337ca7edc",
+      "source": "src/lib/email/account-health.ts"
+    },
+    {
+      "path": "src/lib/email/account-recovery.ts",
+      "sha256": "e5fbcd143d67c36fa4651e9fc092200f500c58dfbbc76bbf5888a272697c3a2d",
+      "source": "src/lib/email/account-recovery.ts"
+    },
+    {
+      "path": "src/lib/email/action-center.ts",
+      "sha256": "602d1fd0bc9ed13cdcca00196da117d98c2432ddea619d6ba3e25237bca938cb",
+      "source": "src/lib/email/action-center.ts"
+    },
+    {
+      "path": "src/lib/email/activity.ts",
+      "sha256": "50646cbe98481d81cbdf3dffe067d13d523fadb88052028ef6de73eec6dd0d1c",
+      "source": "src/lib/email/activity.ts"
+    },
+    {
+      "path": "src/lib/email/api.ts",
+      "sha256": "931413c1216010c583ee62b0c98aaf082a724e7b7dd6c1d9b4f1037c15a2b54b",
+      "source": "src/lib/email/api.ts"
+    },
+    {
+      "path": "src/lib/email/attachments.ts",
+      "sha256": "002a78071735bf65a28c42109c3ea29079334cf063cd5dc28b5ab3d4c17c43bd",
+      "source": "src/lib/email/attachments.ts"
+    },
+    {
+      "path": "src/lib/email/auth-recovery.ts",
+      "sha256": "b10093caee7b074f9037c6fc995258f3a19cadf42c7663087f0ad9ec28e596da",
+      "source": "src/lib/email/auth-recovery.ts"
+    },
+    {
+      "path": "src/lib/email/auth.ts",
+      "sha256": "0d78bd42065cf793a001c4c2fc42ce9c874cf0af84ee19270ff15489d4129735",
+      "source": "src/lib/email/auth.ts"
+    },
+    {
+      "path": "src/lib/email/benchmark.ts",
+      "sha256": "85da54975922dd0b92c329fa8c83a9b1f4940eb052941ff52dc0b34d2b79e877",
+      "source": "src/lib/email/benchmark.ts"
+    },
+    {
+      "path": "src/lib/email/brief-item-state.ts",
+      "sha256": "8f8a078bcf2d8d94c47768157215dcf20afa98c43e5072f81d08220608ed1c10",
+      "source": "src/lib/email/brief-item-state.ts"
+    },
+    {
+      "path": "src/lib/email/brief-memory.ts",
+      "sha256": "b3676898994259dbabf7529cbf04987a1cd4cbfa8489944adfcfcfcdeaac7184",
+      "source": "src/lib/email/brief-memory.ts"
+    },
+    {
+      "path": "src/lib/email/calendar-day.ts",
+      "sha256": "865d128e3ef3e7cee6cefa99aa60364daf4e8dd4431265ddffdacc840a744b2a",
+      "source": "src/lib/email/calendar-day.ts"
+    },
+    {
+      "path": "src/lib/email/calendar.ts",
+      "sha256": "cac6cbf3bd7223af71d416ad81cfb6ea5fbeb7679704959e1e37f90bdd86fd5a",
+      "source": "src/lib/email/calendar.ts"
+    },
+    {
+      "path": "src/lib/email/composition.ts",
+      "sha256": "251ae40a29b793d0ec9d8cc4b33854dce4937ed59aa6c938b68afd8f34f122ed",
+      "source": "src/lib/email/composition.ts"
+    },
+    {
+      "path": "src/lib/email/contacts.ts",
+      "sha256": "030db9b56b0341d408baae4ac2cc29c3651abc96b16ac89b44ec9d00044d4fd0",
+      "source": "src/lib/email/contacts.ts"
+    },
+    {
+      "path": "src/lib/email/database-access.ts",
+      "sha256": "2931581c772579124844017ac0241f8fe1eccb254dc767f2da6138b1fab68272",
+      "source": "src/lib/email/database-access.ts"
+    },
+    {
+      "path": "src/lib/email/database.ts",
+      "sha256": "05eca3889d91f27aedfc9af5f2c55c4d8753d36b4c8ef5fea7a77b3791cbd712",
+      "source": "src/lib/email/database.ts"
+    },
+    {
+      "path": "src/lib/email/first-owner-setup.ts",
+      "sha256": "a74da8c025bfd1752448dbd225a42b6ff0c2651ee57f1729915aca20e3866cb7",
+      "source": "src/lib/email/first-owner-setup.ts"
+    },
+    {
+      "path": "src/lib/email/foreground-notifications.ts",
+      "sha256": "824736d951cc05f371037b9f8730fdce2784f9cbefb7a7353e4c3963c90f328d",
+      "source": "src/lib/email/foreground-notifications.ts"
+    },
+    {
+      "path": "src/lib/email/gmail.ts",
+      "sha256": "b1835d110719d74d6a2a805c780e6cd82d6b01928ee9f80901f57d36c5af5de7",
+      "source": "src/lib/email/gmail.ts"
+    },
+    {
+      "path": "src/lib/email/message-content.ts",
+      "sha256": "544ffd083d0ce48414c3777a22af8a82e14c86368244b19fc7b1a9465a9c7ca6",
+      "source": "src/lib/email/message-content.ts"
+    },
+    {
+      "path": "src/lib/email/microsoft.ts",
+      "sha256": "b02e5a5572347f4e3231df0af8fb86a6d44d79435de2f2e914788111e9ded310",
+      "source": "src/lib/email/microsoft.ts"
+    },
+    {
+      "path": "src/lib/email/model.ts",
+      "sha256": "a02692adc8c005f09d4f0eaef36dc5fdd59a0ac7c43f9bf77943ac5f776d83b6",
+      "source": "src/lib/email/model.ts"
+    },
+    {
+      "path": "src/lib/email/models.ts",
+      "sha256": "7e3908ce6e17dc61256fb3e89c1c382bfd63fb14f25e785e6ce2f8911a204283",
+      "source": "src/lib/email/models.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-changes.ts",
+      "sha256": "f2b2b2836ef38a4f92869c73782f2cbbc7abfc2d0a4e1c33d8a1cf57777cec4f",
+      "source": "src/lib/email/morning-brief-changes.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-copy.ts",
+      "sha256": "6561de8f0400da0dc3d82cb2b4a3ae71ff7fa77da643c77aa7577f93079f50cd",
+      "source": "src/lib/email/morning-brief-copy.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-facts.ts",
+      "sha256": "7765b68363320c3c26bd3fcbb5eb866a5cb019cb88632fd442f71e346adcbc38",
+      "source": "src/lib/email/morning-brief-facts.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-schema.ts",
+      "sha256": "ff0e2966fa355914dbdf38abc5d698f15911ac9edb109812f13211fb3be79eef",
+      "source": "src/lib/email/morning-brief-schema.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-store.ts",
+      "sha256": "342fa5ab9644d9dd5a96e74c892598d08091ac3e9bddd478740abe348d659fe6",
+      "source": "src/lib/email/morning-brief-store.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-time.ts",
+      "sha256": "4aed65c13c454c567d61dd6f4ed5ea8daff126cd8e26eda12908608e2f7b0edf",
+      "source": "src/lib/email/morning-brief-time.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-types.ts",
+      "sha256": "540139dbd961fb60cc90b23ef85d2ebbf6de8ddb3c9bbd4f84621bb897481b09",
+      "source": "src/lib/email/morning-brief-types.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-view.ts",
+      "sha256": "8594056362a05c91e077a8584ddc8c752acbb06976bef3efb46ce1bd94b4df28",
+      "source": "src/lib/email/morning-brief-view.ts"
+    },
+    {
+      "path": "src/lib/email/morning-brief-worker.ts",
+      "sha256": "d541ce362c60001a6a9b53d70b587e3e4d68a5c359970238605e48c7c55abc40",
+      "source": "src/lib/email/morning-brief-worker.ts"
+    },
+    {
+      "path": "src/lib/email/notification-api.ts",
+      "sha256": "512e8a3eefaf924acf126dc91815570140a270a8c878edc9af25bad44844de0a",
+      "source": "src/lib/email/notification-api.ts"
+    },
+    {
+      "path": "src/lib/email/notification-attention.ts",
+      "sha256": "9d1260fda7082dbb51491e2c143e4b22aa4cc927b6fc7c6509d6a5bd6c279c89",
+      "source": "src/lib/email/notification-attention.ts"
+    },
+    {
+      "path": "src/lib/email/notification-center.ts",
+      "sha256": "39c799f9a2b5ca34002a623043808fb92f7fdb9ee6d491eac1d09608eae1dba5",
+      "source": "src/lib/email/notification-center.ts"
+    },
+    {
+      "path": "src/lib/email/notification-claims.ts",
+      "sha256": "b705a3961bd0b54b2b01377415b3ceec72e54524e13e7799af142c07ad88d170",
+      "source": "src/lib/email/notification-claims.ts"
+    },
+    {
+      "path": "src/lib/email/notification-copy.ts",
+      "sha256": "54ea2fa61c63a7bf4cb8f64826406da2ed686fb19888848768614635b80135db",
+      "source": "src/lib/email/notification-copy.ts"
+    },
+    {
+      "path": "src/lib/email/notification-crypto.ts",
+      "sha256": "a7905f304cf985fb60a6518d4d1b7029e87ed09478d0c18b2c37822f0f007d0a",
+      "source": "src/lib/email/notification-crypto.ts"
+    },
+    {
+      "path": "src/lib/email/notification-dispatch.ts",
+      "sha256": "5154d7d1842fbfadcd8fdea433e24da6ede87cd7f1cb389ce7e7693fb4946be8",
+      "source": "src/lib/email/notification-dispatch.ts"
+    },
+    {
+      "path": "src/lib/email/notification-eligibility.ts",
+      "sha256": "8f6f685eef48702e01fcafa61d70a53838faa944b32b410f39038b0261b817bc",
+      "source": "src/lib/email/notification-eligibility.ts"
+    },
+    {
+      "path": "src/lib/email/notification-enrollment.ts",
+      "sha256": "efd60aec6f4e43b4674f6a251a756b6077b3c4c885d6641beb5721b22ef9845f",
+      "source": "src/lib/email/notification-enrollment.ts"
+    },
+    {
+      "path": "src/lib/email/notification-feedback.ts",
+      "sha256": "78dc6cbee1a5fb63a3915010cd333e41fe8598cfb7346fe46eca929ee0eb0d6e",
+      "source": "src/lib/email/notification-feedback.ts"
+    },
+    {
+      "path": "src/lib/email/notification-foreground.ts",
+      "sha256": "8f1defaf09c59d62e3e60b2c252fa3829c995a5349371097f6d3be825100bc11",
+      "source": "src/lib/email/notification-foreground.ts"
+    },
+    {
+      "path": "src/lib/email/notification-governor-schema.ts",
+      "sha256": "3e3b230dbda1061dc35ccdc34b7158b1b75b1c503970afeabf26f6154effc3af",
+      "source": "src/lib/email/notification-governor-schema.ts"
+    },
+    {
+      "path": "src/lib/email/notification-governor.ts",
+      "sha256": "aa0776c5a7ec06fe509d148d6b4c22d84b3213eea81f1328ba8c432f02e2a5b3",
+      "source": "src/lib/email/notification-governor.ts"
+    },
+    {
+      "path": "src/lib/email/notification-handled.ts",
+      "sha256": "1492eba139a629955d81928d91d5659cf042cad43d1319ab751ed00026c85c0e",
+      "source": "src/lib/email/notification-handled.ts"
+    },
+    {
+      "path": "src/lib/email/notification-history.ts",
+      "sha256": "78590b38e10b03523bc6cd1de954727a54c60273b8c2e134a572f8e60afa2f83",
+      "source": "src/lib/email/notification-history.ts"
+    },
+    {
+      "path": "src/lib/email/notification-origin.ts",
+      "sha256": "5b04e2fbc851c8c0b312e19175c0b7b00b93797d945f18f2008778099c949738",
+      "source": "src/lib/email/notification-origin.ts"
+    },
+    {
+      "path": "src/lib/email/notification-policy.ts",
+      "sha256": "491352b741dd1f7dbfe9ff2580daa2bff6d7037e99bc7ad10f2e10fc404f1a73",
+      "source": "src/lib/email/notification-policy.ts"
+    },
+    {
+      "path": "src/lib/email/notification-schedule-eligibility.ts",
+      "sha256": "11dd03555233a9ec766e34ad33b80cb4b639e0078e03154c70e4b1e454fb8ac3",
+      "source": "src/lib/email/notification-schedule-eligibility.ts"
+    },
+    {
+      "path": "src/lib/email/notification-schedule-schema.ts",
+      "sha256": "3036eafde69a40e9f89a4ddb83dfe4d562a526ba459a2a6fe48c4d18f87c734d",
+      "source": "src/lib/email/notification-schedule-schema.ts"
+    },
+    {
+      "path": "src/lib/email/notification-schedule.ts",
+      "sha256": "78e07fa48a137ace20797b937cd960a6865989cb82341d5cae11d37bcb250ed0",
+      "source": "src/lib/email/notification-schedule.ts"
+    },
+    {
+      "path": "src/lib/email/notification-schema.ts",
+      "sha256": "26cd31b1a45ee01c16d97e684942798061f6000385af6f332a37ffc9867c88d2",
+      "source": "src/lib/email/notification-schema.ts"
+    },
+    {
+      "path": "src/lib/email/notification-setup-schema.ts",
+      "sha256": "4a32c03a3cae7695066f95f7c485c9cf87003a20778ac678ec75dd7319f4ad93",
+      "source": "src/lib/email/notification-setup-schema.ts"
+    },
+    {
+      "path": "src/lib/email/notification-setup.ts",
+      "sha256": "9062663204b6bb63dff673d6707ebf9d0668bf65b22564fd4cbd5b26bee80990",
+      "source": "src/lib/email/notification-setup.ts"
+    },
+    {
+      "path": "src/lib/email/notification-source.ts",
+      "sha256": "d6e518905bb455d5c3b5fcaaa489f2b9f030c94169581d7c03ea504bbc88267b",
+      "source": "src/lib/email/notification-source.ts"
+    },
+    {
+      "path": "src/lib/email/notification-store.ts",
+      "sha256": "c6b096031e57e1c8ca4d6adc3191bf18dd5f0638155d1f84fee81f0b28b93998",
+      "source": "src/lib/email/notification-store.ts"
+    },
+    {
+      "path": "src/lib/email/notification-subscriptions.ts",
+      "sha256": "3b9aea78558f698b706b1715f27133354e65d6df7e967343f530e8209fd8ced6",
+      "source": "src/lib/email/notification-subscriptions.ts"
+    },
+    {
+      "path": "src/lib/email/notification-target.ts",
+      "sha256": "2fb5175942e3bdb1b6fd4c3dc8b07423925714d9481e5867e932690a39c4ad0b",
+      "source": "src/lib/email/notification-target.ts"
+    },
+    {
+      "path": "src/lib/email/notification-telegram-config.ts",
+      "sha256": "bc83aa0eca1b8a4d78f5c54d584b24929d344824279b8baaf70174f34987713e",
+      "source": "src/lib/email/notification-telegram-config.ts"
+    },
+    {
+      "path": "src/lib/email/notification-telegram-schema.ts",
+      "sha256": "72dcfc32e57996d3482f8a08b574729bb360efe2dcf4d1876c2830fe7141937a",
+      "source": "src/lib/email/notification-telegram-schema.ts"
+    },
+    {
+      "path": "src/lib/email/notification-telegram-updates-schema.ts",
+      "sha256": "d96ea287ff089d624f94e92f780e689e6eef052bc7e40495d4fa11bb027d0178",
+      "source": "src/lib/email/notification-telegram-updates-schema.ts"
+    },
+    {
+      "path": "src/lib/email/notification-telegram.ts",
+      "sha256": "32e840fdea1a117dbcef798fb9fbe36092e502b476de62656fd78c47cdbd1134",
+      "source": "src/lib/email/notification-telegram.ts"
+    },
+    {
+      "path": "src/lib/email/notification-types.ts",
+      "sha256": "3f0049f2cc7a8fa4e3063b5d0244ee90a624f64b58b1930eae6a7d96c7fafa41",
+      "source": "src/lib/email/notification-types.ts"
+    },
+    {
+      "path": "src/lib/email/notification-web-push.ts",
+      "sha256": "79101635a93873cec965ac2e7e72973efce1794d2be872972527166635bfcd19",
+      "source": "src/lib/email/notification-web-push.ts"
+    },
+    {
+      "path": "src/lib/email/notification-worker.ts",
+      "sha256": "2c1d0690b3200965b23553d09ed40dbbcb3d75152f38ef68f0e6308361cc3fba",
+      "source": "src/lib/email/notification-worker.ts"
+    },
+    {
+      "path": "src/lib/email/onboarding.ts",
+      "sha256": "394313ce6a09bd130d1fc6919d9f3dbdfa6ee1be9be8397dfc13c5a51b1ff117",
+      "source": "src/lib/email/onboarding.ts"
+    },
+    {
+      "path": "src/lib/email/outbox.ts",
+      "sha256": "349eb9492064bbcbf9d339e6766fe2705ed1e5e58803f163912f7c3d9588107b",
+      "source": "src/lib/email/outbox.ts"
+    },
+    {
+      "path": "src/lib/email/passkeys.ts",
+      "sha256": "84dcb57d2b56b07c2486c42e5f15976077a1375f0eb5a37f5762777ab86f9959",
+      "source": "src/lib/email/passkeys.ts"
+    },
+    {
+      "path": "src/lib/email/permissions.ts",
+      "sha256": "114d877cb132eaac4200e71551ab299314e7a3cded26697d00e7bd68128619f1",
+      "source": "src/lib/email/permissions.ts"
+    },
+    {
+      "path": "src/lib/email/policy.ts",
+      "sha256": "10f024dc22d408fa79eb9bff88391530d53009ae327a01741d220d7bf952b5cc",
+      "source": "src/lib/email/policy.ts"
+    },
+    {
+      "path": "src/lib/email/professional.ts",
+      "sha256": "625024cb0dcafbde6756413d80999c28fa8c9dd748303e6a12bf861cc7905c13",
+      "source": "src/lib/email/professional.ts"
+    },
+    {
+      "path": "src/lib/email/provider-account-connection.ts",
+      "sha256": "b6f7096e43dbdee7dc444954c9dd8ef99a794c3d0fd9d78f824575e24d1ecd4b",
+      "source": "src/lib/email/provider-account-connection.ts"
+    },
+    {
+      "path": "src/lib/email/provider-adapter.ts",
+      "sha256": "533f87baa8e1fbc73691a574ab9b156e7a11068130fc694e4a7ae97dec3f822a",
+      "source": "src/lib/email/provider-adapter.ts"
+    },
+    {
+      "path": "src/lib/email/provider-errors.ts",
+      "sha256": "e5df4d8c7e84c018941fd63e52e3796d3a3654ffdfa7aca7d864a0a66e7a0ab8",
+      "source": "src/lib/email/provider-errors.ts"
+    },
+    {
+      "path": "src/lib/email/provider-registry.ts",
+      "sha256": "f6b5c8b2fc5665e487cc9ae16ff330a49cce51692f3d85331eca620efec3721b",
+      "source": "src/lib/email/provider-registry.ts"
+    },
+    {
+      "path": "src/lib/email/provider-setup.ts",
+      "sha256": "40b9a1a00017f0e7cd3cbea3988cf3a254ca289120f037073d633179b8f51ead",
+      "source": "src/lib/email/provider-setup.ts"
+    },
+    {
+      "path": "src/lib/email/reply-polish.ts",
+      "sha256": "b7f4d45be8630d5fc9f1f047a719466c9483cb0b5e1d1d9b0aff09aa3282bfdf",
+      "source": "src/lib/email/reply-polish.ts"
+    },
+    {
+      "path": "src/lib/email/reply-recipients.ts",
+      "sha256": "90fff6c7dddfc9c6d922381102336ec408e376f33e65775ea7b9220a1b4f13ac",
+      "source": "src/lib/email/reply-recipients.ts"
+    },
+    {
+      "path": "src/lib/email/saved-views.ts",
+      "sha256": "220d70f92693845e29e37845bb71779e57fd1a7c9f895fa023df086111d37094",
+      "source": "src/lib/email/saved-views.ts"
+    },
+    {
+      "path": "src/lib/email/search.ts",
+      "sha256": "75f1c39d2c0de5d6aec71363ba6a48fff6f1da7e414ef95f24be0214b5bc1bd7",
+      "source": "src/lib/email/search.ts"
+    },
+    {
+      "path": "src/lib/email/sent-evidence.ts",
+      "sha256": "75a597fece122f7a038c0d3a35f8580717488ac61eef2cc6da7829d1c4d0de0a",
+      "source": "src/lib/email/sent-evidence.ts"
+    },
+    {
+      "path": "src/lib/email/service.ts",
+      "sha256": "6aaf72290ee39a16e87910c436aaf9b6496ff4744b9539145a9f2e588fc856bd",
+      "source": "src/lib/email/service.ts"
+    },
+    {
+      "path": "src/lib/email/system-recovery.ts",
+      "sha256": "0ea67abd2c4bc1ba6c409420780f418f00d1eb66518f3df8aeab6b6123388395",
+      "source": "src/lib/email/system-recovery.ts"
+    },
+    {
+      "path": "src/lib/email/telegram.ts",
+      "sha256": "842959247fcc90079ff4dbab011ad08de328cd10814a78927c9f6a6988738b2e",
+      "source": "src/lib/email/telegram.ts"
+    },
+    {
+      "path": "src/lib/email/today-attention.ts",
+      "sha256": "847e4c88d185400f84de70916f9ac4253edb88b68590399dc1f283baea4af79e",
+      "source": "src/lib/email/today-attention.ts"
+    },
+    {
+      "path": "src/lib/email/today-brief.ts",
+      "sha256": "a0dadd07f644daa120833afa95c6c462cc1b8cf465ffe17cebbec8118e56ffb8",
+      "source": "src/lib/email/today-brief.ts"
+    },
+    {
+      "path": "src/lib/email/types.ts",
+      "sha256": "af58901ee4105f37d675bf3a9e5cc76afe1e92ecce1f4a34140a589ea96b61cb",
+      "source": "src/lib/email/types.ts"
+    },
+    {
+      "path": "src/lib/email/updates.ts",
+      "sha256": "d601d24a84770945992cb4726440d23f7399b63c4cfa4d81819465145ea679ec",
+      "source": "src/lib/email/updates.ts"
+    },
+    {
+      "path": "src/lib/email/vocabulary.ts",
+      "sha256": "02794fa02882de7ad070aeda8b9d73a0f110e10d78f49d09d36d0d9bb560ec50",
+      "source": "src/lib/email/vocabulary.ts"
+    },
+    {
+      "path": "src/lib/email/worker.ts",
+      "sha256": "792a79731ae52bda4a93aa80f60458160ecde60aad92097f8af00eb22c257376",
+      "source": "src/lib/email/worker.ts"
+    },
+    {
+      "path": "src/lib/email/workspace-identity.ts",
+      "sha256": "5f5ce90067750221858350dc0db524886101e0b9e4b720ac3962bc217dbac5bd",
+      "source": "src/lib/email/workspace-identity.ts"
+    },
+    {
+      "path": "src/lib/email/workspaces.ts",
+      "sha256": "ced7805f95ddc4ecb1853b72e09bd9a575829eadfb2112bb5286ae5d286dde53",
+      "source": "src/lib/email/workspaces.ts"
+    },
+    {
+      "path": "src/lib/email/writing-settings.ts",
+      "sha256": "804ed558c42cc0bb324e5fc1c601896c32b656f9a98eda1618988fb11b27c20d",
+      "source": "src/lib/email/writing-settings.ts"
+    },
+    {
+      "path": "src/types/pdf-parse.d.ts",
+      "sha256": "e32cca3d43c4c2e6230891adcf71769b70e866c2dbef8eb97c5ebff7437dfca4",
+      "source": "src/types/pdf-parse.d.ts"
+    },
+    {
+      "path": "tests/account-health.test.ts",
+      "sha256": "dbcc3be2af62eb8ce976f38a5128352d2f667594866edc20650c4d21a8bbdbcb",
+      "source": "tests/account-health.test.ts"
+    },
+    {
+      "path": "tests/account-polling-safety.test.ts",
+      "sha256": "34754efc6233d1eb4a85388a5538ee2d33c5497f9be971c47def5967705422c3",
+      "source": "tests/account-polling-safety.test.ts"
+    },
+    {
+      "path": "tests/account-recovery.test.ts",
+      "sha256": "2c25a63aaa139e569d35f7ebbc180b2ba75384c94eb3bc4243f16c39a3793701",
+      "source": "tests/account-recovery.test.ts"
+    },
+    {
+      "path": "tests/action-center.test.ts",
+      "sha256": "f6bd2dc321958ccc14e4a18e13e1eec3302951527ea3016255578ddb5bbb2d20",
+      "source": "tests/action-center.test.ts"
+    },
+    {
+      "path": "tests/activity-timeline.test.ts",
+      "sha256": "c2f17d985a6bde2613b564a2dd70416294fc6e038fb0b17db8b6fe84a69bf525",
+      "source": "tests/activity-timeline.test.ts"
+    },
+    {
+      "path": "tests/approval.test.ts",
+      "sha256": "35713373f97d3fe94699a3590521c468108f1610e5254ab384e0780487ffc85f",
+      "source": "tests/approval.test.ts"
+    },
+    {
+      "path": "tests/attachment-preview-api.test.ts",
+      "sha256": "8ea413564c6138f896d3a01f7dfff4ea4a5871fb6ca3bdd0c3e1981acf576284",
+      "source": "tests/attachment-preview-api.test.ts"
+    },
+    {
+      "path": "tests/attachments.test.ts",
+      "sha256": "49ced53837ffef6bc3db4521fd5934f97ba138c47baee753a32538d3baa4c421",
+      "source": "tests/attachments.test.ts"
+    },
+    {
+      "path": "tests/auth-recovery.test.ts",
+      "sha256": "2533d5ba5c97f033302820a738001f61cf8534ec1acb957cbf205be298ea538f",
+      "source": "tests/auth-recovery.test.ts"
+    },
+    {
+      "path": "tests/auth.test.ts",
+      "sha256": "9538d8e48442014ef2ff3e2e36ec9a7d6aff12737fa131d92e8929b2114fef40",
+      "source": "tests/auth.test.ts"
+    },
+    {
+      "path": "tests/background-notification-controls.test.tsx",
+      "sha256": "cbfb34c8481d421f5a55b0e3b8c7c5d5c36fb17c49ba17fad1948fd1740159ea",
+      "source": "tests/background-notification-controls.test.tsx"
+    },
+    {
+      "path": "tests/backlog-policy.test.ts",
+      "sha256": "427ac75ca0b1387f53d0cafa252e09bb01c17cf9a6d063b8eea4b03fb2126128",
+      "source": "tests/backlog-policy.test.ts"
+    },
+    {
+      "path": "tests/brief-memory.test.ts",
+      "sha256": "47a2f99e4cd45b48b3febeef3e9fad719260b90d97aa4a9c69a89f1de3544230",
+      "source": "tests/brief-memory.test.ts"
+    },
+    {
+      "path": "tests/calendar-daily-brief-refresh.test.tsx",
+      "sha256": "c6f46ae50ca5f181583ad1d8516672b1c8071746f178c8f25b77950cf376e0bf",
+      "source": "tests/calendar-daily-brief-refresh.test.tsx"
+    },
+    {
+      "path": "tests/calendar-view-state.test.ts",
+      "sha256": "ade0c802efab30205a63c40b6416db89e99f3320ab22cf235ebdc6ef3039e880",
+      "source": "tests/calendar-view-state.test.ts"
+    },
+    {
+      "path": "tests/calendar.test.ts",
+      "sha256": "23a6ba1364af89d5c82993848338bb524fc63afce7350ff8cf9dfe3d498ce1f4",
+      "source": "tests/calendar.test.ts"
+    },
+    {
+      "path": "tests/ci-runner-contract.test.ts",
+      "sha256": "b1836dc3b5d7909502530e49f7a84dc567b67bc1a485dbc4117ae333247263aa",
+      "source": "public-release/tests/ci-runner-contract.test.ts.in"
+    },
+    {
+      "path": "tests/cockpit.test.tsx",
+      "sha256": "f0a0858a35b72deeffcc422b531fac6ce67a9cd9d2761bf423153bcfbb2a8719",
+      "source": "tests/cockpit.test.tsx"
+    },
+    {
+      "path": "tests/composition.test.ts",
+      "sha256": "b04648cfee498849a83b7ca1b127ae4c45286609602f28b6769d25a2630f06a8",
+      "source": "tests/composition.test.ts"
+    },
+    {
+      "path": "tests/contacts.test.ts",
+      "sha256": "550e293b6b156c8d8e472d97d192f00816eca273dad8c22269a19b0f6eee8be8",
+      "source": "tests/contacts.test.ts"
+    },
+    {
+      "path": "tests/database-access.test.ts",
+      "sha256": "d98353a949ed3790fb3095d64541fd2a8816ca97ffe1a98918ad51cbbe49097e",
+      "source": "tests/database-access.test.ts"
+    },
+    {
+      "path": "tests/database-runtime.test.ts",
+      "sha256": "8048b025727aa7bc933fdaa35a17f6616e8488e021fba926dbb4a50b185461cf",
+      "source": "tests/database-runtime.test.ts"
+    },
+    {
+      "path": "tests/dependency-license-policy.test.ts",
+      "sha256": "3543da91774d67a3dc10f1213bb0fab100c6ac6cfb6ada20660ec2d5ec114dd9",
+      "source": "tests/dependency-license-policy.test.ts"
+    },
+    {
+      "path": "tests/direct-replies.test.ts",
+      "sha256": "8bcba53652a4029e7a1708105b350b6dcc638d1ab5ae912629ecb3cfd4b01a46",
+      "source": "tests/direct-replies.test.ts"
+    },
+    {
+      "path": "tests/drafts-view.test.tsx",
+      "sha256": "09f93799bd894f075ef4b18eb9070272664e1d2d3a0299e40c277c61353e7c55",
+      "source": "tests/drafts-view.test.tsx"
+    },
+    {
+      "path": "tests/e2e/cockpit.spec.ts",
+      "sha256": "5549d64abf5fac1ba572ff11e44d50f849b3b447b2bec05d0dee58cc520a5f32",
+      "source": "tests/e2e/cockpit.spec.ts"
+    },
+    {
+      "path": "tests/e2e/notifications.spec.ts",
+      "sha256": "b97fb874769b2bea6e8ff2dcf7f31c27efd6dff1e3bc7d29662bb7d4d8e5be51",
+      "source": "tests/e2e/notifications.spec.ts"
+    },
+    {
+      "path": "tests/e2e/owner-auth-fixture.ts",
+      "sha256": "c58ce10a982d7aacebf414da85a60b528fcc465ba6f08abff34f67ddfdb3a43f",
+      "source": "tests/e2e/owner-auth-fixture.ts"
+    },
+    {
+      "path": "tests/e2e/pwa.spec.ts",
+      "sha256": "94161a87919091cba781a26e79c3cc5eb623abe84801b1a770955834dcc72263",
+      "source": "tests/e2e/pwa.spec.ts"
+    },
+    {
+      "path": "tests/email-policy.test.ts",
+      "sha256": "62a15e984ac3648152182a4f1e5e832222617b0e123c7f3d874c7d259079ee5e",
+      "source": "tests/email-policy.test.ts"
+    },
+    {
+      "path": "tests/email-service-safety.test.ts",
+      "sha256": "b9616b76f83f3a7b7afa5ab9256583242d965fc21fbb9713efb8abe6c97aec72",
+      "source": "tests/email-service-safety.test.ts"
+    },
+    {
+      "path": "tests/exceljs-compatibility.test.ts",
+      "sha256": "1cc2d7e13a81569092c0f1a95dd8ab112865dcdab7af1362983faf9544fee771",
+      "source": "tests/exceljs-compatibility.test.ts"
+    },
+    {
+      "path": "tests/first-owner-bootstrap.test.ts",
+      "sha256": "25018e4ae48c9f76ab3c5f74a943667caeb3c87ef77c68d27649ec1c0ea3e1d8",
+      "source": "tests/first-owner-bootstrap.test.ts"
+    },
+    {
+      "path": "tests/first-owner-setup-api.test.ts",
+      "sha256": "dd5e290f7872e52e9d75684b08cb3f4c7a41d0b16fd51f5f8a6b35169f4fca60",
+      "source": "tests/first-owner-setup-api.test.ts"
+    },
+    {
+      "path": "tests/first-owner-setup.test.ts",
+      "sha256": "7cfab568e54875438582e3f2e836b0d62ee2a4d8b0ce33596c94f64c4b6ec576",
+      "source": "tests/first-owner-setup.test.ts"
+    },
+    {
+      "path": "tests/first-owner-setup.test.tsx",
+      "sha256": "83f6c72aa13fcf17959b3b172293296042051f08b76a8154c21634509aee9ee1",
+      "source": "tests/first-owner-setup.test.tsx"
+    },
+    {
+      "path": "tests/fixtures/morning-brief.ts",
+      "sha256": "8ae2d49238848c8e95851a03acbcb65fdc70fe0a19a844cd584171e29c24f52e",
+      "source": "tests/fixtures/morning-brief.ts"
+    },
+    {
+      "path": "tests/fixtures/notification-settings.ts",
+      "sha256": "69acb537a35d4ed18daffd2a79f05b352153f4a30aeff4769309498e3024d2a4",
+      "source": "tests/fixtures/notification-settings.ts"
+    },
+    {
+      "path": "tests/foreground-browser-notifications.test.tsx",
+      "sha256": "30e846ba79b0046348f5ba3af7f0d6687b9e0205cfd0bf67e607867e854574ec",
+      "source": "tests/foreground-browser-notifications.test.tsx"
+    },
+    {
+      "path": "tests/foreground-notifications-api.test.ts",
+      "sha256": "0d17b939ddda47109edae03629df7adbf23f3961fd7ced0c21e60e870825b66c",
+      "source": "tests/foreground-notifications-api.test.ts"
+    },
+    {
+      "path": "tests/foreground-notifications.test.ts",
+      "sha256": "76e608acf3206bf0ba4f8e4032de2d2141527b5c8dfbf6b4f5dc26eea2bc6ba6",
+      "source": "tests/foreground-notifications.test.ts"
+    },
+    {
+      "path": "tests/gmail.test.ts",
+      "sha256": "ff5ae9171538d897f835f0e79983bb2e7b95060ccb1ba40d0745fdd4efc381de",
+      "source": "tests/gmail.test.ts"
+    },
+    {
+      "path": "tests/helpers/notification-ledger.ts",
+      "sha256": "6aec6f7325a4d1ca19a7018aad50f69928ba5c6020771a299c1e071201b8e3d6",
+      "source": "tests/helpers/notification-ledger.ts"
+    },
+    {
+      "path": "tests/helpers/public-test-accounting.ts",
+      "sha256": "9a550d1f48115c4e0e30ddc547fb6855f26d8fadce658dfd94bccd792cdf10d8",
+      "source": "tests/helpers/public-test-accounting.ts"
+    },
+    {
+      "path": "tests/helpers/push-marker-database.ts",
+      "sha256": "98e6bf6bb9611883302fdd74178f3a6d85230447cd4dd83b3930d3ac82d3536f",
+      "source": "tests/helpers/push-marker-database.ts"
+    },
+    {
+      "path": "tests/install-release-gate.test.ts",
+      "sha256": "bb2caca7fdfe61eff777c6b5504353b19998638c32d784a7b9ab2bd985fcc30e",
+      "source": "tests/install-release-gate.test.ts"
+    },
+    {
+      "path": "tests/installer-ubuntu.test.ts",
+      "sha256": "53e6487b121bb7b4c799751fcd894ac4379b6f54bf7b09cb7b796cab4d52b339",
+      "source": "tests/installer-ubuntu.test.ts"
+    },
+    {
+      "path": "tests/installer-windows.test.ts",
+      "sha256": "a3bc79be6643ffff8e2f68e8d4de075f055363b877c63fd966fab6b36024e183",
+      "source": "tests/installer-windows.test.ts"
+    },
+    {
+      "path": "tests/interactive-hidden-input.test.ts",
+      "sha256": "187bee75b7d609fa1134f009c6fc3313d67d0204b56aa8b6365d18c80acf4883",
+      "source": "tests/interactive-hidden-input.test.ts"
+    },
+    {
+      "path": "tests/mailActionSummary.test.ts",
+      "sha256": "1a85fe090f8b8927054c6a1a46b243d344308c9bf845126aaa7fe39cbbbc42a1",
+      "source": "tests/mailActionSummary.test.ts"
+    },
+    {
+      "path": "tests/mailSelection.test.ts",
+      "sha256": "06a1baa17098049f15ec9b6ce5c4b56ca043522d812bf842e0fcc24dfcfcf715",
+      "source": "tests/mailSelection.test.ts"
+    },
+    {
+      "path": "tests/message-content.test.ts",
+      "sha256": "9907f296076cdf90b0b45da7059cf16b15ebb5a6e7445dc0ca9b98c7a677be73",
+      "source": "tests/message-content.test.ts"
+    },
+    {
+      "path": "tests/message-pane-forward.test.tsx",
+      "sha256": "2d3e1ca10887801dbda56ea4beecc8f6f832b581463efdede1e7a985f0e9fe99",
+      "source": "tests/message-pane-forward.test.tsx"
+    },
+    {
+      "path": "tests/message-reader.test.tsx",
+      "sha256": "2567eb75299dbdfcc8050092e6024c2f601a0e3ee5ea2244d9abc0d24460a0a6",
+      "source": "tests/message-reader.test.tsx"
+    },
+    {
+      "path": "tests/microsoft-account-identity.test.ts",
+      "sha256": "110c6358096cda12b3d4ee9147bc51cfa5d54d2133e4fa45051aabaab1ff2071",
+      "source": "tests/microsoft-account-identity.test.ts"
+    },
+    {
+      "path": "tests/microsoft.test.ts",
+      "sha256": "2a9b1a53c2b47514ce2cdf8808fc0bb6f7b4b82998a4fd6419654fa9c8fb89f2",
+      "source": "tests/microsoft.test.ts"
+    },
+    {
+      "path": "tests/model-draft.test.ts",
+      "sha256": "d3eb33c1ddfcb9be1dc0d5b35891e417d384c412a9dc8a3577667f1b06e9b0d7",
+      "source": "tests/model-draft.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-changes.test.ts",
+      "sha256": "aa849956753d1ebe8aa3da32338455831f8ab494c1b2ae336c86230aa163a3b5",
+      "source": "tests/morning-brief-changes.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-copy.test.ts",
+      "sha256": "8f7e65b79d49c095d127f0ce5813cd708b67e5802c3c01163156775e05052a16",
+      "source": "tests/morning-brief-copy.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-facts.test.ts",
+      "sha256": "8ca72fd0c2052876d30e9bfa4dc4528a0c03b2a3e1c8255426a9e637fb3c960f",
+      "source": "tests/morning-brief-facts.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-schema.test.ts",
+      "sha256": "5f325ab29091dab1d4382b7fbf0803624bd6d5000336edf75038e7b9c5f73cf7",
+      "source": "tests/morning-brief-schema.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-store.test.ts",
+      "sha256": "993485c8403350216080eb12eef91f4a4217ad578a7de02a2b16ce82b3d50b51",
+      "source": "tests/morning-brief-store.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-time.test.ts",
+      "sha256": "69e64ec9bad3f3d98fdecdc4e007e0994c281bf4822646e1bb9809f6374278a4",
+      "source": "tests/morning-brief-time.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-types.test.ts",
+      "sha256": "ee801bbd14c3b79c86254b76d3fd406f4cf5aff33ac9ab8218396ce9f1b1c26d",
+      "source": "tests/morning-brief-types.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-view.test.ts",
+      "sha256": "f716934cc7e4b608ed03666590d04bc299a7642254678a985de57494c99d401d",
+      "source": "tests/morning-brief-view.test.ts"
+    },
+    {
+      "path": "tests/morning-brief-worker.test.ts",
+      "sha256": "b639339bc2f61648554ca605c959eecb6ac351a5c72a5ab09ca7c7e7bf14d42d",
+      "source": "tests/morning-brief-worker.test.ts"
+    },
+    {
+      "path": "tests/notification-attention-controls.test.tsx",
+      "sha256": "543a3259445f53aa8cdeedcf44efa7d4eaca7ce8b7de446a0f9feaf50f795e94",
+      "source": "tests/notification-attention-controls.test.tsx"
+    },
+    {
+      "path": "tests/notification-attention.test.ts",
+      "sha256": "0e56a4f94f5a9d12f78da6446fd88f69a6ae3796005d4625d107538b652a257b",
+      "source": "tests/notification-attention.test.ts"
+    },
+    {
+      "path": "tests/notification-center.test.ts",
+      "sha256": "552ae683f653a88b88dafff1aae82ce1f670e2c9dbd1c35bb22e2dd011c2b3e8",
+      "source": "tests/notification-center.test.ts"
+    },
+    {
+      "path": "tests/notification-copy.test.ts",
+      "sha256": "a00096fc1d65b82b6ce682a81fae6987cedfa7bd486b8225696d725fd4942b79",
+      "source": "tests/notification-copy.test.ts"
+    },
+    {
+      "path": "tests/notification-crypto.test.ts",
+      "sha256": "7f7f9a898f076ba6b42f641fcf7bca79de54238014de9ec71c4e578d783441cb",
+      "source": "tests/notification-crypto.test.ts"
+    },
+    {
+      "path": "tests/notification-dispatch.test.ts",
+      "sha256": "a98a8274930b3fa523e50176d33366445f98889dd776a694f00dad207760b46a",
+      "source": "tests/notification-dispatch.test.ts"
+    },
+    {
+      "path": "tests/notification-enrollment-api.test.ts",
+      "sha256": "51d8f2529dc922e3db9fa71a5d71c225f49a13a569d7b4808fb64188a06c2aad",
+      "source": "tests/notification-enrollment-api.test.ts"
+    },
+    {
+      "path": "tests/notification-foreground.test.ts",
+      "sha256": "e27469233c1bda7e903f189b36adfcee6e46e56a57d9df1de4b343aaa08e3fcc",
+      "source": "tests/notification-foreground.test.ts"
+    },
+    {
+      "path": "tests/notification-governor.test.ts",
+      "sha256": "9e149902f27d9b1deaf7b1d4d7d5545d7f89b7eb0a4f7a945f73d02a6345633a",
+      "source": "tests/notification-governor.test.ts"
+    },
+    {
+      "path": "tests/notification-history.test.ts",
+      "sha256": "7fc9fbb12ebbce0ee1ff91f3933fafe74e91969192900747669e0955473da63c",
+      "source": "tests/notification-history.test.ts"
+    },
+    {
+      "path": "tests/notification-origin.test.ts",
+      "sha256": "d6234cbd3ec990dc812375d9ac26746006f6a25b68133833ec394b8c91980bd5",
+      "source": "tests/notification-origin.test.ts"
+    },
+    {
+      "path": "tests/notification-policy-api.test.ts",
+      "sha256": "bf34a716267f2bc4cdd279860510508103a01e6f7abeac24419d2a65c8c90edc",
+      "source": "tests/notification-policy-api.test.ts"
+    },
+    {
+      "path": "tests/notification-policy.test.ts",
+      "sha256": "eb8d563a9b1819dae8f8d3f5e569859dcf823603c19ed911cfcee9e2d29fa28a",
+      "source": "tests/notification-policy.test.ts"
+    },
+    {
+      "path": "tests/notification-routing.test.tsx",
+      "sha256": "9111ccf50dbe887743c27b8b8438ddbf56903957942fea5c60ad80daf0a89db9",
+      "source": "tests/notification-routing.test.tsx"
+    },
+    {
+      "path": "tests/notification-schedule.test.ts",
+      "sha256": "36930e3c5ad335f0ea796da0d034c4959ec85987feb6abd5e5ba6e3dbec3b0ea",
+      "source": "tests/notification-schedule.test.ts"
+    },
+    {
+      "path": "tests/notification-setup-schema.test.ts",
+      "sha256": "0ff805f1c52b760864fd66e03541e4333fcd5ad7aa896ee00ea6b05cb73a814b",
+      "source": "tests/notification-setup-schema.test.ts"
+    },
+    {
+      "path": "tests/notification-setup.test.ts",
+      "sha256": "5dfc86536112b5bebf443f78ade246f5e89777a6865c056c8e6e8bfc4dc5261f",
+      "source": "tests/notification-setup.test.ts"
+    },
+    {
+      "path": "tests/notification-store.test.ts",
+      "sha256": "fb9f740191dbdf6823e132074b434aa5424b2f19cc712e0462faa5bde027d8e8",
+      "source": "tests/notification-store.test.ts"
+    },
+    {
+      "path": "tests/notification-subscriptions.test.ts",
+      "sha256": "974ac585f4635d18cc5791428d220b4f917a8aed405036a8a2e550a86cf3ee58",
+      "source": "tests/notification-subscriptions.test.ts"
+    },
+    {
+      "path": "tests/notification-telegram-callbacks.test.ts",
+      "sha256": "22abf13fbc1b0079d10183ab18a9d25fcfc2a96983ac32a9adc5824c99a03a3f",
+      "source": "tests/notification-telegram-callbacks.test.ts"
+    },
+    {
+      "path": "tests/notification-telegram-schema.test.ts",
+      "sha256": "94e91f5a7ce3b5f99476bbfd152f0ade062f2582f80ca518d8e4364d64e8c0d0",
+      "source": "tests/notification-telegram-schema.test.ts"
+    },
+    {
+      "path": "tests/notification-telegram.test.ts",
+      "sha256": "7513677d443cb2d928d4e34d461ba3717d63aef4a3856013b12ad9bc5492f20d",
+      "source": "tests/notification-telegram.test.ts"
+    },
+    {
+      "path": "tests/notification-web-push.test.ts",
+      "sha256": "77c046012017f84b3d8c575424feb61fe06449d2908f597fc4484d321ef5f9dc",
+      "source": "tests/notification-web-push.test.ts"
+    },
+    {
+      "path": "tests/onboarding.test.ts",
+      "sha256": "9723d0416be80c0bff026c6840c8f3a7b7c4e746c38b40bd39de8d7b9880866d",
+      "source": "tests/onboarding.test.ts"
+    },
+    {
+      "path": "tests/open-source-notice.test.tsx",
+      "sha256": "f577e727c3ea92d4ada33f3870bbacaca39218c07574a34d58ee747c9c26dd17",
+      "source": "tests/open-source-notice.test.tsx"
+    },
+    {
+      "path": "tests/outbox-view.test.tsx",
+      "sha256": "53f8caf192fe792057548264003694af133b657a6eeb64b04d86a10d485b6c3c",
+      "source": "tests/outbox-view.test.tsx"
+    },
+    {
+      "path": "tests/outbox.test.ts",
+      "sha256": "519833dfcd324a37fc4840d662ade2328e38d9efd3262b5a1c54342ed88869a3",
+      "source": "tests/outbox.test.ts"
+    },
+    {
+      "path": "tests/passkey-verification.test.ts",
+      "sha256": "c7bc30ab18311424308597a37809e35a206f37fe609fe5fc0d63d3ff1ed3483a",
+      "source": "tests/passkey-verification.test.ts"
+    },
+    {
+      "path": "tests/passkeys.test.ts",
+      "sha256": "6097364688690c6b175557a7cc5acc5fdc5d5a3976622fb81249c36a4b885d1c",
+      "source": "tests/passkeys.test.ts"
+    },
+    {
+      "path": "tests/permissions.test.ts",
+      "sha256": "3a11f50ac0485adf9cd424264cce61f57ecc003eebdafe7d36d822016e1e5183",
+      "source": "tests/permissions.test.ts"
+    },
+    {
+      "path": "tests/professional.test.ts",
+      "sha256": "eece2b91354f05abed6bc71dbbd35c3c7bf2cd45ee2053a3e1b06263dac4920d",
+      "source": "tests/professional.test.ts"
+    },
+    {
+      "path": "tests/provider-account-connection.test.ts",
+      "sha256": "1adb1856ab5a4b8e992d123cacc5c4916f6a928f277e3cc2dd279dd7c3fa7b92",
+      "source": "tests/provider-account-connection.test.ts"
+    },
+    {
+      "path": "tests/provider-adapter-service.test.ts",
+      "sha256": "6ff2c05f34bd4430a977907980e7412b4e056c75abada2101972c25ea5fc17d4",
+      "source": "tests/provider-adapter-service.test.ts"
+    },
+    {
+      "path": "tests/provider-adapter.test.ts",
+      "sha256": "4fb64a29a38cd90eeff7a34a77bd92adb377ae8225d99b2d9e89a3a663687cd2",
+      "source": "tests/provider-adapter.test.ts"
+    },
+    {
+      "path": "tests/provider-authorization-service.test.ts",
+      "sha256": "a781bad4e323b943d332e63aae51bfa0635382300f1a331f53d38d2d23114ca4",
+      "source": "tests/provider-authorization-service.test.ts"
+    },
+    {
+      "path": "tests/provider-connect-api.test.ts",
+      "sha256": "5f462129973ce781486702ee47c9e48a5bdf6eb5f5167fc0355c4e5c08940556",
+      "source": "tests/provider-connect-api.test.ts"
+    },
+    {
+      "path": "tests/provider-discovery-api.test.ts",
+      "sha256": "81e85432a93f2a26b1f5736dc7c280536cc1cdd2f499e608c87d3a113ade785c",
+      "source": "tests/provider-discovery-api.test.ts"
+    },
+    {
+      "path": "tests/provider-errors.test.ts",
+      "sha256": "acee770ecbdd1bfeedef2b0fd2dee5a72b624b27f32a995360b4bc07323cae55",
+      "source": "tests/provider-errors.test.ts"
+    },
+    {
+      "path": "tests/provider-preflight-api.test.ts",
+      "sha256": "cdb7aae8c519c7087e6e3fab2335ca1ccb82e3d0324915813d5ab56e752dec3b",
+      "source": "tests/provider-preflight-api.test.ts"
+    },
+    {
+      "path": "tests/provider-registry.test.ts",
+      "sha256": "74f531106c13fb0f54173fb3ec963bf9a0229ca654ed6755405a0cc219629d9e",
+      "source": "tests/provider-registry.test.ts"
+    },
+    {
+      "path": "tests/provider-setup-routing.test.ts",
+      "sha256": "4f5a18a3090356e69aca200700432ab2bbb12abdd32f7488a78e464c6ace580d",
+      "source": "tests/provider-setup-routing.test.ts"
+    },
+    {
+      "path": "tests/provider-setup.test.ts",
+      "sha256": "cbc19fc96bbfb23186e026dfcdc14f6b3d872cf44a4a506551438245b424619d",
+      "source": "tests/provider-setup.test.ts"
+    },
+    {
+      "path": "tests/providers-api.test.ts",
+      "sha256": "88c1345086ea61682917975914c6ecd856c9c7270c8452dacc30cb74f4befa25",
+      "source": "tests/providers-api.test.ts"
+    },
+    {
+      "path": "tests/public-mirror-export.test.ts",
+      "sha256": "6b0f40d10a5344fef22a818b488521cf38748fae464d63e29123382319ca5fcf",
+      "source": "tests/public-mirror-export.test.ts"
+    },
+    {
+      "path": "tests/public-mirror-policy.test.ts",
+      "sha256": "63c3a802277439a0eaa687bd90a282d85ad5b2be6cd85c72ce0a59e2c0a10228",
+      "source": "tests/public-mirror-policy.test.ts"
+    },
+    {
+      "path": "tests/public-release-docs.test.ts",
+      "sha256": "7dee9c9129aff3cc8d319d1558ee27ed7f5156271c5bf5c2b0f61aa471cd5161",
+      "source": "tests/public-release-docs.test.ts"
+    },
+    {
+      "path": "tests/push-notifications.test.ts",
+      "sha256": "80085822f541d3f1e30e44a6d16ccffe394b50c7d8f05efc30af164101973916",
+      "source": "tests/push-notifications.test.ts"
+    },
+    {
+      "path": "tests/push-worker.test.ts",
+      "sha256": "a38244bee5803d009ec25523843ad0cadac292afd993324364159d05df8ca600",
+      "source": "tests/push-worker.test.ts"
+    },
+    {
+      "path": "tests/pwa-controls.test.tsx",
+      "sha256": "f1c4f75b495b9d9090a0e7a3d2cdd8e76a4f2137571c13edfe2c434dc702e980",
+      "source": "tests/pwa-controls.test.tsx"
+    },
+    {
+      "path": "tests/pwa-worker.test.ts",
+      "sha256": "1bb767fc85b73e6cc2515a2bf369407652969f7ab341283efda4435851fc9ff4",
+      "source": "tests/pwa-worker.test.ts"
+    },
+    {
+      "path": "tests/recipient-field.test.tsx",
+      "sha256": "ee2344a72854894969318a90388bc186c5ffa5d52a372a805ceff4f6e4c7a859",
+      "source": "tests/recipient-field.test.tsx"
+    },
+    {
+      "path": "tests/refreshState.test.ts",
+      "sha256": "faa0fb8a080859afd3e1801c17797c726939cf2fa448c88d37f7d9e6ee05d5b8",
+      "source": "tests/refreshState.test.ts"
+    },
+    {
+      "path": "tests/release-operations.test.ts",
+      "sha256": "f30afec0504103f522bfb88278a2a8d97a4146ff4e4e96db63bd78ebbd664e4b",
+      "source": "tests/release-operations.test.ts"
+    },
+    {
+      "path": "tests/reply-polish.test.ts",
+      "sha256": "96068ca72f1ff20a9cf63fd1db8c6fa0519ea045df67808c49f941d13ef4b406",
+      "source": "tests/reply-polish.test.ts"
+    },
+    {
+      "path": "tests/reply-studio-state.test.ts",
+      "sha256": "06c61b4a09ec9847783cc0c7b7ca1905cb5a91c4beee2daed0fb1865e90538af",
+      "source": "tests/reply-studio-state.test.ts"
+    },
+    {
+      "path": "tests/saved-views-mail.test.ts",
+      "sha256": "b47013e05160b9f937d8d8f95d6819bc4f7d7f5622d4959428c5b8d9f264c3b8",
+      "source": "tests/saved-views-mail.test.ts"
+    },
+    {
+      "path": "tests/saved-views.test.ts",
+      "sha256": "f29d807bd41b9059f656891bd7b85470fe8263198c3b1f07fe9eb3bc4c4dbfe6",
+      "source": "tests/saved-views.test.ts"
+    },
+    {
+      "path": "tests/search.test.ts",
+      "sha256": "d210409424ba7dd19cf57a813207187abc6e6352c71da4dc372ef38fa2f56cec",
+      "source": "tests/search.test.ts"
+    },
+    {
+      "path": "tests/security-headers.test.ts",
+      "sha256": "f4b4c3be92bad0305afad186a8fe606cb2d0586c3857bf990bfaaf867c376d7e",
+      "source": "tests/security-headers.test.ts"
+    },
+    {
+      "path": "tests/sent-evidence.test.ts",
+      "sha256": "5bdc5fcdabd900d48ddca3d80d3f60aedc5bf21b6938b6ef7f656e0c50d83b23",
+      "source": "tests/sent-evidence.test.ts"
+    },
+    {
+      "path": "tests/settings-account-recovery.test.tsx",
+      "sha256": "352b3459b9e2cf99d958b72148bc92b071ff07c8eeb1ff2aa97dfe280e780298",
+      "source": "tests/settings-account-recovery.test.tsx"
+    },
+    {
+      "path": "tests/settings-browser-notifications.test.tsx",
+      "sha256": "2acc5ff1f97906bfa9a8ec4f222e150e0b01a91d3c935e891c8b33520500d0bd",
+      "source": "tests/settings-browser-notifications.test.tsx"
+    },
+    {
+      "path": "tests/settings-daily-brief-refresh.test.tsx",
+      "sha256": "81d6f5b86aeb9ff6f1490b0cbcca68a4a9b20e8483c1e72fe7560825c99d3e6b",
+      "source": "tests/settings-daily-brief-refresh.test.tsx"
+    },
+    {
+      "path": "tests/setup.ts",
+      "sha256": "415b8f34e119856838cb4a76f64db3cd8ed83a72389a39fa862d608d6d1ab164",
+      "source": "tests/setup.ts"
+    },
+    {
+      "path": "tests/shortcuts.test.ts",
+      "sha256": "4ffaa6acb0fa5efdfe0ff48d08bf1cd93d0322ddc71240b0e89c7d2ddb75b4d4",
+      "source": "tests/shortcuts.test.ts"
+    },
+    {
+      "path": "tests/source-encoding.test.ts",
+      "sha256": "1cc487f300eef75f1ce8ba35a347f4e8b0829bda89e3cc50b0ce19f690ab304d",
+      "source": "tests/source-encoding.test.ts"
+    },
+    {
+      "path": "tests/system-recovery.test.ts",
+      "sha256": "3bfbad171c1c7c954816c39b2fc86d06baa7924de21bc04a678ad8fa047830a3",
+      "source": "tests/system-recovery.test.ts"
+    },
+    {
+      "path": "tests/telegram-notification-settings.test.tsx",
+      "sha256": "1dcee48d285879f9949a91fea149d34c8908596dbcaf9462632b4fbc5c3e550a",
+      "source": "tests/telegram-notification-settings.test.tsx"
+    },
+    {
+      "path": "tests/today-attention.test.ts",
+      "sha256": "ba66b582ca43ecc2771f2341069340309183fa07bc5acf2d66b23ba0d7c7824d",
+      "source": "tests/today-attention.test.ts"
+    },
+    {
+      "path": "tests/today-brief.test.ts",
+      "sha256": "1b7cdcb2b9e85c5781f7f07e22dc0a175c6ea69c9e2ff7562094ea71d61d4854",
+      "source": "tests/today-brief.test.ts"
+    },
+    {
+      "path": "tests/today-items-api.test.ts",
+      "sha256": "89f33ce06b009f170e2bbc5e98e012faa4b317d41da3cac58e70524f77593170",
+      "source": "tests/today-items-api.test.ts"
+    },
+    {
+      "path": "tests/today-morning-brief.test.tsx",
+      "sha256": "b53b272fc198d3191099d129e1f55b7e52f9afdf8af85d5fc29cdee01be48113",
+      "source": "tests/today-morning-brief.test.tsx"
+    },
+    {
+      "path": "tests/useLatestRequest.test.tsx",
+      "sha256": "510b46c40589cd92f727f25a925113af22e8cecefe6276d5f116d79fadd72cab",
+      "source": "tests/useLatestRequest.test.tsx"
+    },
+    {
+      "path": "tests/v04-closeout-stress.test.ts",
+      "sha256": "cebb8ff08a739d44a5ca8e9a85a9b5fdaedffc4f3c4ca4949519f769a2b4d4f6",
+      "source": "tests/v04-closeout-stress.test.ts"
+    },
+    {
+      "path": "tests/v05-closeout-stress.test.ts",
+      "sha256": "49da75b4f7101c19c9be8a83d84b53586bcec8db635f69753d73612215caf01f",
+      "source": "tests/v05-closeout-stress.test.ts"
+    },
+    {
+      "path": "tests/version.test.ts",
+      "sha256": "deeb7e824d0153fdee4a6f0fbe047e081eede23c3f5f0589a6e9fcda2d5023c2",
+      "source": "public-release/tests/version.test.ts.in"
+    },
+    {
+      "path": "tests/vocabulary.test.ts",
+      "sha256": "edc237f347565a67254eb38718752944b4c33fca1fcdd1d3693cb34d3fc8628d",
+      "source": "tests/vocabulary.test.ts"
+    },
+    {
+      "path": "tests/worker-database-integration.test.ts",
+      "sha256": "c3cd4fd0effeab229a3d2a1e997a5feff83c91eba63da555ee607cb1b1186238",
+      "source": "tests/worker-database-integration.test.ts"
+    },
+    {
+      "path": "tests/worker.test.ts",
+      "sha256": "ea58f36cf66af099e4beaeeafcc79e5ba5ad09dbb2c5b83886fd15404fa80938",
+      "source": "tests/worker.test.ts"
+    },
+    {
+      "path": "tests/writing-settings.test.ts",
+      "sha256": "7324da1bcf6a13a24faa90f1bfce9d418673c6c2eb3a8cd3b4e3ce947872f4f7",
+      "source": "tests/writing-settings.test.ts"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "776da7c1f62de2e14b1ba94a87f5198d8399fb121e6edcc330552b3787a4ed64",
+      "source": "tsconfig.json"
+    },
+    {
+      "path": "vitest.config.ts",
+      "sha256": "39f5070ba485a5df860832673c57e2eddf845269ddf7e996f98bdd0b7bb168c3",
+      "source": "vitest.config.ts"
+    }
+  ],
+  "findings": []
+}

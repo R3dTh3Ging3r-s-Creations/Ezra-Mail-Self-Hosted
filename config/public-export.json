@@ -1,0 +1,484 @@
+{
+  "copyDirectories": [
+    "src",
+    "public/branding",
+    "docs/branding",
+    "installer"
+  ],
+  "copyFiles": [
+    ".env.example",
+    ".gitattributes",
+    ".gitignore",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "LICENSE",
+    "NOTICE",
+    "CLA.md",
+    "COMMERCIAL-LICENSING.md",
+    "next-env.d.ts",
+    "next.config.mjs",
+    "package.json",
+    "package-lock.json",
+    "playwright.config.ts",
+    "tsconfig.json",
+    "vitest.config.ts",
+    "START HERE - Install Ezra Mail.bat",
+    "config/public-export.json",
+    "public/manifest.webmanifest",
+    "config/models/Qwen3-8B-MaxContext.Modelfile",
+    "config/models/Qwen3-14B-MaxContext.Modelfile",
+    "config/models/Qwen3.5-9B-MaxContext.Modelfile",
+    "public/ezra-sw.js",
+    "scripts/public-mirror-policy.ts",
+    "scripts/build-public-mirror.ts",
+    "scripts/check-dependency-licenses.ts",
+    "scripts/ensure-web-build.ps1",
+    "scripts/email-worker.ts",
+    "scripts/mcp-server.ts",
+    "scripts/model-benchmark.ts",
+    "scripts/update-model.ts",
+    "scripts/setup-models.ps1",
+    "scripts/install-startup.ps1",
+    "scripts/ezra-tray.ps1",
+    "scripts/hash-auth-password.ts",
+    "scripts/first-owner-bootstrap.ts",
+    "scripts/install-ezra-backup-timers.sh",
+    "scripts/install-ezra-systemd.sh",
+    "scripts/verify-install-release.ts",
+    "scripts/recover-owner-auth.ts",
+    "scripts/interactive-hidden-input.ts",
+    "scripts/migrate-database.ts",
+    "scripts/verify-latest-backup.ts",
+    "scripts/create-email-backup.ts",
+    "scripts/rehearse-email-restore.ts",
+    "scripts/apply-dependency-patches.mjs",
+    "scripts/cleanup-test-databases.mjs",
+    "scripts/generate-branding-assets.mjs",
+    "patches/exceljs+4.4.1-prerelease.0.patch",
+    "docs/DEPENDENCY_LICENSES.md",
+    "docs/EZRA_CLOUD.md",
+    "docs/EMAIL_AGENT_SETUP.md",
+    "tests/account-health.test.ts",
+    "tests/account-polling-safety.test.ts",
+    "tests/account-recovery.test.ts",
+    "tests/action-center.test.ts",
+    "tests/activity-timeline.test.ts",
+    "tests/approval.test.ts",
+    "tests/attachment-preview-api.test.ts",
+    "tests/attachments.test.ts",
+    "tests/auth-recovery.test.ts",
+    "tests/auth.test.ts",
+    "tests/background-notification-controls.test.tsx",
+    "tests/backlog-policy.test.ts",
+    "tests/brief-memory.test.ts",
+    "tests/calendar-daily-brief-refresh.test.tsx",
+    "tests/calendar-view-state.test.ts",
+    "tests/calendar.test.ts",
+    "tests/cockpit.test.tsx",
+    "tests/composition.test.ts",
+    "tests/contacts.test.ts",
+    "tests/database-access.test.ts",
+    "tests/database-runtime.test.ts",
+    "tests/dependency-license-policy.test.ts",
+    "tests/direct-replies.test.ts",
+    "tests/drafts-view.test.tsx",
+    "tests/e2e/cockpit.spec.ts",
+    "tests/e2e/notifications.spec.ts",
+    "tests/e2e/owner-auth-fixture.ts",
+    "tests/e2e/pwa.spec.ts",
+    "tests/email-policy.test.ts",
+    "tests/email-service-safety.test.ts",
+    "tests/exceljs-compatibility.test.ts",
+    "tests/first-owner-bootstrap.test.ts",
+    "tests/first-owner-setup-api.test.ts",
+    "tests/first-owner-setup.test.ts",
+    "tests/first-owner-setup.test.tsx",
+    "tests/fixtures/morning-brief.ts",
+    "tests/fixtures/notification-settings.ts",
+    "tests/foreground-browser-notifications.test.tsx",
+    "tests/foreground-notifications-api.test.ts",
+    "tests/foreground-notifications.test.ts",
+    "tests/gmail.test.ts",
+    "tests/helpers/notification-ledger.ts",
+    "tests/helpers/public-test-accounting.ts",
+    "tests/helpers/push-marker-database.ts",
+    "tests/install-release-gate.test.ts",
+    "tests/installer-ubuntu.test.ts",
+    "tests/installer-windows.test.ts",
+    "tests/interactive-hidden-input.test.ts",
+    "tests/mailActionSummary.test.ts",
+    "tests/mailSelection.test.ts",
+    "tests/message-content.test.ts",
+    "tests/message-pane-forward.test.tsx",
+    "tests/message-reader.test.tsx",
+    "tests/microsoft-account-identity.test.ts",
+    "tests/microsoft.test.ts",
+    "tests/model-draft.test.ts",
+    "tests/morning-brief-changes.test.ts",
+    "tests/morning-brief-copy.test.ts",
+    "tests/morning-brief-facts.test.ts",
+    "tests/morning-brief-schema.test.ts",
+    "tests/morning-brief-store.test.ts",
+    "tests/morning-brief-time.test.ts",
+    "tests/morning-brief-types.test.ts",
+    "tests/morning-brief-view.test.ts",
+    "tests/morning-brief-worker.test.ts",
+    "tests/notification-attention-controls.test.tsx",
+    "tests/notification-attention.test.ts",
+    "tests/notification-center.test.ts",
+    "tests/notification-copy.test.ts",
+    "tests/notification-crypto.test.ts",
+    "tests/notification-dispatch.test.ts",
+    "tests/notification-enrollment-api.test.ts",
+    "tests/notification-foreground.test.ts",
+    "tests/notification-governor.test.ts",
+    "tests/notification-history.test.ts",
+    "tests/notification-origin.test.ts",
+    "tests/notification-policy-api.test.ts",
+    "tests/notification-policy.test.ts",
+    "tests/notification-routing.test.tsx",
+    "tests/notification-schedule.test.ts",
+    "tests/notification-setup-schema.test.ts",
+    "tests/notification-setup.test.ts",
+    "tests/notification-store.test.ts",
+    "tests/notification-subscriptions.test.ts",
+    "tests/notification-telegram-callbacks.test.ts",
+    "tests/notification-telegram-schema.test.ts",
+    "tests/notification-telegram.test.ts",
+    "tests/notification-web-push.test.ts",
+    "tests/onboarding.test.ts",
+    "tests/open-source-notice.test.tsx",
+    "tests/outbox-view.test.tsx",
+    "tests/outbox.test.ts",
+    "tests/passkey-verification.test.ts",
+    "tests/passkeys.test.ts",
+    "tests/permissions.test.ts",
+    "tests/professional.test.ts",
+    "tests/provider-account-connection.test.ts",
+    "tests/provider-adapter-service.test.ts",
+    "tests/provider-adapter.test.ts",
+    "tests/provider-authorization-service.test.ts",
+    "tests/provider-connect-api.test.ts",
+    "tests/provider-discovery-api.test.ts",
+    "tests/provider-errors.test.ts",
+    "tests/provider-preflight-api.test.ts",
+    "tests/provider-registry.test.ts",
+    "tests/provider-setup-routing.test.ts",
+    "tests/provider-setup.test.ts",
+    "tests/providers-api.test.ts",
+    "tests/public-mirror-export.test.ts",
+    "tests/public-mirror-policy.test.ts",
+    "tests/public-release-docs.test.ts",
+    "tests/push-notifications.test.ts",
+    "tests/push-worker.test.ts",
+    "tests/pwa-controls.test.tsx",
+    "tests/pwa-worker.test.ts",
+    "tests/recipient-field.test.tsx",
+    "tests/refreshState.test.ts",
+    "tests/release-operations.test.ts",
+    "tests/reply-polish.test.ts",
+    "tests/reply-studio-state.test.ts",
+    "tests/saved-views-mail.test.ts",
+    "tests/saved-views.test.ts",
+    "tests/search.test.ts",
+    "tests/security-headers.test.ts",
+    "tests/sent-evidence.test.ts",
+    "tests/settings-account-recovery.test.tsx",
+    "tests/settings-browser-notifications.test.tsx",
+    "tests/settings-daily-brief-refresh.test.tsx",
+    "tests/setup.ts",
+    "tests/shortcuts.test.ts",
+    "tests/source-encoding.test.ts",
+    "tests/system-recovery.test.ts",
+    "tests/telegram-notification-settings.test.tsx",
+    "tests/today-attention.test.ts",
+    "tests/today-brief.test.ts",
+    "tests/today-items-api.test.ts",
+    "tests/today-morning-brief.test.tsx",
+    "tests/useLatestRequest.test.tsx",
+    "tests/v04-closeout-stress.test.ts",
+    "tests/v05-closeout-stress.test.ts",
+    "tests/vocabulary.test.ts",
+    "tests/worker-database-integration.test.ts",
+    "tests/worker.test.ts",
+    "tests/writing-settings.test.ts"
+  ],
+  "mappedFiles": [
+    {
+      "from": "public-release/README.md",
+      "to": "README.md"
+    },
+    {
+      "from": "public-release/DEPLOYMENT.md",
+      "to": "docs/DEPLOYMENT.md"
+    },
+    {
+      "from": "public-release/proxy-example.conf",
+      "to": "docs/proxy-example.conf"
+    },
+    {
+      "from": "public-release/PRIVACY.md",
+      "to": "docs/PRIVACY.md"
+    },
+    {
+      "from": "public-release/TERMS.md",
+      "to": "docs/TERMS.md"
+    },
+    {
+      "from": "public-release/EZRA_MAIL_ROADMAP.md",
+      "to": "docs/EZRA_MAIL_ROADMAP.md"
+    },
+    {
+      "from": "public-release/release-gate.yml",
+      "to": ".github/workflows/release-gate.yml"
+    },
+    {
+      "from": "public-release/secret-scan.yml",
+      "to": ".github/workflows/secret-scan.yml"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/bug_report.yml",
+      "to": ".github/ISSUE_TEMPLATE/bug_report.yml"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/feature_request.yml",
+      "to": ".github/ISSUE_TEMPLATE/feature_request.yml"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/config.yml",
+      "to": ".github/ISSUE_TEMPLATE/config.yml"
+    },
+    {
+      "from": ".github/pull_request_template.md",
+      "to": ".github/pull_request_template.md"
+    },
+    {
+      "to": "tests/version.test.ts",
+      "from": "public-release/tests/version.test.ts.in"
+    },
+    {
+      "to": "tests/ci-runner-contract.test.ts",
+      "from": "public-release/tests/ci-runner-contract.test.ts.in"
+    }
+  ],
+  "privateRoots": [
+    ".git",
+    ".next",
+    "node_modules",
+    "test-results",
+    "data",
+    "AGENTS.md",
+    "PRIVATE_OWNER_RECOVERY",
+    "SERVER_HANDOFF.md",
+    "SERVER_CONTEXT.md",
+    "config/thing1",
+    "openclaw-workspace-template",
+    "docs/VERSION_EXECUTION_LOG.md",
+    "docs/superpowers",
+    "docs/version-plans",
+    "ui-design-mockups",
+    ".github/dependabot.yml",
+    ".github/workflows/release-gate.yml",
+    ".superdesign",
+    ".superpowers",
+    ".github/workflows/secret-scan.yml",
+    "docs/CI-RUNNER.md",
+    "docs/DEPLOYMENT.md",
+    "docs/INTEGRATION_NOTES.md",
+    "docs/LATEST_AUDIT.md",
+    "docs/PUBLIC_RELEASE_READINESS.md",
+    "docs/EZRA_MAIL_ROADMAP.md",
+    "docs/TRUST_TRIAL_RUNBOOK.md",
+    "docs/WINDOWS_TESTER_HANDOFF.md",
+    "README.md",
+    "tsconfig.tsbuildinfo",
+    "scripts/check-caddy-drift.ts",
+    "scripts/configure-thing1-security.sh",
+    "scripts/deploy-thing1.ps1",
+    "scripts/extract-attachment.ts",
+    "scripts/install-thing1-backup-timers.sh",
+    "scripts/install-thing1-node.sh",
+    "scripts/setup-openclaw.ps1",
+    "scripts/start-ezra.ps1",
+    "tests/version.test.ts",
+    "tests/ci-runner-contract.test.ts"
+  ],
+  "scriptAudit": [
+    {
+      "path": "START HERE - Install Ezra Mail.bat",
+      "sha256": "dd1015f5667a2564f5abef21c5e4f8af28a011b350a483cec44a76e147c2dfdf"
+    },
+    {
+      "path": "installer/EzraMailSetup.ps1",
+      "sha256": "b3850c926e956718ed15a0be4663b355320ad6ed963fa54af0902971d03c0437"
+    },
+    {
+      "path": "installer/Install Ezra Mail.cmd",
+      "sha256": "14304185d63a1ce1f460fdf01c47eb7250b71cbb740132af55b626b87e883115"
+    },
+    {
+      "path": "installer/START HERE - Install Ezra Mail.bat",
+      "sha256": "d1e298c17bc0f5437efd6aa785060eaa891ce64df33f43136259c716a5635e90"
+    },
+    {
+      "path": "installer/install-ezra-ubuntu.sh",
+      "sha256": "9a44da9b4a9bba8f1eb83576358727a14a8155fd542322540536fa9e3db952e7"
+    },
+    {
+      "path": "next-env.d.ts",
+      "sha256": "85ae5aee75f011967cf2d25cbc342f62d69314e9d925f7f4aa3456fc2cffcca6"
+    },
+    {
+      "path": "next.config.mjs",
+      "sha256": "66e634c668e04580f16d3bb7c8cb7b53334737a7b7cdd7e286859de5fd2d0a13"
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "2eaa5a3cec79889172e4f31e6aee1b983b5ba46e480d0c1f67353b489adca4e8"
+    },
+    {
+      "path": "scripts/apply-dependency-patches.mjs",
+      "sha256": "88e62f3bb1e09405c0d76f55b37532d0a6bbb2dedf6c03111e1c4eb94952c400"
+    },
+    {
+      "path": "scripts/check-dependency-licenses.ts",
+      "sha256": "21343bf38240b307519dab6a177734630f473a225dc1419273ca82b516ad0263"
+    },
+    {
+      "path": "scripts/cleanup-test-databases.mjs",
+      "sha256": "b6e6d64d3dab49c1731026073ae2f504d7496bb946ef83785ba02dde7bfe5d05"
+    },
+    {
+      "path": "scripts/create-email-backup.ts",
+      "sha256": "14d4f8bbc20a13de1e608a9507a092704e9953dcc52d8ce2a019743ffd280b7f"
+    },
+    {
+      "path": "scripts/email-worker.ts",
+      "sha256": "57b7fe8a6580f9ed9d45280dea3b0420ef913ecc855e58f2b318ea38f0a59514"
+    },
+    {
+      "path": "scripts/ensure-web-build.ps1",
+      "sha256": "e259bad83f0464957d5c703dbabf8c1328f9064a983ccf2366b29ed2d82ae23f"
+    },
+    {
+      "path": "scripts/ezra-tray.ps1",
+      "sha256": "8fc797a03e5b37f7efc3babdf074a44d3f646b7388e60ae9a6ac071c1f0a822a"
+    },
+    {
+      "path": "scripts/generate-branding-assets.mjs",
+      "sha256": "d41746203bf8ce51b8e931714eaa448d46597c268863400dd91918a72e6f9cbc"
+    },
+    {
+      "path": "scripts/hash-auth-password.ts",
+      "sha256": "28637eb5920945c2de9ba8e643ec022c2f1087fdfec92c2f2357177191721967"
+    },
+    {
+      "path": "scripts/first-owner-bootstrap.ts",
+      "sha256": "69aa0f25102d2f4360dd85bb6ea72c240d31700e4d0b8fdb69573ce5d67a7c92"
+    },
+    {
+      "path": "scripts/install-ezra-backup-timers.sh",
+      "sha256": "690cab18fb6d26919d03cbbb15f395abd3367f6118b813f005a7e57665834c83"
+    },
+    {
+      "path": "scripts/install-ezra-systemd.sh",
+      "sha256": "910c667e95142e8b6edfc571770aceda6e3cf698ecc3c7e986ecdec8035e386b"
+    },
+    {
+      "path": "scripts/install-startup.ps1",
+      "sha256": "67a06003f6dcb9ddcdf75856723a83dc71457ac09a308ee27cbe29aae354e5ae"
+    },
+    {
+      "path": "scripts/interactive-hidden-input.ts",
+      "sha256": "248890a55094a9a1a8559e60b295c0163db1a0b2e49f5fc51bc0f88475094106"
+    },
+    {
+      "path": "scripts/mcp-server.ts",
+      "sha256": "b89f6f0d365773f51a301ffde2f8b6cc0a20017d48eec7a94d10fb8d481214d2"
+    },
+    {
+      "path": "scripts/migrate-database.ts",
+      "sha256": "05a46d5d818e7c2db41873bda9885952fdf195e741d61ecd7cf679c2ceb448e1"
+    },
+    {
+      "path": "scripts/model-benchmark.ts",
+      "sha256": "aea6feff2adf912f797560b53eab8a6de970520407f60de4ea5604a6487b8287"
+    },
+    {
+      "path": "scripts/public-mirror-policy.ts",
+      "sha256": "1c3b13858808d7e66a8c27cfabb73f3c4a6839657503f4d890905981f9c85d7f"
+    },
+    {
+      "path": "scripts/recover-owner-auth.ts",
+      "sha256": "85426203d6e6c5cf6b9687cb47c1096791a630aa417ee7be9c8ea10d56e221cd"
+    },
+    {
+      "path": "scripts/rehearse-email-restore.ts",
+      "sha256": "34ee500cc61aef01244b66148440bc66ede936ea2bc978aaf7251a1c7deef96c"
+    },
+    {
+      "path": "scripts/setup-models.ps1",
+      "sha256": "075c033562ab2f7a5674ebbc83c2fe5dae75046c32db66bfc91fc761f88ef709"
+    },
+    {
+      "path": "scripts/update-model.ts",
+      "sha256": "42c9892938bc72503d25929ddd6acd55409898325b53c13ef7ef269b032fcf2b"
+    },
+    {
+      "path": "scripts/verify-latest-backup.ts",
+      "sha256": "de9442932baf46b559e37b0a16046999bbc6f9fb7f1188df81879eb8e7497756"
+    },
+    {
+      "path": "scripts/verify-install-release.ts",
+      "sha256": "8548d2c05f3967494759130da7421c124598e66b8ebaae2d19686c48c75749ed"
+    },
+    {
+      "path": "vitest.config.ts",
+      "sha256": "39f5070ba485a5df860832673c57e2eddf845269ddf7e996f98bdd0b7bb168c3"
+    }
+  ],
+  "binaryAudit": [
+    {
+      "path": "public/branding/ezra-mail-logo-d4-192.png",
+      "type": "png",
+      "sha256": "99ef82e03e5a0fffb1323c544557529589756826a38760d97a3f92a9e4a2e30e"
+    },
+    {
+      "path": "public/branding/ezra-mail-logo-d4-120.png",
+      "type": "png",
+      "sha256": "11297816151488a70b81d370231ac0d1ee127bd690725fbd2d04cbb51990a5e9"
+    },
+    {
+      "path": "public/branding/ezra-mail-logo-d4-512.png",
+      "type": "png",
+      "sha256": "8ad43ef669edf7541fc156117cf96fea51d8edf722e55432c93cdd38cae67cd8"
+    },
+    {
+      "path": "docs/branding/ezra-mail-github-social.png",
+      "type": "png",
+      "sha256": "2b4772366b5a9d0226aa9c973603b49dec065d5b8badc826cf0e3877260733a5"
+    },
+    {
+      "path": "docs/branding/ezra-mail-logo-d4-app-512.png",
+      "type": "png",
+      "sha256": "8ad43ef669edf7541fc156117cf96fea51d8edf722e55432c93cdd38cae67cd8"
+    },
+    {
+      "path": "docs/branding/ezra-mail-logo-d4-google-120.png",
+      "type": "png",
+      "sha256": "11297816151488a70b81d370231ac0d1ee127bd690725fbd2d04cbb51990a5e9"
+    },
+    {
+      "path": "docs/branding/ezra-mail-logo-d4-master.png",
+      "type": "png",
+      "sha256": "0ffd5a749250201e6ba77615bdafab8c496a34b1fb697aef4c14f42c6cfb4afe"
+    },
+    {
+      "path": "docs/branding/ezra-mail-today-demo.png",
+      "type": "png",
+      "sha256": "56bb2758634dae3e2c9c19fcb4bf68aeaa7ec6bc7c19b0b961675dfb9cd50910"
+    }
+  ]
+}

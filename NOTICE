@@ -1,0 +1,16 @@
+Ezra Mail
+Copyright (c) 2026 Eric Michael Mathews
+
+The community edition is licensed under the GNU Affero General Public License,
+version 3 only (AGPL-3.0-only).
+
+Separate commercial licenses may be available from Eric Michael Mathews for
+uses that cannot comply with the AGPL. No commercial license is granted by
+this notice.
+
+Third-party Web Push transport
+web-push 3.6.7 is used unmodified under the Mozilla Public License 2.0.
+Source: https://github.com/web-push-libs/web-push/tree/v3.6.7
+License and upstream notices: https://github.com/web-push-libs/web-push/blob/v3.6.7/LICENSE
+The package retains its upstream license and notices. Ezra Mail's commercial
+terms do not relicense this third-party code.

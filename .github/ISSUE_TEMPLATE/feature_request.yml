@@ -1,0 +1,40 @@
+name: Feature request
+description: Propose a focused improvement to Ezra Mail.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Describe the experience that needs improvement before describing a solution.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Explain how the result should feel and behave for the user.
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Privacy, provider, or action-boundary impact
+      description: Note any new data, permission, provider action, notification, or sending behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope confirmation
+      options:
+        - label: This request contains no live mail, credentials, or private infrastructure details.
+          required: true
+        - label: I checked the roadmap for an existing milestone.
+          required: true

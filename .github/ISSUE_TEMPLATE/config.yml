@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security report
+    url: https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted/security/advisories/new
+    about: Report vulnerabilities privately. Do not open a public issue.
+  - name: Roadmap
+    url: https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted/blob/main/docs/EZRA_MAIL_ROADMAP.md
+    about: Review accepted milestones before proposing a large feature.

@@ -1,0 +1,5 @@
+FROM qwen3:14b
+PARAMETER num_ctx 40960
+PARAMETER temperature 0.1
+PARAMETER top_p 0.9
+PARAMETER repeat_penalty 1.05

@@ -1,0 +1,19 @@
+diff --git a/node_modules/exceljs/lib/stream/xlsx/workbook-reader.js b/node_modules/exceljs/lib/stream/xlsx/workbook-reader.js
+index d5f1e85..89596cb 100644
+--- a/node_modules/exceljs/lib/stream/xlsx/workbook-reader.js
++++ b/node_modules/exceljs/lib/stream/xlsx/workbook-reader.js
+@@ -88,4 +88,4 @@ class WorkbookReader extends EventEmitter {
+-    for await (const entry of iterateStream(zip)) {
++    for await (const entry of zip) {
+       let match;
+       let sheetNo;
+       switch (entry.path) {
+@@ -107,7 +107,7 @@ class WorkbookReader extends EventEmitter {
+           if (entry.path.match(/xl\/worksheets\/sheet\d+[.]xml/)) {
+             match = entry.path.match(/xl\/worksheets\/sheet(\d+)[.]xml/);
+             sheetNo = match[1];
+-            if (this.sharedStrings && this.workbookRels) {
++            if (this.sharedStrings && this.workbookRels && this.model) {
+               yield* this._parseWorksheet(iterateStream(entry), sheetNo);
+             } else {
+               // create temp file for each worksheet
