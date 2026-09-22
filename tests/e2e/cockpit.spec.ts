@@ -370,6 +370,11 @@ test("Settings opens the provider permissions dashboard", async ({ page }) => {
 });
 
 test("Setup checklist shows honest status and safe next-step links", async ({ page }) => {
+  // Other browser projects can enable owner protection on the shared server.
+  // This UI fixture must work even when every unmocked API requires authentication.
+  await page.route("**/api/**", (route) => route.fulfill({
+    status: 401, json: { error: "Authentication is required." },
+  }));
   await mockEzraMailApi(page, []);
   await mockSetupChecklistApi(page);
   await page.goto("/?view=settings");
@@ -1593,6 +1598,10 @@ async function mockCalendarModesApi(page: Page, requests: URLSearchParams[], emp
 }
 
 async function mockSetupChecklistApi(page: Page, browserNotificationsAvailable = false) {
+  await page.route("**/api/accounts", (route) => route.fulfill({ json: {
+    generatedAt: "2026-07-10T12:00:00.000Z",
+    pollIntervalMinutes: 5, manualSyncCooldownSeconds: 60, items: [],
+  } }));
   await page.route("**/api/auth/devices", (route) => route.fulfill({ json: {
     devices: [],
     passkeys: [],
