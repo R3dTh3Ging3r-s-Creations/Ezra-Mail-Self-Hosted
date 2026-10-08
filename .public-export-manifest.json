@@ -323,7 +323,7 @@
     },
     {
       "path": "scripts/build-public-mirror.ts",
-      "sha256": "56e6a769daa6b11929ea3c55043da55758730c6b8a10a8e59876a91d026e92d9",
+      "sha256": "936babca14efa9e838eebc3eb08498de7fca83af54d594e45fff8b897564fd85",
       "source": "scripts/build-public-mirror.ts"
     },
     {
@@ -2068,7 +2068,7 @@
     },
     {
       "path": "tests/e2e/cockpit.spec.ts",
-      "sha256": "28fc2446de9fdbbc89ba96a9959037ac891699c092e53ec5cdb88193d649bf36",
+      "sha256": "02cef78acc8acb35c7287d10e132436587d947cbc93577c527bae76a30d878d9",
       "source": "tests/e2e/cockpit.spec.ts"
     },
     {
