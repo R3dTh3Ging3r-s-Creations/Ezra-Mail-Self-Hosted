@@ -1,6 +1,6 @@
 # Ezra Mail roadmap
 
-Current app version: **v0.8.2**, experimental and pre-1.0.
+Current app version: **v0.8.2**. Experimental and pre-1.0.
 Updated October 8, 2026. This is the public roadmap for Ezra-Mail-Self-Hosted;
 private operational records and account data remain separate.
 

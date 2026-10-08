@@ -52,12 +52,11 @@ describe("Ezra Mail release version", () => {
     expect(publicRoadmap).not.toMatch(/- \[ \] \*\*v0\.7\.5\b/);
     expect(uiAuditMilestone).toBeGreaterThan(-1);
     expect(generalAvailabilityMilestone).toBeGreaterThan(uiAuditMilestone);
-    expect(publicRoadmap).toContain("d162e55");
-    expect(publicRoadmap).toContain("32679351293");
-    expect(publicRoadmap).toContain("32679404193");
-    expect(publicRoadmap).toContain("4f533de");
-    expect(publicRoadmap).toContain("32707261292");
-    expect(publicRoadmap).toContain("32707260801");
+    expect(publicRoadmap).toContain("potentially incomplete local index");
+    expect(publicRoadmap).toContain("not atomic revision");
+    expect(publicRoadmap).toContain("Guided public plugin onboarding");
+    expect(publicRoadmap).toContain("expiry, outage, restart and uncertain-outcome acceptance");
+    expect(publicRoadmap).toContain("not exposed");
   });
 
   it.skipIf(!isPrivateWorkspace)("records the deployed v0.7.7 production checkpoint", () => {

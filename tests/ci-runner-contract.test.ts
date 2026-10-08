@@ -23,7 +23,13 @@ describe("Thing2 workflow contract", () => {
     ]);
 
     if (await isPublishedPublicMirror()) {
-      expect(releaseGate).toContain("runs-on: ubuntu-latest");
+      for (const workflow of [releaseGate, secretScan]) {
+        expect(workflow).toContain("runs-on: ubuntu-24.04");
+        expect(workflow).toContain("contents: read");
+        expect(workflow).toContain("persist-credentials: false");
+        expect(workflow).not.toContain("self-hosted");
+        expect(workflow).not.toMatch(/uses:.*Ezra-Mail\//);
+      }
       expect(releaseGate).toContain("cancel-in-progress: true");
       expect(secretScan).toContain("cancel-in-progress: false");
       return;

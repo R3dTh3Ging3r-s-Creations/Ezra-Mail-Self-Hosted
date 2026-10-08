@@ -143,7 +143,7 @@
     },
     {
       "path": "docs/EZRA_MAIL_ROADMAP.md",
-      "sha256": "fedcbfa3a59c27413364bb117435a0e7eee010ec02a6953b0783a3b7b7a78998",
+      "sha256": "9f52a50d2d803c14eb50af9198ac13532ca72d39f18e87c8e38189a06ced7b15",
       "source": "public-release/EZRA_MAIL_ROADMAP.md"
     },
     {
@@ -323,7 +323,7 @@
     },
     {
       "path": "scripts/build-public-mirror.ts",
-      "sha256": "cee444c8eb18985f4cb34278e7eeb86a59e08a2cc455bbbb357f8bb092391126",
+      "sha256": "56e6a769daa6b11929ea3c55043da55758730c6b8a10a8e59876a91d026e92d9",
       "source": "scripts/build-public-mirror.ts"
     },
     {
@@ -2023,7 +2023,7 @@
     },
     {
       "path": "tests/ci-runner-contract.test.ts",
-      "sha256": "88ababfaab5b3a4d6ced58c24bb3e69fffb89829aa2b37ad1ff2a5c10be6dece",
+      "sha256": "70785c5b85e752f3634eef3272e54d8b9ba3333846a18019d6a673d1d2262b98",
       "source": "tests/ci-runner-contract.test.ts"
     },
     {
@@ -2708,7 +2708,7 @@
     },
     {
       "path": "tests/version.test.ts",
-      "sha256": "cff5b33964c6c5046e8dbd48fd448955274057e4c178778c6727741ac21b0c1f",
+      "sha256": "a47438b6e66f787a1a0fe0cb11a01e966160e09b4a86afdd845ac835a067a56d",
       "source": "tests/version.test.ts"
     },
     {
