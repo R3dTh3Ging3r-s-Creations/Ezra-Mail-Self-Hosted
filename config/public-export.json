@@ -1,6 +1,7 @@
 {
   "copyDirectories": [
     "src",
+    "tests",
     "public/branding",
     "docs/branding",
     "installer"
@@ -27,13 +28,11 @@
     "START HERE - Install Ezra Mail.bat",
     "config/public-export.json",
     "public/manifest.webmanifest",
-    "config/models/Qwen3-8B-MaxContext.Modelfile",
-    "config/models/Qwen3-14B-MaxContext.Modelfile",
-    "config/models/Qwen3.5-9B-MaxContext.Modelfile",
     "public/ezra-sw.js",
     "scripts/public-mirror-policy.ts",
     "scripts/build-public-mirror.ts",
     "scripts/check-dependency-licenses.ts",
+    "scripts/extract-attachment.ts",
     "scripts/ensure-web-build.ps1",
     "scripts/email-worker.ts",
     "scripts/mcp-server.ts",
@@ -58,152 +57,21 @@
     "scripts/generate-branding-assets.mjs",
     "patches/exceljs+4.4.1-prerelease.0.patch",
     "docs/DEPENDENCY_LICENSES.md",
+    "docs/ARGPARSE_LICENSE_REVIEW.md",
+    "docs/licenses/argparse-2.0.1.txt",
     "docs/EZRA_CLOUD.md",
     "docs/EMAIL_AGENT_SETUP.md",
-    "tests/account-health.test.ts",
-    "tests/account-polling-safety.test.ts",
-    "tests/account-recovery.test.ts",
-    "tests/action-center.test.ts",
-    "tests/activity-timeline.test.ts",
-    "tests/approval.test.ts",
-    "tests/attachment-preview-api.test.ts",
-    "tests/attachments.test.ts",
-    "tests/auth-recovery.test.ts",
-    "tests/auth.test.ts",
-    "tests/background-notification-controls.test.tsx",
-    "tests/backlog-policy.test.ts",
-    "tests/brief-memory.test.ts",
-    "tests/calendar-daily-brief-refresh.test.tsx",
-    "tests/calendar-view-state.test.ts",
-    "tests/calendar.test.ts",
-    "tests/cockpit.test.tsx",
-    "tests/composition.test.ts",
-    "tests/contacts.test.ts",
-    "tests/database-access.test.ts",
-    "tests/database-runtime.test.ts",
-    "tests/dependency-license-policy.test.ts",
-    "tests/direct-replies.test.ts",
-    "tests/drafts-view.test.tsx",
-    "tests/e2e/cockpit.spec.ts",
-    "tests/e2e/notifications.spec.ts",
-    "tests/e2e/owner-auth-fixture.ts",
-    "tests/e2e/pwa.spec.ts",
-    "tests/email-policy.test.ts",
-    "tests/email-service-safety.test.ts",
-    "tests/exceljs-compatibility.test.ts",
-    "tests/first-owner-bootstrap.test.ts",
-    "tests/first-owner-setup-api.test.ts",
-    "tests/first-owner-setup.test.ts",
-    "tests/first-owner-setup.test.tsx",
-    "tests/fixtures/morning-brief.ts",
-    "tests/fixtures/notification-settings.ts",
-    "tests/foreground-browser-notifications.test.tsx",
-    "tests/foreground-notifications-api.test.ts",
-    "tests/foreground-notifications.test.ts",
-    "tests/gmail.test.ts",
-    "tests/helpers/notification-ledger.ts",
-    "tests/helpers/public-test-accounting.ts",
-    "tests/helpers/push-marker-database.ts",
-    "tests/install-release-gate.test.ts",
-    "tests/installer-ubuntu.test.ts",
-    "tests/installer-windows.test.ts",
-    "tests/interactive-hidden-input.test.ts",
-    "tests/mailActionSummary.test.ts",
-    "tests/mailSelection.test.ts",
-    "tests/message-content.test.ts",
-    "tests/message-pane-forward.test.tsx",
-    "tests/message-reader.test.tsx",
-    "tests/microsoft-account-identity.test.ts",
-    "tests/microsoft.test.ts",
-    "tests/model-draft.test.ts",
-    "tests/morning-brief-changes.test.ts",
-    "tests/morning-brief-copy.test.ts",
-    "tests/morning-brief-facts.test.ts",
-    "tests/morning-brief-schema.test.ts",
-    "tests/morning-brief-store.test.ts",
-    "tests/morning-brief-time.test.ts",
-    "tests/morning-brief-types.test.ts",
-    "tests/morning-brief-view.test.ts",
-    "tests/morning-brief-worker.test.ts",
-    "tests/notification-attention-controls.test.tsx",
-    "tests/notification-attention.test.ts",
-    "tests/notification-center.test.ts",
-    "tests/notification-copy.test.ts",
-    "tests/notification-crypto.test.ts",
-    "tests/notification-dispatch.test.ts",
-    "tests/notification-enrollment-api.test.ts",
-    "tests/notification-foreground.test.ts",
-    "tests/notification-governor.test.ts",
-    "tests/notification-history.test.ts",
-    "tests/notification-origin.test.ts",
-    "tests/notification-policy-api.test.ts",
-    "tests/notification-policy.test.ts",
-    "tests/notification-routing.test.tsx",
-    "tests/notification-schedule.test.ts",
-    "tests/notification-setup-schema.test.ts",
-    "tests/notification-setup.test.ts",
-    "tests/notification-store.test.ts",
-    "tests/notification-subscriptions.test.ts",
-    "tests/notification-telegram-callbacks.test.ts",
-    "tests/notification-telegram-schema.test.ts",
-    "tests/notification-telegram.test.ts",
-    "tests/notification-web-push.test.ts",
-    "tests/onboarding.test.ts",
-    "tests/open-source-notice.test.tsx",
-    "tests/outbox-view.test.tsx",
-    "tests/outbox.test.ts",
-    "tests/passkey-verification.test.ts",
-    "tests/passkeys.test.ts",
-    "tests/permissions.test.ts",
-    "tests/professional.test.ts",
-    "tests/provider-account-connection.test.ts",
-    "tests/provider-adapter-service.test.ts",
-    "tests/provider-adapter.test.ts",
-    "tests/provider-authorization-service.test.ts",
-    "tests/provider-connect-api.test.ts",
-    "tests/provider-discovery-api.test.ts",
-    "tests/provider-errors.test.ts",
-    "tests/provider-preflight-api.test.ts",
-    "tests/provider-registry.test.ts",
-    "tests/provider-setup-routing.test.ts",
-    "tests/provider-setup.test.ts",
-    "tests/providers-api.test.ts",
-    "tests/public-mirror-export.test.ts",
-    "tests/public-mirror-policy.test.ts",
-    "tests/public-release-docs.test.ts",
-    "tests/push-notifications.test.ts",
-    "tests/push-worker.test.ts",
-    "tests/pwa-controls.test.tsx",
-    "tests/pwa-worker.test.ts",
-    "tests/recipient-field.test.tsx",
-    "tests/refreshState.test.ts",
-    "tests/release-operations.test.ts",
-    "tests/reply-polish.test.ts",
-    "tests/reply-studio-state.test.ts",
-    "tests/saved-views-mail.test.ts",
-    "tests/saved-views.test.ts",
-    "tests/search.test.ts",
-    "tests/security-headers.test.ts",
-    "tests/sent-evidence.test.ts",
-    "tests/settings-account-recovery.test.tsx",
-    "tests/settings-browser-notifications.test.tsx",
-    "tests/settings-daily-brief-refresh.test.tsx",
-    "tests/setup.ts",
-    "tests/shortcuts.test.ts",
-    "tests/source-encoding.test.ts",
-    "tests/system-recovery.test.ts",
-    "tests/telegram-notification-settings.test.tsx",
-    "tests/today-attention.test.ts",
-    "tests/today-brief.test.ts",
-    "tests/today-items-api.test.ts",
-    "tests/today-morning-brief.test.tsx",
-    "tests/useLatestRequest.test.tsx",
-    "tests/v04-closeout-stress.test.ts",
-    "tests/v05-closeout-stress.test.ts",
-    "tests/vocabulary.test.ts",
-    "tests/worker-database-integration.test.ts",
-    "tests/worker.test.ts",
-    "tests/writing-settings.test.ts"
+    "scripts/prepare-restored-agent-access.ts",
+    "tools/gog-ezra/build.mjs",
+    "tools/gog-ezra/calendar_ezra_event.go",
+    "tools/gog-ezra/calendar_ezra_event_test.go",
+    "tools/gog-ezra/README.md",
+    "plugins/ezra-mail/linux/agent-linux-runtime.ts",
+    "plugins/ezra-mail/linux/key-agent-mcp-linux.ts",
+    "plugins/ezra-mail/linux/build-agent-linux.ts",
+    "plugins/ezra-mail/linux/agent-linux-runtime.test.ts",
+    "plugins/ezra-mail/linux/agent-linux-build.test.ts",
+    "plugins/ezra-mail/SCOPED_ACTIONS.md"
   ],
   "mappedFiles": [
     {
@@ -247,7 +115,7 @@
       "to": ".github/ISSUE_TEMPLATE/feature_request.yml"
     },
     {
-      "from": ".github/ISSUE_TEMPLATE/config.yml",
+      "from": "public-release/issue-config.yml",
       "to": ".github/ISSUE_TEMPLATE/config.yml"
     },
     {
@@ -255,15 +123,33 @@
       "to": ".github/pull_request_template.md"
     },
     {
-      "to": "tests/version.test.ts",
-      "from": "public-release/tests/version.test.ts.in"
+      "from": "public-release/PERSONAL_PLUGIN.md",
+      "to": "docs/PERSONAL_PLUGIN.md"
     },
     {
-      "to": "tests/ci-runner-contract.test.ts",
-      "from": "public-release/tests/ci-runner-contract.test.ts.in"
+      "from": "public-release/PLUGIN_LINUX.md",
+      "to": "plugins/ezra-mail/linux/README.md"
+    },
+    {
+      "from": "public-release/ezra-mail-cloud-mcp.service.in",
+      "to": "plugins/ezra-mail/linux/ezra-mail-cloud-mcp.service.in"
+    },
+    {
+      "from": "public-release/models/Qwen3-14B-MaxContext.Modelfile",
+      "to": "config/models/Qwen3-14B-MaxContext.Modelfile"
+    },
+    {
+      "from": "public-release/models/Qwen3-8B-MaxContext.Modelfile",
+      "to": "config/models/Qwen3-8B-MaxContext.Modelfile"
+    },
+    {
+      "from": "public-release/models/Qwen3.5-9B-MaxContext.Modelfile",
+      "to": "config/models/Qwen3.5-9B-MaxContext.Modelfile"
     }
   ],
   "privateRoots": [
+    "scripts/start-agent-mcp.ps1",
+    "docs/operations/personal-agent-access.md",
     ".git",
     ".next",
     "node_modules",
@@ -283,7 +169,7 @@
     ".github/workflows/release-gate.yml",
     ".superdesign",
     ".superpowers",
-    ".github/workflows/secret-scan.yml",
+    "config/models",
     "docs/CI-RUNNER.md",
     "docs/DEPLOYMENT.md",
     "docs/INTEGRATION_NOTES.md",
@@ -297,13 +183,27 @@
     "scripts/check-caddy-drift.ts",
     "scripts/configure-thing1-security.sh",
     "scripts/deploy-thing1.ps1",
-    "scripts/extract-attachment.ts",
     "scripts/install-thing1-backup-timers.sh",
     "scripts/install-thing1-node.sh",
     "scripts/setup-openclaw.ps1",
     "scripts/start-ezra.ps1",
-    "tests/version.test.ts",
-    "tests/ci-runner-contract.test.ts"
+    "scripts/key-agent-mcp.ts",
+    "docs/operations/scoped-actions-acceptance.md",
+    ".gitleaksignore",
+    ".github/workflows/secret-scan.yml",
+    ".github/ISSUE_TEMPLATE/config.yml",
+    "plugins/ezra-mail/.codex-plugin",
+    "plugins/ezra-mail/scripts",
+    "plugins/ezra-mail/skills",
+    "plugins/ezra-mail/tests",
+    "plugins/ezra-mail/linux/tunnel-runtime",
+    "plugins/ezra-mail/README.md",
+    "plugins/ezra-mail/linux/README.md",
+    "plugins/ezra-mail/linux/ezra-mail-cloud-mcp.service.in",
+    "plugins/ezra-mail/key-profile.example.json",
+    "plugins/ezra-mail/mcp-key.json",
+    "plugins/ezra-mail/mcp.json",
+    "plugins/ezra-mail/plugin.json"
   ],
   "scriptAudit": [
     {
@@ -344,7 +244,7 @@
     },
     {
       "path": "scripts/check-dependency-licenses.ts",
-      "sha256": "21343bf38240b307519dab6a177734630f473a225dc1419273ca82b516ad0263"
+      "sha256": "3ca3545c9f100011878faa7bb81026b9dd62951585fbf82252897c405272a140"
     },
     {
       "path": "scripts/cleanup-test-databases.mjs",
@@ -396,7 +296,7 @@
     },
     {
       "path": "scripts/mcp-server.ts",
-      "sha256": "b89f6f0d365773f51a301ffde2f8b6cc0a20017d48eec7a94d10fb8d481214d2"
+      "sha256": "b1fc6acf14ef3c6a34324a3553b79e715aefa2cf423ed21b1ebc1167905a2e86"
     },
     {
       "path": "scripts/migrate-database.ts",
@@ -408,7 +308,7 @@
     },
     {
       "path": "scripts/public-mirror-policy.ts",
-      "sha256": "1c3b13858808d7e66a8c27cfabb73f3c4a6839657503f4d890905981f9c85d7f"
+      "sha256": "c8bddf79aa9b89408adbe4549af6f5750737982ccefcdffaa2e760a1df9bbef5"
     },
     {
       "path": "scripts/recover-owner-auth.ts",
@@ -416,7 +316,7 @@
     },
     {
       "path": "scripts/rehearse-email-restore.ts",
-      "sha256": "34ee500cc61aef01244b66148440bc66ede936ea2bc978aaf7251a1c7deef96c"
+      "sha256": "cc01c2c076bea353980fcc6675d815babb55cacbede2c69683a2710bde25444f"
     },
     {
       "path": "scripts/setup-models.ps1",
@@ -437,6 +337,38 @@
     {
       "path": "vitest.config.ts",
       "sha256": "39f5070ba485a5df860832673c57e2eddf845269ddf7e996f98bdd0b7bb168c3"
+    },
+    {
+      "path": "scripts/prepare-restored-agent-access.ts",
+      "sha256": "82341ab584c9d1091e8af5715aecde350c9ac313482740925e1877172dadd6f3"
+    },
+    {
+      "path": "scripts/extract-attachment.ts",
+      "sha256": "5e77092a2f69ff9ea9cd6f1c19c07a7bd3a2ba4864a2afaea787f6112cb4d393"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/agent-linux-runtime.ts",
+      "sha256": "1a63b19a23decf5c9a7ad40e77fe1d38aba6971b464259ebc7d1e5820b067307"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/key-agent-mcp-linux.ts",
+      "sha256": "0b9e770b3c071e2460b9a5dc46a9a45ca955e8a9784341e22966c300c6ddbc62"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/build-agent-linux.ts",
+      "sha256": "b682156865598359f20364a548c6577906845a9dd23343780fa30e274999558b"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/agent-linux-runtime.test.ts",
+      "sha256": "53b2d593f9ed51086781e9ae8090dcd00ba42818ee7fd52bab7f7d9bc0fe9371"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/agent-linux-build.test.ts",
+      "sha256": "47047b976897715c9efb102b7c595734ade25239f01c197bf168c62e2404af5c"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/ezra-mail-cloud-mcp.service.in",
+      "sha256": "5a0269482077bac6f641e1c3b03da643bc26b8ae296918c7d4484eefa48ae32d"
     }
   ],
   "binaryAudit": [

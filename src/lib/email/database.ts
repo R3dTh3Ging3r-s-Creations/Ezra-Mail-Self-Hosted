@@ -1,3 +1,5 @@
+import { migrateAgentResourceSchema } from "./agent-resource-schema";
+import { migrateAgentOperationSchema } from "./agent-operation-schema";
 import { withEmailDatabaseAccess } from "./database-access";
 import { migrateMorningBriefSchema } from './morning-brief-schema';
 import { migrateNotificationTelegramUpdatesSchema } from "./notification-telegram-updates-schema";
@@ -32,7 +34,7 @@ let clientCache: Client | undefined;
 let initializedUrl: string | undefined;
 let initialization: Promise<void> | undefined;
 
-export const EMAIL_SCHEMA_VERSION = 10;
+export const EMAIL_SCHEMA_VERSION = 14;
 
 export function nowIso() {
   return new Date().toISOString();
@@ -992,6 +994,32 @@ async function initialize(client: Client) {
   await migrateNotificationTelegramSchema(client);
   await migrateNotificationTelegramUpdatesSchema(client);
   await migrateMorningBriefSchema(client);
+  await migrateCalendarReminderMode(client);
+  await migrateAgentOperationSchema(client);
+  await migrateCalendarProviderEvidence(client);
+  await migrateAgentResourceSchema(client);
+}
+
+/** Additive v13; cached evidence never substitutes for a fresh agent snapshot. */
+export async function migrateCalendarProviderEvidence(client: Client) {
+  const columns = new Set((await client.execute("PRAGMA table_info(calendar_events)")).rows.map(row => String(row.name)));
+  const statements: string[] = [];
+  for (const column of ["reminder_evidence", "provider_revision", "correlation_id", "recurrence_id"]) {
+    if (!columns.has(column)) statements.push(`ALTER TABLE calendar_events ADD COLUMN ${column} TEXT`);
+  }
+  const version = Number((await client.execute("PRAGMA user_version")).rows[0].user_version);
+  if (version < 13) statements.push("PRAGMA user_version=13");
+  if (statements.length) await client.batch(statements, "write");
+}
+
+async function migrateCalendarReminderMode(client: Client) {
+  const columns = new Set((await client.execute("PRAGMA table_info(calendar_drafts)")).rows.map((row) => String(row.name)));
+  const statements: string[] = [];
+  // NULL preserves old provider-specific semantics until the owner edits the draft.
+  if (!columns.has("reminder_mode")) statements.push("ALTER TABLE calendar_drafts ADD COLUMN reminder_mode TEXT");
+  const version = Number((await client.execute("PRAGMA user_version")).rows[0].user_version);
+  if (version < 11) statements.push("PRAGMA user_version = 11");
+  if (statements.length) await client.batch(statements, "write");
 }
 
 async function migrateBriefEvidenceAndCalendarDates(client: Client) {

@@ -11,15 +11,15 @@ describe("OpenSourceNotice", () => {
     expect(new Set(links.map((link) => link.getAttribute("href"))).size).toBe(3);
     expect(screen.getByRole("link", { name: "Public source" })).toHaveAttribute(
       "href",
-      "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted",
+      "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail",
     );
     expect(screen.getByRole("link", { name: "AGPL-3.0-only license" })).toHaveAttribute(
       "href",
-      "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted/blob/main/LICENSE",
+      "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail/blob/main/LICENSE",
     );
     expect(screen.getByRole("link", { name: "Commercial licensing" })).toHaveAttribute(
       "href",
-      "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted/blob/main/COMMERCIAL-LICENSING.md",
+      "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail/blob/main/COMMERCIAL-LICENSING.md",
     );
   });
 });

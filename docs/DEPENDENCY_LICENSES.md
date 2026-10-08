@@ -16,7 +16,7 @@ The platform-independent graph includes required dependency and required peer ed
 | @libsql/hrana-client@0.7.0 | node_modules/@libsql/hrana-client | MIT | https://github.com/libsql/hrana-client-ts |
 | @libsql/isomorphic-fetch@0.3.1 | node_modules/@libsql/isomorphic-fetch | MIT | https://github.com/libsql/isomorphic-ts |
 | @libsql/isomorphic-ws@0.1.5 | node_modules/@libsql/isomorphic-ws | MIT | https://github.com/libsql/isomorphic-ts |
-| @modelcontextprotocol/sdk@1.30.0 | node_modules/@modelcontextprotocol/sdk | MIT | https://github.com/modelcontextprotocol/typescript-sdk |
+| @modelcontextprotocol/sdk@1.31.0 | node_modules/@modelcontextprotocol/sdk | MIT | https://github.com/modelcontextprotocol/typescript-sdk |
 | @neon-rs/load@0.0.4 | node_modules/@neon-rs/load | MIT | https://github.com/dherman/neon-rs |
 | @next/env@15.5.25 | node_modules/@next/env | MIT | https://github.com/vercel/next.js |
 | @peculiar/asn1-android@2.8.0 | node_modules/@peculiar/asn1-android | MIT | https://github.com/PeculiarVentures/asn1-schema |
@@ -46,7 +46,7 @@ The platform-independent graph includes required dependency and required peer ed
 | archiver-utils@2.1.0 | node_modules/archiver-utils | MIT | https://github.com/archiverjs/archiver-utils |
 | archiver-utils@3.0.4 | node_modules/zip-stream/node_modules/archiver-utils | MIT | https://github.com/archiverjs/archiver-utils |
 | archiver@5.3.2 | node_modules/archiver | MIT | https://github.com/archiverjs/node-archiver |
-| argparse@1.0.10 | node_modules/argparse | MIT | https://github.com/nodeca/argparse |
+| argparse@2.0.1 | node_modules/argparse | Python-2.0 | https://github.com/nodeca/argparse |
 | asn1.js@5.4.1 | node_modules/asn1.js | MIT | https://github.com/indutny/asn1.js |
 | asn1js@3.0.10 | node_modules/asn1js | BSD-3-Clause | https://github.com/PeculiarVentures/ASN1.js |
 | async@3.2.6 | node_modules/async | MIT | https://github.com/caolan/async |
@@ -57,8 +57,8 @@ The platform-independent graph includes required dependency and required peer ed
 | bluebird@3.4.7 | node_modules/bluebird | MIT | https://github.com/petkaantonov/bluebird |
 | bn.js@4.12.5 | node_modules/bn.js | MIT | https://github.com/indutny/bn.js |
 | body-parser@2.3.0 | node_modules/body-parser | MIT | https://github.com/expressjs/body-parser |
-| brace-expansion@1.1.18 | node_modules/brace-expansion | MIT | https://github.com/juliangruber/brace-expansion |
-| brace-expansion@2.1.4 | node_modules/readdir-glob/node_modules/brace-expansion | MIT | https://github.com/juliangruber/brace-expansion |
+| brace-expansion@1.1.21 | node_modules/brace-expansion | MIT | https://github.com/juliangruber/brace-expansion |
+| brace-expansion@2.1.7 | node_modules/readdir-glob/node_modules/brace-expansion | MIT | https://github.com/juliangruber/brace-expansion |
 | buffer-crc32@0.2.13 | node_modules/buffer-crc32 | MIT | https://github.com/brianloveswords/buffer-crc32 |
 | buffer-equal-constant-time@1.0.1 | node_modules/buffer-equal-constant-time | BSD-3-Clause | https://github.com/goinstant/buffer-equal-constant-time |
 | buffer@5.7.1 | node_modules/buffer | MIT | https://github.com/feross/buffer |
@@ -115,7 +115,7 @@ The platform-independent graph includes required dependency and required peer ed
 | express@5.2.1 | node_modules/express | MIT | https://github.com/expressjs/express |
 | fast-csv@4.3.6 | node_modules/fast-csv | MIT | https://github.com/C2FO/fast-csv |
 | fast-deep-equal@3.1.3 | node_modules/fast-deep-equal | MIT | https://github.com/epoberezkin/fast-deep-equal |
-| fast-uri@3.1.7 | node_modules/fast-uri | BSD-3-Clause | https://github.com/fastify/fast-uri |
+| fast-uri@3.1.8 | node_modules/fast-uri | BSD-3-Clause | https://github.com/fastify/fast-uri |
 | fetch-blob@3.2.0 | node_modules/fetch-blob | MIT | https://github.com/node-fetch/fetch-blob |
 | finalhandler@2.1.1 | node_modules/finalhandler | MIT | https://github.com/pillarjs/finalhandler |
 | formdata-polyfill@4.0.10 | node_modules/formdata-polyfill | MIT | https://registry.npmjs.org/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz |
@@ -132,7 +132,7 @@ The platform-independent graph includes required dependency and required peer ed
 | graceful-fs@4.2.11 | node_modules/graceful-fs | ISC | https://github.com/isaacs/node-graceful-fs |
 | has-symbols@1.1.0 | node_modules/has-symbols | MIT | https://github.com/inspect-js/has-symbols |
 | hasown@2.0.4 | node_modules/hasown | MIT | https://github.com/inspect-js/hasOwn |
-| hono@4.13.0 | node_modules/hono | MIT | https://github.com/honojs/hono |
+| hono@4.13.13 | node_modules/hono | MIT | https://github.com/honojs/hono |
 | htmlparser2@12.0.0 | node_modules/htmlparser2 | MIT | https://github.com/fb55/htmlparser2 |
 | http_ece@1.2.0 | node_modules/http_ece | MIT | https://github.com/martinthomson/encrypted-content-encoding |
 | http-errors@2.0.1 | node_modules/http-errors | MIT | https://github.com/jshttp/http-errors |
@@ -143,7 +143,7 @@ The platform-independent graph includes required dependency and required peer ed
 | immediate@3.0.6 | node_modules/immediate | MIT | https://github.com/calvinmetcalf/immediate |
 | inflight@1.0.6 | node_modules/inflight | ISC | https://github.com/npm/inflight |
 | inherits@2.0.4 | node_modules/inherits | ISC | https://github.com/isaacs/inherits |
-| ip-address@10.4.0 | node_modules/ip-address | MIT | https://github.com/beaugunderson/ip-address |
+| ip-address@10.7.3 | node_modules/ip-address | MIT | https://github.com/beaugunderson/ip-address |
 | ipaddr.js@1.9.1 | node_modules/ipaddr.js | MIT | https://github.com/whitequark/ipaddr.js |
 | is-plain-object@5.0.0 | node_modules/is-plain-object | MIT | https://github.com/jonschlinkert/is-plain-object |
 | is-promise@4.0.0 | node_modules/is-promise | MIT | https://github.com/then/is-promise |
@@ -217,10 +217,10 @@ The platform-independent graph includes required dependency and required peer ed
 | postcss@8.5.25 | node_modules/postcss | MIT | https://github.com/postcss/postcss |
 | process-nextick-args@2.0.1 | node_modules/process-nextick-args | MIT | https://github.com/calvinmetcalf/process-nextick-args |
 | promise-limit@2.7.0 | node_modules/promise-limit | ISC | https://github.com/featurist/promise-limit |
-| proxy-addr@2.0.7 | node_modules/proxy-addr | MIT | https://github.com/jshttp/proxy-addr |
+| proxy-addr@2.0.8 | node_modules/proxy-addr | MIT | https://github.com/jshttp/proxy-addr |
 | pvtsutils@1.3.6 | node_modules/pvtsutils | MIT | https://github.com/PeculiarVentures/pvtsutils |
 | pvutils@1.1.5 | node_modules/pvutils | MIT | https://github.com/PeculiarVentures/pvutils |
-| qs@6.15.2 | node_modules/qs | BSD-3-Clause | https://github.com/ljharb/qs |
+| qs@6.16.0 | node_modules/qs | BSD-3-Clause | https://github.com/ljharb/qs |
 | range-parser@1.2.1 | node_modules/range-parser | MIT | https://github.com/jshttp/range-parser |
 | raw-body@3.0.2 | node_modules/raw-body | MIT | https://github.com/stream-utils/raw-body |
 | react-dom@19.2.6 | node_modules/react-dom | MIT | https://github.com/facebook/react |
@@ -241,7 +241,7 @@ The platform-independent graph includes required dependency and required peer ed
 | safe-buffer@5.1.2 | node_modules/lazystream/node_modules/safe-buffer | MIT | https://github.com/feross/safe-buffer |
 | safe-buffer@5.2.1 | node_modules/safe-buffer | MIT | https://github.com/feross/safe-buffer |
 | safer-buffer@2.1.2 | node_modules/safer-buffer | MIT | https://github.com/ChALkeR/safer-buffer |
-| sanitize-html@2.17.6 | node_modules/sanitize-html | MIT | https://github.com/apostrophecms/apostrophe |
+| sanitize-html@2.17.7 | node_modules/sanitize-html | MIT | https://github.com/apostrophecms/apostrophe |
 | saxes@5.0.1 | node_modules/saxes | ISC | https://github.com/lddubeau/saxes |
 | scheduler@0.27.0 | node_modules/scheduler | MIT | https://github.com/facebook/react |
 | send@1.2.1 | node_modules/send | MIT | https://github.com/pillarjs/send |
@@ -254,8 +254,7 @@ The platform-independent graph includes required dependency and required peer ed
 | side-channel-map@1.0.1 | node_modules/side-channel-map | MIT | https://github.com/ljharb/side-channel-map |
 | side-channel-weakmap@1.0.2 | node_modules/side-channel-weakmap | MIT | https://github.com/ljharb/side-channel-weakmap |
 | side-channel@1.1.1 | node_modules/side-channel | MIT | https://github.com/ljharb/side-channel |
-| source-map-js@1.2.1 | node_modules/source-map-js | BSD-3-Clause | https://github.com/7rulnik/source-map-js |
-| sprintf-js@1.0.3 | node_modules/sprintf-js | BSD-3-Clause | https://github.com/alexei/sprintf.js |
+| source-map-js@1.2.2 | node_modules/source-map-js | BSD-3-Clause | https://github.com/7rulnik/source-map-js |
 | statuses@2.0.2 | node_modules/statuses | MIT | https://github.com/jshttp/statuses |
 | string_decoder@1.1.1 | node_modules/archiver-utils/node_modules/string_decoder | MIT | https://github.com/nodejs/string_decoder.git |
 | string_decoder@1.1.1 | node_modules/duplexer2/node_modules/string_decoder | MIT | https://github.com/nodejs/string_decoder.git |

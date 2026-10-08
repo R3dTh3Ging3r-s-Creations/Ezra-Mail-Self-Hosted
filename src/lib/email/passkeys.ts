@@ -18,6 +18,7 @@ const ALLOWED_STEP_UP_ACTIONS = new Set([
   "view_recovery_material",
   "regenerate_recovery_material",
   "export_private_archive",
+  "manage_agent_grants",
 ]);
 
 export async function beginPasskeyRegistration(request: Request, input: {
@@ -108,8 +109,9 @@ export async function finishPasskeyRegistration(request: Request, input: {
 export async function beginStepUp(request: Request, input: {
   action: string;
   deviceId?: string | null;
+  reviewHash?: string;
 }) {
-  assertStepUpAction(input.action);
+  const boundAction = stepUpActionBinding(input.action, input.reviewHash);
   const config = webAuthnConfig(request);
   const passkeys = await execute(
     `SELECT credential_id, transports, device_type, backed_up
@@ -137,7 +139,7 @@ export async function beginStepUp(request: Request, input: {
   });
   const challenge = await createAuthChallenge({
     kind: "step_up",
-    action: input.action,
+    action: boundAction,
     deviceId: input.deviceId,
     challenge: options.challenge,
   });
@@ -148,13 +150,14 @@ export async function finishStepUp(request: Request, input: {
   challengeId: string;
   action: string;
   deviceId?: string | null;
+  reviewHash?: string;
   response: AuthenticationResponseJSON;
 }) {
-  assertStepUpAction(input.action);
+  const boundAction = stepUpActionBinding(input.action, input.reviewHash);
   const pending = await consumeAuthChallenge({
     id: input.challengeId,
     kind: "step_up",
-    action: input.action,
+    action: boundAction,
     deviceId: input.deviceId,
   });
   const stored = await execute(
@@ -187,12 +190,12 @@ export async function finishStepUp(request: Request, input: {
   );
   const receipt = await createAuthChallenge({
     kind: "step_up_receipt",
-    action: input.action,
+    action: boundAction,
     deviceId: input.deviceId,
     challenge: crypto.randomBytes(32).toString("base64url"),
   });
   await audit("auth.step_up.succeeded", "owner", "passkey", String(row.id), {
-    action: input.action,
+    action: boundAction,
     deviceId: input.deviceId || null,
   });
   return { receiptId: receipt.id, expiresAt: receipt.expiresAt };
@@ -202,12 +205,13 @@ export async function consumeStepUpReceipt(input: {
   receiptId: string;
   action: string;
   deviceId?: string | null;
+  reviewHash?: string;
 }) {
-  assertStepUpAction(input.action);
+  const boundAction = stepUpActionBinding(input.action, input.reviewHash);
   await consumeAuthChallenge({
     id: input.receiptId,
     kind: "step_up_receipt",
-    action: input.action,
+    action: boundAction,
     deviceId: input.deviceId,
   });
 }
@@ -242,6 +246,15 @@ function normalizeName(value: string, fallback: string) {
   return normalized;
 }
 
+function stepUpActionBinding(action: string, reviewHash?: string) {
+  assertStepUpAction(action);
+  if (action === "manage_agent_grants") {
+    if (!reviewHash || !/^[a-f0-9]{64}$/.test(reviewHash)) throw new AuthError("Exact grant review is required.", 400);
+    return `${action}:${reviewHash}`;
+  }
+  if (reviewHash !== undefined) throw new AuthError("Unexpected security review binding.", 400);
+  return action;
+}
 function assertStepUpAction(action: string) {
   if (!ALLOWED_STEP_UP_ACTIONS.has(action)) throw new AuthError("Unknown security action.", 400);
 }

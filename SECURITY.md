@@ -3,13 +3,13 @@
 Ezra Mail processes private communications and treats security and privacy
 reports as confidential by default.
 
-The sanitized public source repository is named `Ezra-Mail-Self-Hosted`. This policy is its
+The sanitized public mirror is named `Ezra-Mail`. This policy is its
 public-facing vulnerability-reporting guidance; the private operational source
 is not published.
 
 ## Supported version
 
-Security fixes target the latest documented pre-release. Older
+Only the latest documented private-preview release is supported. Older
 revisions may be useful rollback points, but they do not receive separate
 security maintenance.
 
@@ -27,7 +27,7 @@ this repository. Include:
 - the likely privacy or safety impact; and
 - whether provider credentials or mailbox state may have been exposed.
 
-If private reporting is unavailable in your copy of the repository,
+If private reporting is unavailable while the repository remains private,
 contact the repository owner through the GitHub profile associated with the
 project and request a private channel before sharing details.
 

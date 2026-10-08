@@ -1,3 +1,4 @@
+import { assertPersonalAccount } from "./agent-accounts";
 import crypto from "node:crypto";
 import { spawn } from "node:child_process";
 import dns from "node:dns/promises";
@@ -462,7 +463,16 @@ export async function startMicrosoftAccountConnection(input: {
   access: MicrosoftAccessMode;
 }) {
   await ensureEmailDatabase();
-  const challenge = await providerAdapterFor("microsoft").startAuthorization(input);
+  let preservedScopes: string[] = [];
+  if (input.access === "tasks") {
+    const row = (await execute("SELECT id,email FROM email_accounts WHERE provider='microsoft' AND LOWER(email)=?", [input.email.trim().toLowerCase()])).rows[0];
+    if (!row) throw new Error("Connect the personal Microsoft account before adding task access.");
+    await assertPersonalAccount({ accountId: String(row.id), provider: "microsoft", expectedEmail: String(row.email) });
+    const prior: unknown = JSON.parse(await getServiceValue(`microsoft_scopes:${input.email.trim().toLowerCase()}`) || "null");
+    if (!Array.isArray(prior) || !prior.length || !prior.every(scope => typeof scope === "string")) throw new Error("Existing Microsoft permissions must be known before adding task access.");
+    preservedScopes = prior;
+  }
+  const challenge = await providerAdapterFor("microsoft").startAuthorization(input.access === "tasks" ? { ...input, preservedScopes } : input);
   if (challenge.provider !== "microsoft") throw new Error("Microsoft authorization could not start.");
   const connectionId = newId("msauth");
   const expiresAt = new Date(Date.now() + challenge.expiresIn * 1000).toISOString();
@@ -472,6 +482,7 @@ export async function startMicrosoftAccountConnection(input: {
       email: input.email,
       access: input.access,
       deviceCode: challenge.deviceCode,
+      ...(input.access === "tasks" ? { preservedScopes } : {}),
       expiresAt,
       interval: challenge.interval,
     }),
@@ -524,14 +535,31 @@ export async function completeMicrosoftAccountConnection(connectionId: string) {
   }
   const email = existingIdentity.rows[0] ? String(existingIdentity.rows[0].email) : verifiedEmail;
   await assertProviderAccountIdentity({ provider: "microsoft", email });
+  let persistedAccess = String(state.access);
+  if (state.access === "tasks") {
+    if (normalizedEmail !== expectedEmail) throw new Error("Task consent requires the exact personal mailbox identity.");
+    const row = (await execute("SELECT id,email FROM email_accounts WHERE provider='microsoft' AND LOWER(email)=?", [normalizedEmail])).rows[0];
+    if (!row) throw new Error("Personal task account is unavailable.");
+    await assertPersonalAccount({ accountId: String(row.id), provider: "microsoft", expectedEmail: String(row.email) });
+    const current: unknown = JSON.parse(await getServiceValue(`microsoft_scopes:${normalizedEmail}`) || "[]");
+    if (!Array.isArray(current) || !current.every(scope => typeof scope === "string") || !state.preservedScopes) throw new Error("Existing Microsoft scope evidence is unavailable.");
+    const granted = new Set((token.scopes || []).map(scope => scope.toLowerCase()));
+    const required = [...state.preservedScopes, ...current, "Tasks.ReadWrite"];
+    const covers = (scope: string) => granted.has(scope.toLowerCase()) || ["offline_access","openid","profile","email"].includes(scope.toLowerCase()) || (/^(Mail|Calendars|Tasks)\.Read$/i.test(scope) && granted.has(`${scope}Write`.toLowerCase()));
+    if (!required.every(covers)) {
+      await setService(`microsoft_auth:${connectionId}`, JSON.stringify({ status: "rejected" }));
+      throw new Error("Microsoft task consent did not preserve all required permissions. No credentials were changed.");
+    }
+    persistedAccess = await getServiceValue(`microsoft_access:${normalizedEmail}`) || "readonly";
+  }
   const credential = await storeMicrosoftRefreshToken(email, token.refreshToken);
-  await setService(`microsoft_access:${email.toLowerCase()}`, String(state.access));
+  await setService(`microsoft_access:${email.toLowerCase()}`, persistedAccess);
   await setService(`microsoft_scopes:${email.toLowerCase()}`, JSON.stringify(token.scopes || []));
   const account = await recordVerifiedProviderAccount({
     email,
     label: profile.displayName ? `${profile.displayName} (${email})` : email,
     provider: "microsoft",
-    access: state.access,
+    access: persistedAccess,
     credentialBackend: credential.backend,
   });
   if (state.access === "calendar" || state.access === "full") {
@@ -2709,6 +2737,7 @@ function parseMicrosoftAuthState(value: string | null) {
     const parsed = JSON.parse(value) as {
       email?: string;
       access?: MicrosoftAccessMode;
+      preservedScopes?: string[];
       deviceCode?: string;
       expiresAt?: string;
       interval?: number;
@@ -2717,13 +2746,14 @@ function parseMicrosoftAuthState(value: string | null) {
       !parsed.email ||
       !parsed.deviceCode ||
       !parsed.expiresAt ||
-      !["readonly", "maintenance", "calendar", "send", "full"].includes(String(parsed.access))
+      !["readonly", "maintenance", "calendar", "send", "full", "tasks"].includes(String(parsed.access))
     ) {
       return null;
     }
     return {
       email: parsed.email,
       access: String(parsed.access) as MicrosoftAccessMode,
+      preservedScopes: Array.isArray(parsed.preservedScopes) && parsed.preservedScopes.every(scope => typeof scope === "string") ? parsed.preservedScopes : undefined,
       deviceCode: parsed.deviceCode,
       expiresAt: parsed.expiresAt,
       interval: Number(parsed.interval || 5),

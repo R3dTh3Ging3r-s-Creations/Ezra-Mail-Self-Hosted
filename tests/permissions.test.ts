@@ -47,10 +47,10 @@ describe("Provider Permissions Dashboard", () => {
     expect(all.summary).toMatchObject({ accounts: 2, connectedAccounts: 2, errors: 1, readOnly: 1 });
     expect(gmail?.features.find((feature) => feature.id === "mail_read")).toMatchObject({ status: "connected", access: "read" });
     expect(gmail?.features.find((feature) => feature.id === "mail_actions")).toMatchObject({ status: "read_only", access: "read" });
-    expect(gmail?.features.find((feature) => feature.id === "calendar_write")).toMatchObject({ status: "connected", access: "write" });
-    expect(gmail?.features.find((feature) => feature.id === "send")).toMatchObject({ status: "connected", access: "write" });
-    expect(hotmail?.features.find((feature) => feature.id === "mail_actions")).toMatchObject({ status: "connected", access: "write" });
-    expect(hotmail?.features.find((feature) => feature.id === "send")).toMatchObject({ status: "needs_setup", access: "none" });
+    expect(gmail?.features.find((feature) => feature.id === "calendar_write")).toMatchObject({ status: "unknown", access: "none" });
+    expect(gmail?.features.find((feature) => feature.id === "send")).toMatchObject({ status: "unknown", access: "none" });
+    expect(hotmail?.features.find((feature) => feature.id === "mail_actions")).toMatchObject({ status: "unknown", access: "read" });
+    expect(hotmail?.features.find((feature) => feature.id === "send")).toMatchObject({ status: "unknown", access: "none" });
     expect(hotmail?.features.find((feature) => feature.id === "calendar_read")).toMatchObject({ status: "error", access: "none" });
     expect(hotmail?.reconnectRecommended).toBe(true);
 

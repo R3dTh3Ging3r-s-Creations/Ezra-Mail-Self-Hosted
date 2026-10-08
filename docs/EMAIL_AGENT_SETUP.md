@@ -6,53 +6,20 @@ configuration files.
 
 ## Gmail
 
-Ezra uses the separate [gog CLI](https://github.com/openclaw/gogcli) for Gmail.
-Install it using the upstream installation guide, under the same OS account that
-runs Ezra's web and worker processes. Check `gog --version` and `gog auth add
---help`: this integration requires `--readonly`, `--gmail-no-send`,
-`--extra-scopes`, `--remote`, `--step` and `--auth-url`. CLI versions can change;
-if these flags are unavailable, do not connect an account until compatibility is
-resolved. Live Gmail acceptance is not part of the automated release gate.
+Create an OAuth client for your own Google project and keep its downloaded
+client file outside the repository. Authorize only the account you intend to
+use, then configure the documented placeholders in `.env.local`.
 
-In your own Google Cloud project, enable the Gmail API (and Calendar API if
-wanted), configure the consent screen and create a **Desktop app** OAuth client.
-Keep its downloaded JSON outside this repository. Register that file with
-`gog auth credentials set YOUR_CLIENT_JSON_PATH` using your installed CLI's help.
-Use your own account as a test user while the consent screen is in testing mode;
-Google's testing/verification policies can affect token lifetime and availability.
-See the [upstream quickstart](https://github.com/openclaw/gogcli/blob/main/docs/quickstart.md).
-
-Set `GOG_PATH` in `.env.local` to your actual executable path (on Linux, `gog` is
-sufficient when it is on the service account's PATH). Leave `GMAIL_ACCOUNTS` blank
-until you deliberately configure an account. Restart web and worker, open Ezra's
-Accounts view, enter your Gmail address and follow its sign-in flow. On a headless
-host, Ezra uses the remote flow: open the displayed URL yourself and return the
-final redirect URL only to your private Ezra installation. Never post it publicly.
-Keyring access must work for the account running both processes; for a headless
-file-backed keyring, follow upstream protected-storage instructions.
-
-Initial setup from Ezra's Accounts view requests maintenance access, including
-`https://www.googleapis.com/auth/gmail.modify`. Although the CLI command includes
-`--readonly` and `--gmail-no-send`, it adds that modification scope explicitly;
-do not treat the resulting OAuth grant as read-only. Calendar setup also adds
-`https://www.googleapis.com/auth/calendar.events`. Review Google's actual consent
-screen before approving. Ezra's app-level action checks are separate from the
-provider's permission grant, and outgoing messages require exact-message review.
+Start with read-only Gmail access. Ezra can classify mail locally and present
+actions for review. Mailbox maintenance and sending require separate provider
+permissions and explicit approval in the app.
 
 ## Microsoft mail and calendar
 
-Create [your own Microsoft app registration](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
-and copy its Application (client) ID into `MICROSOFT_CLIENT_ID` in `.env.local`.
-Use delegated Microsoft Graph permissions with the public-client device-code flow;
-no client secret is needed. Do not use the author's app registration or credentials.
-
-Initial account setup currently requests `offline_access`, `User.Read`,
-`Mail.Read` and **`Mail.ReadWrite`**. It is not a read-only connection. Calendar
-setup adds **`Calendars.ReadWrite`**. Enabling replies separately adds
-**`Mail.Send`** (and retains Calendar when already enabled). Configure/consent to
-only the capabilities you intend to use. The provider's permission grant and
-Ezra's per-action review are distinct: outgoing mail requires exact-message review,
-and calendar drafts remain reviewable before provider actions.
+Create a Microsoft app registration for your own installation, then connect an
+account through the Accounts view. Ezra requests only the permissions needed
+for the features you enable. Calendar drafts and outgoing messages remain
+reviewable before any provider action.
 
 For both personal and work/school accounts, select **Any Entra ID Tenant +
 Personal Microsoft accounts** in the registration's supported accounts and set
@@ -166,8 +133,8 @@ hash or edit `.env.local` for normal installation.
 On Ubuntu, from the extracted Ezra Mail application directory, run one of:
 
 ```bash
-sudo bash installer/install-ezra-ubuntu.sh --desktop
-sudo bash installer/install-ezra-ubuntu.sh --headless
+sudo installer/install-ezra-ubuntu.sh --desktop
+sudo installer/install-ezra-ubuntu.sh --headless
 ```
 
 The desktop mode opens the first-owner setup page. Headless mode prefers a

@@ -31,12 +31,13 @@ import { MailView } from "./MailView";
 import { OutboxView } from "./OutboxView";
 import { SettingsView } from "./SettingsView";
 import { TodayView } from "./TodayView";
+import { TodoView } from "./TodoView";
 import { EZRA_MAIL_PRODUCT_VERSION } from "./version";
 import { directShortcutCommand, isEditableShortcutTarget, navigationShortcut } from "./shortcuts";
 import { isAbortError, useLatestRequest } from "./useLatestRequest";
 import styles from "./EzraMail.module.css";
 
-type View = "today" | "mail" | "calendar" | "drafts" | "outbox" | "actions" | "activity" | "settings";
+type View = "todo" | "today" | "mail" | "calendar" | "drafts" | "outbox" | "actions" | "activity" | "settings";
 type MailMeta = { workspaces: MailWorkspace[] };
 type MailDrilldown = Record<string, string | number | boolean | string[] | null | undefined>;
 
@@ -44,6 +45,7 @@ const NAV_ITEMS = [
   { id: "today" as const, label: "Today", icon: SunMedium },
   { id: "mail" as const, label: "Mail", icon: Inbox },
   { id: "calendar" as const, label: "Calendar", icon: CalendarDays },
+  { id: "todo" as const, label: "To Do", icon: ListChecks },
   { id: "drafts" as const, label: "Drafts", icon: FilePenLine },
   { id: "outbox" as const, label: "Outbox", icon: Send },
   { id: "actions" as const, label: "Actions", icon: ListChecks },
@@ -51,7 +53,7 @@ const NAV_ITEMS = [
 ];
 const MAIL_DRILLDOWN_PARAMS = ["folder", "date", "priority", "category", "account", "inboxCategory", "unread", "attachments", "handled", "needsReply", "hasDeadline", "q", "messageId", "todaySection"];
 const MOBILE_NAV_ITEMS = NAV_ITEMS.filter((item) => ["today", "mail", "calendar", "actions"].includes(item.id));
-const MOBILE_MORE_ITEMS = NAV_ITEMS.filter((item) => ["drafts", "outbox", "activity"].includes(item.id));
+const MOBILE_MORE_ITEMS = NAV_ITEMS.filter((item) => ["todo", "drafts", "outbox", "activity"].includes(item.id));
 
 export function EzraMailApp() {
   const [session, setSession] = useState<AuthSessionState | null>(null);
@@ -152,7 +154,7 @@ export function EzraMailApp() {
     void loadSession();
     const params = new URLSearchParams(window.location.search);
     const requestedView = params.get("view");
-    if (requestedView === "mail" || requestedView === "calendar" || requestedView === "drafts" || requestedView === "outbox" || requestedView === "actions" || requestedView === "activity" || requestedView === "settings") {
+    if (requestedView === "todo" || requestedView === "mail" || requestedView === "calendar" || requestedView === "drafts" || requestedView === "outbox" || requestedView === "actions" || requestedView === "activity" || requestedView === "settings") {
       setView(requestedView);
     }
     setSelectedMessageId(params.get("message"));
@@ -633,6 +635,7 @@ export function EzraMailApp() {
         {view === "outbox" ? <OutboxView workspaceId={workspaceId} initialDraftId={selectedOutboxDraftId} /> : null}
         {view === "actions" ? <ActionCenterView workspaceId={workspaceId} onOpenTarget={openActionCenterTarget} /> : null}
         {view === "activity" ? <ActivityTimelineView workspaceId={workspaceId} onOpenTarget={openActionCenterTarget} /> : null}
+        {view === "todo" ? <TodoView /> : null}
         {view === "settings" ? <SettingsView workspaceId={workspaceId} onAccountsChanged={loadWorkspaceMeta} onDailyBriefChanged={(sourceWorkspaceId) => refreshDailyBrief({ quiet: true, sourceWorkspaceId })} onOpenView={(target) => navigate(target)} /> : null}
       </main>
 
@@ -703,7 +706,7 @@ export function EzraMailApp() {
 
 function viewFromParams(params: URLSearchParams): View {
   const requested = params.get("view");
-  return requested === "mail" || requested === "calendar" || requested === "drafts" || requested === "outbox"
+  return requested === "todo" || requested === "mail" || requested === "calendar" || requested === "drafts" || requested === "outbox"
     || requested === "actions" || requested === "activity" || requested === "settings"
     ? requested
     : "today";

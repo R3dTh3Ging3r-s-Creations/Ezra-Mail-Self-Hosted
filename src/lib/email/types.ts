@@ -19,7 +19,9 @@ export type EmailEnvelope = {
   receivedAt: string;
   snippet: string;
   bodyText?: string;
+  bodyTextTruncated?: boolean;
   bodyHtml?: string;
+  bodyHtmlTruncated?: boolean;
   providerRevision?: string | null;
   gmailUrl: string;
   isUnread: boolean;
@@ -525,12 +527,19 @@ export type CalendarAttendee = {
 
 export type CalendarDateRange = { startDate: string; endDate: string };
 
+export type CalendarReminder = { mode: "default" | "none" } | { mode: "minutes"; minutes: number };
+export type CalendarReminderEvidence = CalendarReminder | { mode: "unknown" } | { mode: "custom"; overrides: Array<{ method: string; minutes: number }> };
+
 export type CalendarEvent = {
   id: string;
   accountId: string;
   accountLabel: string;
   accountProvider: AccountProvider;
   externalEventId: string;
+  reminder?: CalendarReminderEvidence;
+  revision?: string | null;
+  correlationId?: string | null;
+  recurrenceId?: string | null;
   calendarId: string;
   calendarName: string;
   title: string;
@@ -554,6 +563,7 @@ export type CalendarEvent = {
 };
 
 export type CalendarDraftStatus = "draft" | "created" | "cancelled";
+export type CalendarReminderMode = "default" | "none" | "minutes";
 export type CalendarPrivacy = "default" | "private" | "public";
 
 export type CalendarDraft = {
@@ -570,6 +580,7 @@ export type CalendarDraft = {
   isAllDay: boolean;
   timezone: string;
   attendees: string[];
+  reminderMode?: CalendarReminderMode;
   reminderMinutes: number | null;
   isBusy: boolean;
   privacy: CalendarPrivacy;
@@ -604,6 +615,7 @@ export type CalendarPage = {
 };
 
 export type CalendarActionResult = {
+  operationId?: string;
   ok: boolean;
   message: string;
   draft?: CalendarDraft;
@@ -657,7 +669,7 @@ export type AccountFreshnessItem = {
   recoveryMessage: string | null;
   issues?: Array<{
     feature: "mail" | "calendar";
-    status: "ok" | "needs_setup" | "error";
+    status: "ok" | "needs_setup" | "error" | "stale" | "incomplete";
     message: string | null;
     reconnectRecommended: boolean;
     lastSuccessAt: string | null;
@@ -835,6 +847,7 @@ export type ProviderPermissionFeatureId =
   | "calendar_write";
 
 export type ProviderPermissionStatus =
+  | "unknown"
   | "connected"
   | "available"
   | "read_only"

@@ -44,6 +44,7 @@ import type {
 } from "@/lib/email/types";
 import { ruleActionLabel as sharedRuleActionLabel } from "@/lib/email/vocabulary";
 import { api, post } from "./api";
+import { AgentAccessSettings } from "./AgentAccessSettings";
 import { isInitialPanelLoad } from "./refreshState";
 import { isAbortError, useLatestRequest } from "./useLatestRequest";
 import { WritingPreferencesPanel } from "./WritingPreferencesPanel";
@@ -975,7 +976,7 @@ export function SettingsView(props: {
                     <div><strong>{account.accountLabel}</strong><small>{account.accountEmail}</small></div>
                     <span className={`${styles.connectionStatus} ${account.status === "connected" ? styles.connected : ""}`}>{account.status.replace("_", " ")}</span>
                   </header>
-                  {account.issues?.length ? <div className={styles.accountFeatureHealth} aria-label="Feature health">{account.issues.map((issue) => <span key={issue.feature} className={issue.status === "ok" ? styles.featureHealthGood : styles.featureHealthWarn}><strong>{issue.feature === "mail" ? "Mail" : "Calendar"}</strong>{issue.status === "ok" ? "Current" : issue.status === "needs_setup" ? "Setup needed" : "Needs attention"}</span>)}</div> : null}
+                  {account.issues?.length ? <div className={styles.accountFeatureHealth} aria-label="Feature health">{account.issues.map((issue) => <span key={issue.feature} className={issue.status === "ok" ? styles.featureHealthGood : styles.featureHealthWarn}><strong>{issue.feature === "mail" ? "Mail" : "Calendar"}</strong>{issue.status === "ok" ? "Current" : issue.status === "stale" ? "Stale" : issue.status === "incomplete" ? "Incomplete" : issue.status === "needs_setup" ? "Setup needed" : "Needs attention"}</span>)}</div> : null}
                   {account.recoveryMessage ? <div className={styles.accountRecoveryNotice}><ShieldAlert aria-hidden="true" /><div><strong>{account.status === "disabled" ? "Account disconnected" : "Reconnect recommended"}</strong><span>{account.recoveryMessage}</span></div></div> : null}
                   <label>Purpose label<div><input value={purposeDrafts[account.accountId] || ""} maxLength={80} disabled={account.status === "disabled"} onChange={(event) => { purposeDirtyRef.current.add(account.accountId); setPurposeDrafts((current) => ({ ...current, [account.accountId]: event.target.value })); }} /><button className={styles.secondaryButton} disabled={Boolean(busy) || account.status === "disabled"} onClick={() => saveAccountPurpose(account.accountId)}>{busy === `purpose-${account.accountId}` ? "Saving..." : "Save purpose"}</button></div></label>
                   <dl>
@@ -1103,6 +1104,7 @@ export function SettingsView(props: {
 
         {tab === "permissions" ? (
           <>
+            <AgentAccessSettings />
             <SettingsHeader title="Provider Permissions Dashboard" description="Per-account mail, calendar, send, token, and sync capability status." icon={KeyRound} />
             {permissions ? (
               <>

@@ -1,0 +1,21 @@
+import { randomUUID } from "node:crypto";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { configureEmailDatabaseForTests, execute, setSetting } from "@/lib/email/database";
+import { POST } from "@/app/api/todo/actions/route";
+import { hashResourceMutation } from "@/lib/email/agent-resource-store";
+const mocks=vi.hoisted(()=>({owner:vi.fn(),prepare:vi.fn(),create:vi.fn(),read:vi.fn()}));
+vi.mock("@/lib/email/agent-api",async original=>({...await original<typeof import("@/lib/email/agent-api")>(),requireGrantOwner:mocks.owner}));
+vi.mock("@/lib/email/agent-tasks",async original=>({...await original<typeof import("@/lib/email/agent-tasks")>(),prepareTaskEvidence:mocks.prepare}));
+vi.mock("@/lib/email/microsoft-todo",async original=>({...await original<typeof import("@/lib/email/microsoft-todo")>(),createMicrosoftTask:mocks.create,readMicrosoftTask:mocks.read}));
+const account={accountId:"ms",provider:"microsoft" as const,expectedEmail:"owner@hotmail.test"};
+const target={account,kind:"task_list" as const,id:"list"};
+const fields={title:"Owner task",body:"<literal>",importance:"normal" as const,due:null,reminder:null};
+const mutation={kind:"tasks.create" as const,target,fields};
+const request=(body:unknown)=>new Request("https://ezra.test/api/todo/actions",{method:"POST",headers:{origin:"https://ezra.test","content-type":"application/json"},body:JSON.stringify(body)});
+describe("deliberate owner task operations",()=>{
+ beforeEach(async()=>{vi.clearAllMocks();configureEmailDatabaseForTests(`file:./owner-tasks-${randomUUID()}.sqlite`);await setSetting("agent_personal_accounts",JSON.stringify([account,{accountId:"gg",provider:"gmail",expectedEmail:"owner@gmail.test"}]));await execute("INSERT INTO email_accounts(id,provider,email,label,status,created_at,updated_at) VALUES ('ms','microsoft',?,'Fixture','connected',?,?)",[account.expectedEmail,new Date().toISOString(),new Date().toISOString()]);mocks.owner.mockResolvedValue({deviceId:"owner-device"});mocks.prepare.mockImplementation(async()=>({target,complete:true,fetchedAt:new Date().toISOString(),identityVerifiedAt:new Date().toISOString()}));mocks.create.mockImplementation(async(...args:any[])=>{await args.at(-1)();return {id:"created"};});mocks.read.mockResolvedValue({status:"found",task:{...fields,id:"created",list:target,status:"notStarted",recurring:false}});});
+ it("prepare never dispatches; exact explicit execute works without a hidden grant",async()=>{const prepared=await (await POST(request({action:"prepare",mutation}))).json();expect(prepared.status).toBe("prepared");expect(mocks.create).not.toHaveBeenCalled();expect((await execute("SELECT * FROM agent_grants")).rows).toHaveLength(0);const result=await(await POST(request({action:"execute",operationId:prepared.id,payloadHash:prepared.payloadHash}))).json();expect(result).toMatchObject({status:"succeeded",receipt:{providerId:"created"}});await POST(request({action:"execute",operationId:prepared.id,payloadHash:prepared.payloadHash}));expect(mocks.create).toHaveBeenCalledOnce();});
+ it("rejects caller authority and changed review",async()=>{expect((await POST(request({action:"prepare",mutation,authority:{source:"owner_ui"}}))).status).toBe(400);const op=await(await POST(request({action:"prepare",mutation}))).json();expect((await POST(request({action:"execute",operationId:op.id,payloadHash:hashResourceMutation({...mutation,fields:{...fields,title:"Changed"}})}))).status).toBe(409);expect(mocks.create).not.toHaveBeenCalled();});
+ it("profile removal after preparation prevents dispatch",async()=>{const op=await(await POST(request({action:"prepare",mutation}))).json();await setSetting("agent_personal_accounts","[]");await POST(request({action:"execute",operationId:op.id,payloadHash:op.payloadHash}));expect(mocks.create).not.toHaveBeenCalled();});
+ it("lost response remains unknown and cannot redispatch",async()=>{const op=await(await POST(request({action:"prepare",mutation}))).json();mocks.create.mockImplementationOnce(async(...args:any[])=>{await args.at(-1)();throw new Error("lost");});expect(await(await POST(request({action:"execute",operationId:op.id,payloadHash:op.payloadHash}))).json()).toMatchObject({status:"unknown"});await POST(request({action:"execute",operationId:op.id,payloadHash:op.payloadHash}));expect(mocks.create).toHaveBeenCalledOnce();});
+});

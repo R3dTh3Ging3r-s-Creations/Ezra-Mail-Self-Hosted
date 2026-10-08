@@ -37,7 +37,7 @@ type BinaryExtension = typeof binaryExtensions[number];
 const exporterTrustRoot = "scripts/build-public-mirror.ts";
 
 const windowsPath = /(?:^|[^A-Za-z0-9_])([A-Za-z]:[\\/][^\r\n"'`<>|]*?)(?=\s+(?:[A-Za-z]:[\\/])|$)/gi;
-const linuxPath = /(?:^|[\s"'`(=])((?:\/(?:srv|home|root|opt|var|etc|mnt|usr\/local))\/[A-Za-z0-9._/@:+-]+)/i;
+const linuxPath = /(?:^|[\s"'`(=])((?:\/(?:srv|home|root|opt|var|etc|mnt|usr\/local))\/[A-Za-z0-9._/@:+-]+)/gi;
 
 function normalizeRelativePath(relativePath: string): string {
   const normalized = relativePath.replace(/\\/g, "/").replace(/^\.\/+/, "").replace(/\/+/g, "/");
@@ -213,6 +213,28 @@ function isDocumentedWindowsPlaceholder(candidate: string): boolean {
   return /^[A-Za-z]:[\\/]Users[\\/]YOUR_USER(?:[\\/].*)?$/i.test(candidate) || /^[A-Za-z]:[\\/]<[^>]+>(?:[\\/].*)?$/i.test(candidate);
 }
 
+// Only generic, reviewed deployment literals in these exact public files are
+// exempt from the absolute-path heuristic. Other exposure rules still apply.
+const linuxBridgeDocumentation = new Set([
+  "plugins/ezra-mail/linux/agent-linux-runtime.ts",
+  "plugins/ezra-mail/linux/agent-linux-runtime.test.ts",
+  "plugins/ezra-mail/linux/ezra-mail-cloud-mcp.service.in",
+  "public-release/ezra-mail-cloud-mcp.service.in",
+  "plugins/ezra-mail/linux/README.md", "public-release/PLUGIN_LINUX.md",
+]);
+const linuxBridgePublicPaths = new Set([
+  ["etc", "ezra-mail-cloud-mcp", "profile.json"],
+  ["etc", "systemd", "system", "ezra-mail-cloud-mcp.service"],
+  ["etc", "credstore.encrypted", "ezra-mail-agent-key"],
+  ["etc", "credstore.encrypted", "ezra-mail-openai-runtime-key"],
+  ["opt", "ezra-mail-cloud-mcp", "releases", "REVISION"],
+  ["opt", "ezra-mail-cloud-mcp", "releases", "REVISION", "bridge.cjs"],
+  ["opt", "ezra-mail-cloud-mcp", "releases", ""],
+  ["opt", "ezra-mail-cloud-mcp", "releases", "fixture"],
+  ["opt", "ezra-mail-cloud-mcp", "tunnel-client-runtime"],
+  ["usr", "local", "bin", "node"],
+].map(parts => "/" + parts.join("/")));
+
 export function scanPublicText(relativePath: string, content: string): ExposureFinding[] {
   const normalized = normalizeRelativePath(relativePath);
   const findings = scanPathIndicators(normalized);
@@ -226,6 +248,9 @@ export function scanPublicText(relativePath: string, content: string): ExposureF
     if (normalized !== "package-lock.json") {
       for (const assignment of line.matchAll(credentialAssignment)) {
         const value = assignment[2] ?? assignment[3] ?? "";
+        if ((normalized === "public-release/ezra-mail-cloud-mcp.service.in"
+          || normalized === "plugins/ezra-mail/linux/ezra-mail-cloud-mcp.service.in")
+          && value === "file:%d/openai-runtime-key") continue;
         if (!value || value === "?" || /^[{"'`]+$/.test(value) || value.startsWith("\\n") || /^[{\[]/.test(value) || (value.startsWith("`") && value.includes("${")) || isDocumentedPlaceholder(value) || isCodeReference(value, line, normalized, Boolean(assignment[2])) || isPredictableTestValue(value)) continue;
         findings.push(finding(assignment[0].toLowerCase().includes(cookieLabel) || assignment[0].toLowerCase().includes(sessionLabel) ? sessionSecretRuleId : "token-assignment", normalized, lineNumber));
       }
@@ -233,7 +258,11 @@ export function scanPublicText(relativePath: string, content: string): ExposureF
     for (const windowsMatch of line.matchAll(windowsPath)) {
       if (!isDocumentedWindowsPlaceholder(windowsMatch[1])) findings.push(finding("absolute-windows-path", normalized, lineNumber));
     }
-    if (linuxPath.test(line)) findings.push(finding("absolute-linux-path", normalized, lineNumber));
+    for (const match of line.matchAll(linuxPath)) {
+      if (!linuxBridgeDocumentation.has(normalized) || !linuxBridgePublicPaths.has(match[1])) {
+        findings.push(finding("absolute-linux-path", normalized, lineNumber));
+      }
+    }
   });
 
   return findings;

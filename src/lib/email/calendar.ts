@@ -1,11 +1,11 @@
+import { prepareCalendarCreate, executeCalendarCreate, reconcileCalendarCreate } from "./agent-actions";
+import { agentOperationStore, type TrustedApproval } from "./agent-operation-store";
 import type { Row } from "@libsql/client";
 import { allDayRangeFromInstants, calendarDateInZone, calendarDateRange, calendarDayBounds, calendarEventOverlapsRange } from "./calendar-day";
 import {
-  createGoogleCalendarEvent,
   listGoogleCalendarEvents,
 } from "./gmail";
 import {
-  createMicrosoftCalendarEvent,
   getMicrosoftAccessToken,
   listMicrosoftCalendarEvents,
 } from "./microsoft";
@@ -25,6 +25,8 @@ import type {
   CalendarEvent,
   CalendarPage,
   CalendarPrivacy,
+  CalendarReminderMode,
+  CalendarReminderEvidence,
 } from "./types";
 import { accountWorkspaceIdentity, providerForWorkspace } from "./workspaces";
 
@@ -43,6 +45,7 @@ export type CalendarDraftInput = {
   isAllDay?: boolean;
   timezone?: string;
   attendees?: string[] | string;
+  reminderMode?: CalendarReminderMode;
   reminderMinutes?: number | null;
   isBusy?: boolean;
   privacy?: CalendarPrivacy;
@@ -109,7 +112,7 @@ export async function syncCalendarAccounts(input: {
         });
         synced += 1;
       }
-      await setCalendarIntegration(accountId, provider, "write", "connected", null);
+      await setCalendarIntegration(accountId, provider, "read", "connected", null);
       await setSyncState(accountId, "connected", null, range);
       await audit("calendar.synced", "worker", "account", accountId, { count: events.length });
     } catch (error) {
@@ -131,6 +134,11 @@ export async function syncCalendarAccounts(input: {
 export async function createCalendarDraft(input: CalendarDraftInput): Promise<CalendarDraft> {
   const account = await connectedAccount(input.accountId);
   const timezone = input.timezone?.trim() || (await getSetting("timezone")) || DEFAULT_TIMEZONE;
+  new Intl.DateTimeFormat("en-US", { timeZone: timezone });
+  const reminderMode = input.reminderMode ?? (input.reminderMinutes != null ? "minutes" : account.provider === "microsoft" ? "none" : "default");
+  if (!["default", "none", "minutes"].includes(reminderMode) || (reminderMode === "minutes" ? !Number.isInteger(input.reminderMinutes) || input.reminderMinutes! < 0 || input.reminderMinutes! > 40_320 : input.reminderMinutes != null)) {
+    throw new Error("Calendar reminder is invalid.");
+  }
   const title = input.title.trim();
   if (!title) throw new Error("Calendar event title is required.");
   const startsAt = normalizeDateTime(input.startsAt, "start");
@@ -144,9 +152,9 @@ export async function createCalendarDraft(input: CalendarDraftInput): Promise<Ca
   await execute(
     `INSERT INTO calendar_drafts
       (id, account_id, calendar_id, title, description, location, starts_at, ends_at,
-       is_all_day, timezone, attendees, reminder_minutes, is_busy, privacy, send_updates,
+       is_all_day, timezone, attendees, reminder_mode, reminder_minutes, is_busy, privacy, send_updates,
        status, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'draft', ?, ?)`,
     [
       id,
       input.accountId,
@@ -159,6 +167,7 @@ export async function createCalendarDraft(input: CalendarDraftInput): Promise<Ca
       input.isAllDay ? 1 : 0,
       timezone,
       JSON.stringify(attendees),
+      reminderMode,
       input.reminderMinutes ?? null,
       input.isBusy === false ? 0 : 1,
       input.privacy || "default",
@@ -200,56 +209,39 @@ export async function createEventFromDraft(input: {
   draftId: string;
   confirmInvites?: boolean;
   sendUpdates?: boolean;
+  authority?: Omit<TrustedApproval, "account">;
 }): Promise<CalendarActionResult> {
+  if (!input.authority || input.authority.source !== "owner_ui") throw new Error("Authenticated owner review authority is required.");
   const draft = await getCalendarDraft(input.draftId);
-  if (!draft) throw new Error("Calendar draft was not found.");
-  if (draft.status !== "draft") throw new Error("Calendar draft is not ready to create.");
+  if (!draft || draft.status === "cancelled") throw new Error("Calendar draft is not ready to create.");
   const account = await connectedAccount(draft.accountId);
-  const attendees = draft.attendees;
-  if (account.provider === "microsoft" && attendees.length && !input.confirmInvites) {
+  if (account.provider === "microsoft" && draft.attendees.length && !input.confirmInvites) {
     throw new Error("Microsoft calendar events with attendees send invitations. Confirm invitation sending before creating this event.");
   }
-
-  const providerEvent = account.email.endsWith(".test")
-    ? testCalendarEvent(account, draft)
-    : account.provider === "microsoft"
-      ? await createMicrosoftCalendarEvent(account.email, draft)
-      : await createGoogleCalendarEvent({
-        account: account.email,
-        calendarId: draft.calendarId,
-        title: draft.title,
-        description: draft.description,
-        location: draft.location,
-        startsAt: draft.startsAt,
-        endsAt: draft.endsAt,
-        isAllDay: draft.isAllDay,
-        timezone: draft.timezone,
-        attendees,
-        reminderMinutes: draft.reminderMinutes,
-        isBusy: draft.isBusy,
-        privacy: draft.privacy,
-        sendUpdates: input.sendUpdates ?? draft.sendUpdates,
-      });
-  if (!providerEvent?.externalEventId) throw new Error("Calendar provider did not return a created event id.");
-  const event = await upsertCalendarEvent({
-    ...providerEvent,
-    accountId: account.id,
-    accountLabel: account.label,
-    accountProvider: account.provider,
-    syncedAt: nowIso(),
-  });
-  await execute(
-    `UPDATE calendar_drafts
-     SET status = 'created', provider_event_id = ?, updated_at = ?
-     WHERE id = ?`,
-    [event.externalEventId, nowIso(), draft.id],
-  );
-  await audit("calendar.event.created", "cockpit", "calendar_event", event.id, {
-    draftId: draft.id,
-    accountId: account.id,
-    attendees: attendees.length,
-  });
-  return { ok: true, message: "Calendar event created.", draft: await getCalendarDraft(draft.id) || draft, event };
+  const operationId = `calendar-draft:${draft.id}`;
+  let op = await agentOperationStore.getOperation(operationId);
+  if (draft.status !== "created" || !op) {
+    op = await prepareCalendarCreate({
+      account: { accountId: account.id, provider: account.provider, expectedEmail: account.email },
+      calendarId: draft.calendarId, title: draft.title, description: draft.description, location: draft.location,
+      startsAt: draft.startsAt, endsAt: draft.endsAt, isAllDay: draft.isAllDay, timezone: draft.timezone,
+      attendees: draft.attendees, reminder: draft.reminderMode === "minutes" ? { mode: "minutes", minutes: draft.reminderMinutes }
+        : { mode: draft.reminderMode || (draft.reminderMinutes !== null ? "minutes" : account.provider === "microsoft" ? "none" : "default") },
+      isBusy: draft.isBusy, privacy: draft.privacy, sendUpdates: input.sendUpdates ?? draft.sendUpdates,
+    }, operationId, "owner_ui");
+    if (op.status === "prepared") await agentOperationStore.approveOperationFromTrustedTransport(op.id, op.payloadHash, { ...input.authority, account: op.payload.account });
+    op = op.status === "unknown" ? await reconcileCalendarCreate(op.id) : await executeCalendarCreate(op.id);
+  }
+  if (op.status !== "succeeded" || !op.receipt) {
+    return { ok: false, operationId, message: op.status === "unknown"
+      ? "The calendar outcome is not verified. The operation is saved for reconciliation; it will not create another event."
+      : op.errorCode === "duplicate_conflict" ? "An existing calendar event conflicts with this draft. Review it before creating a new draft."
+      : `Calendar operation ${op.status}. Review account access, calendar conflicts and operation status before trying a new draft.` };
+  }
+  const event = await upsertCalendarEvent(op.receipt.event);
+  await execute("UPDATE calendar_drafts SET status='created',provider_event_id=?,updated_at=? WHERE id=?", [event.externalEventId,nowIso(),draft.id]);
+  await audit("calendar.event.created", "cockpit", "calendar_event", event.id, { draftId: draft.id, accountId: account.id, operationId, outcome: op.receipt.outcome, attendees: draft.attendees.length });
+  return { ok: true, operationId, message: op.receipt.outcome === "existing_match" ? "Matching calendar event verified." : "Calendar event created and verified.", draft: await getCalendarDraft(draft.id) || draft, event };
 }
 
 export async function markCalendarIntegrationConnected(accountId: string, provider: AccountProvider) {
@@ -360,8 +352,8 @@ async function upsertCalendarEvent(event: CalendarEventUpsert): Promise<Calendar
       (id, account_id, external_event_id, calendar_id, calendar_name, title, description,
        location, starts_at, ends_at, is_all_day, timezone, status, visibility, is_busy,
        organizer_name, organizer_email, attendees, web_link, provider_updated_at,
-       synced_at, created_at, updated_at, start_date, end_date)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       synced_at, created_at, updated_at, start_date, end_date, reminder_evidence, provider_revision, correlation_id, recurrence_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT(account_id, external_event_id) DO UPDATE SET
        calendar_id = excluded.calendar_id,
        calendar_name = excluded.calendar_name,
@@ -382,6 +374,10 @@ async function upsertCalendarEvent(event: CalendarEventUpsert): Promise<Calendar
        attendees = excluded.attendees,
        web_link = excluded.web_link,
        provider_updated_at = excluded.provider_updated_at,
+       reminder_evidence = excluded.reminder_evidence,
+       provider_revision = excluded.provider_revision,
+       correlation_id = excluded.correlation_id,
+       recurrence_id = excluded.recurrence_id,
        synced_at = excluded.synced_at,
        updated_at = excluded.updated_at`,
     [
@@ -410,6 +406,10 @@ async function upsertCalendarEvent(event: CalendarEventUpsert): Promise<Calendar
       now,
       dateRange?.startDate ?? null,
       dateRange?.endDate ?? null,
+      event.reminder ? JSON.stringify(event.reminder) : null,
+      event.revision ?? null,
+      event.correlationId ?? null,
+      event.recurrenceId ?? null,
     ],
   );
   const result = await execute(
@@ -556,6 +556,16 @@ async function setCalendarIntegration(
   );
 }
 
+function cachedReminder(value: unknown): CalendarReminderEvidence {
+  try {
+    const reminder = JSON.parse(String(value));
+    if (["default", "none", "unknown"].includes(reminder?.mode)) return { mode: reminder.mode };
+    if (reminder?.mode === "minutes" && Number.isInteger(reminder.minutes) && reminder.minutes >= 0) return { mode: "minutes", minutes: reminder.minutes };
+    if (reminder?.mode === "custom" && Array.isArray(reminder.overrides) && reminder.overrides.every((item: { method?: unknown; minutes?: unknown }) => typeof item?.method === "string" && typeof item.minutes === "number" && Number.isFinite(item.minutes))) return { mode: "custom", overrides: reminder.overrides.map((item: { method: string; minutes: number }) => ({ method: item.method, minutes: item.minutes })) };
+  } catch { /* Legacy or invalid cache data carries no reminder evidence. */ }
+  return { mode: "unknown" };
+}
+
 function calendarEventFromRow(row: Row, configuredTimezone = DEFAULT_TIMEZONE): CalendarEvent {
   const isAllDay = Number(row.is_all_day) === 1;
   const timezone = nullableString(row.timezone) || configuredTimezone;
@@ -569,6 +579,10 @@ function calendarEventFromRow(row: Row, configuredTimezone = DEFAULT_TIMEZONE): 
     accountLabel: String(row.account_label),
     accountProvider: String(row.account_provider) as AccountProvider,
     externalEventId: String(row.external_event_id),
+    reminder: cachedReminder(row.reminder_evidence),
+    revision: nullableString(row.provider_revision),
+    correlationId: nullableString(row.correlation_id),
+    recurrenceId: nullableString(row.recurrence_id),
     calendarId: String(row.calendar_id),
     calendarName: String(row.calendar_name),
     title: String(row.title),
@@ -606,6 +620,7 @@ function calendarDraftFromRow(row: Row): CalendarDraft {
     isAllDay: Number(row.is_all_day) === 1,
     timezone: String(row.timezone || DEFAULT_TIMEZONE),
     attendees: parseStringArray(row.attendees),
+    reminderMode: (row.reminder_mode || (row.reminder_minutes != null ? "minutes" : row.account_provider === "microsoft" ? "none" : "default")) as CalendarReminderMode,
     reminderMinutes: row.reminder_minutes === null || row.reminder_minutes === undefined ? null : Number(row.reminder_minutes),
     isBusy: Number(row.is_busy) === 1,
     privacy: String(row.privacy || "default") as CalendarPrivacy,
@@ -614,34 +629,6 @@ function calendarDraftFromRow(row: Row): CalendarDraft {
     providerEventId: nullableString(row.provider_event_id),
     createdAt: String(row.created_at),
     updatedAt: String(row.updated_at),
-  };
-}
-
-function testCalendarEvent(
-  account: { id: string; label: string; provider: AccountProvider },
-  draft: CalendarDraft,
-): Omit<CalendarEvent, "id" | "accountLabel" | "accountProvider" | "syncedAt"> {
-  return {
-    accountId: account.id,
-    externalEventId: `test-${draft.id}`,
-    calendarId: draft.calendarId,
-    calendarName: "Primary",
-    title: draft.title,
-    description: draft.description || null,
-    location: draft.location || null,
-    startsAt: draft.startsAt,
-    endsAt: draft.endsAt,
-    isAllDay: draft.isAllDay,
-    dateRange: draft.isAllDay ? allDayRangeFromInstants(draft.startsAt, draft.endsAt, draft.timezone) : null,
-    timezone: draft.timezone,
-    status: "confirmed",
-    visibility: draft.privacy,
-    isBusy: draft.isBusy,
-    organizerName: account.label,
-    organizerEmail: null,
-    attendees: draft.attendees.map((email) => ({ email })),
-    webLink: null,
-    updatedAt: nowIso(),
   };
 }
 

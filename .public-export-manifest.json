@@ -3,7 +3,7 @@
   "files": [
     {
       "path": ".env.example",
-      "sha256": "5780d731c02d22a42d86248a81fee0fed09ba4a0f8f22f3e405f247e54a3c598",
+      "sha256": "c7a1e25bb5de0761753a20ea2772347e58d8d231cc5c0be8dc0414c89ed6bfe0",
       "source": ".env.example"
     },
     {
@@ -19,7 +19,7 @@
     {
       "path": ".github/ISSUE_TEMPLATE/config.yml",
       "sha256": "9d7bf4bf308c36b2fb4e30218f2c3e1f4b72a28c4001879d35c4ca461f7b152e",
-      "source": ".github/ISSUE_TEMPLATE/config.yml"
+      "source": "public-release/issue-config.yml"
     },
     {
       "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
@@ -43,7 +43,7 @@
     },
     {
       "path": ".gitignore",
-      "sha256": "e84e812ee9ac18c48f41dc5381cd208b1dea405f808266395dc8455bfd0fe131",
+      "sha256": "a80dd8ed81d27308bf4a9f1fbc9656c247ff43d2ad1962672f420321e659e4a5",
       "source": ".gitignore"
     },
     {
@@ -73,17 +73,17 @@
     },
     {
       "path": "NOTICE",
-      "sha256": "0556d5c423b7402b21336b3795bc6282521fd68a08112366552d866251795d83",
+      "sha256": "1255046ab22c2744877011c6894d5d547125bcb4f7ac382afafbfc7fa29ec94a",
       "source": "NOTICE"
     },
     {
       "path": "README.md",
-      "sha256": "0b2f87e201c75de5913b6e1f22e04fe80dd4362bc2e00423cb44043679016234",
+      "sha256": "086f3ac276b323ded06893071a72392112278bd49e683f0871464070355a3259",
       "source": "public-release/README.md"
     },
     {
       "path": "SECURITY.md",
-      "sha256": "6fec6fcd386acda84f37153489f8155414d65947bbd7217863ef0ceef5703664",
+      "sha256": "1da50ee706cb6f4ee91ce906c34d9ba8aa45a8f0d304f480fdc077b1d48ec3e6",
       "source": "SECURITY.md"
     },
     {
@@ -99,36 +99,41 @@
     {
       "path": "config/models/Qwen3-14B-MaxContext.Modelfile",
       "sha256": "c6fe52a2c2b21e9d94bba81ecc4a36393199471e055a4174ad45cbb34f8b897a",
-      "source": "config/models/Qwen3-14B-MaxContext.Modelfile"
+      "source": "public-release/models/Qwen3-14B-MaxContext.Modelfile"
     },
     {
       "path": "config/models/Qwen3-8B-MaxContext.Modelfile",
       "sha256": "0789fd82f5749cdeb2583051bb35dfdacb1d9f46bee84b5115d23ff10a2a4420",
-      "source": "config/models/Qwen3-8B-MaxContext.Modelfile"
+      "source": "public-release/models/Qwen3-8B-MaxContext.Modelfile"
     },
     {
       "path": "config/models/Qwen3.5-9B-MaxContext.Modelfile",
       "sha256": "378008d4729a338b1f41117d3d1022f4a3f55b9085232ac3408cc13761a28fe7",
-      "source": "config/models/Qwen3.5-9B-MaxContext.Modelfile"
+      "source": "public-release/models/Qwen3.5-9B-MaxContext.Modelfile"
     },
     {
       "path": "config/public-export.json",
-      "sha256": "9c09f144b7f58e95e16644c6d4c2b25ba5f1514af8c39a77db4c6921a4224a17",
+      "sha256": "e4336c31d672c94e8684123092f60df3c137cd30113aa94c6e8ada63b584a2de",
       "source": "config/public-export.json"
     },
     {
+      "path": "docs/ARGPARSE_LICENSE_REVIEW.md",
+      "sha256": "02c2c66391845206789338ba558540469c191640978bbb45d872ebafecac98bc",
+      "source": "docs/ARGPARSE_LICENSE_REVIEW.md"
+    },
+    {
       "path": "docs/DEPENDENCY_LICENSES.md",
-      "sha256": "c52cabe74677a0b77a378f3eb3a2e562cac68cbfee08db187751355971cdd103",
+      "sha256": "8958ebaa63ab7e55fbd273a0d445040af7198d031b6251fc65053f1f774b1407",
       "source": "docs/DEPENDENCY_LICENSES.md"
     },
     {
       "path": "docs/DEPLOYMENT.md",
-      "sha256": "0fb07bd9df963a4e77b7dab2c7dec9e7f1dbf0d8a8cd6ccce138b5952feeb928",
+      "sha256": "989e9b2cdd6b447199f8b0b1f9991b828c8d216930b7ea83ee6701090a0e5a3d",
       "source": "public-release/DEPLOYMENT.md"
     },
     {
       "path": "docs/EMAIL_AGENT_SETUP.md",
-      "sha256": "6921b7a355a14228286e699b03fbf2f0cb8852ba34a5c4dff6e80326fb721be9",
+      "sha256": "02d9619c6c25c10da0a7493286836ccc8f01184048068adb60aa6964d3ffbce5",
       "source": "docs/EMAIL_AGENT_SETUP.md"
     },
     {
@@ -138,12 +143,17 @@
     },
     {
       "path": "docs/EZRA_MAIL_ROADMAP.md",
-      "sha256": "3f4760ec08e8d8396468e261cbb3d0ac3cb6998c1a1edaf7673cc2e8cee8bf47",
+      "sha256": "9f52a50d2d803c14eb50af9198ac13532ca72d39f18e87c8e38189a06ced7b15",
       "source": "public-release/EZRA_MAIL_ROADMAP.md"
     },
     {
+      "path": "docs/PERSONAL_PLUGIN.md",
+      "sha256": "ffda9db403ac9ad581228afdc252fb9ee7c1c6912ca57275fa13f0004b536d1c",
+      "source": "public-release/PERSONAL_PLUGIN.md"
+    },
+    {
       "path": "docs/PRIVACY.md",
-      "sha256": "b669ca7516fa0f67eddd4d5b74823f4b97b0f102ea914ce1d3c1c2d1de3b5c77",
+      "sha256": "de011d6dc112568cab12ae68e1429d8a7f600bba5fb8f7b313ae96fa1debc4af",
       "source": "public-release/PRIVACY.md"
     },
     {
@@ -182,6 +192,11 @@
       "source": "docs/branding/ezra-mail-today-demo.png"
     },
     {
+      "path": "docs/licenses/argparse-2.0.1.txt",
+      "sha256": "de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23",
+      "source": "docs/licenses/argparse-2.0.1.txt"
+    },
+    {
       "path": "docs/proxy-example.conf",
       "sha256": "129d0070fbe6633de24a14720ab5e77e4bd8a603cbcfc2cc5568dbea4fe563af",
       "source": "public-release/proxy-example.conf"
@@ -218,12 +233,12 @@
     },
     {
       "path": "package-lock.json",
-      "sha256": "d6bb1e09a792168453b7b123e5c31d86fc7d90dea23d073ec2bf83e720332ebf",
+      "sha256": "4f42367b7845db61f54e34cb80ce0b3d4567a20218539ab7fe5a0031f6052b8a",
       "source": "package-lock.json"
     },
     {
       "path": "package.json",
-      "sha256": "45ae8dcda44f827d0b93a5951e745ed33113e505b15195403a26926ee598728a",
+      "sha256": "88579bffbcb2378ee8ef9dccb4d58c0be8041aa53213de18596952b092c822b6",
       "source": "package.json"
     },
     {
@@ -235,6 +250,46 @@
       "path": "playwright.config.ts",
       "sha256": "2eaa5a3cec79889172e4f31e6aee1b983b5ba46e480d0c1f67353b489adca4e8",
       "source": "playwright.config.ts"
+    },
+    {
+      "path": "plugins/ezra-mail/SCOPED_ACTIONS.md",
+      "sha256": "0a08c0806aaa93c2143d4a196c7d0807a77ed9958b83c1a233ebb49fc5df4541",
+      "source": "plugins/ezra-mail/SCOPED_ACTIONS.md"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/README.md",
+      "sha256": "b0811677f598b136902f86760b408abefbe89206a29b279763ed166e417c2b5d",
+      "source": "public-release/PLUGIN_LINUX.md"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/agent-linux-build.test.ts",
+      "sha256": "47047b976897715c9efb102b7c595734ade25239f01c197bf168c62e2404af5c",
+      "source": "plugins/ezra-mail/linux/agent-linux-build.test.ts"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/agent-linux-runtime.test.ts",
+      "sha256": "53b2d593f9ed51086781e9ae8090dcd00ba42818ee7fd52bab7f7d9bc0fe9371",
+      "source": "plugins/ezra-mail/linux/agent-linux-runtime.test.ts"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/agent-linux-runtime.ts",
+      "sha256": "1a63b19a23decf5c9a7ad40e77fe1d38aba6971b464259ebc7d1e5820b067307",
+      "source": "plugins/ezra-mail/linux/agent-linux-runtime.ts"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/build-agent-linux.ts",
+      "sha256": "b682156865598359f20364a548c6577906845a9dd23343780fa30e274999558b",
+      "source": "plugins/ezra-mail/linux/build-agent-linux.ts"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/ezra-mail-cloud-mcp.service.in",
+      "sha256": "5a0269482077bac6f641e1c3b03da643bc26b8ae296918c7d4484eefa48ae32d",
+      "source": "public-release/ezra-mail-cloud-mcp.service.in"
+    },
+    {
+      "path": "plugins/ezra-mail/linux/key-agent-mcp-linux.ts",
+      "sha256": "0b9e770b3c071e2460b9a5dc46a9a45ca955e8a9784341e22966c300c6ddbc62",
+      "source": "plugins/ezra-mail/linux/key-agent-mcp-linux.ts"
     },
     {
       "path": "public/branding/ezra-mail-logo-d4-120.png",
@@ -268,12 +323,12 @@
     },
     {
       "path": "scripts/build-public-mirror.ts",
-      "sha256": "1479df86ea6e6608c4397fd71e2391287510bf11e76cd0fb17f038da14d28282",
+      "sha256": "56e6a769daa6b11929ea3c55043da55758730c6b8a10a8e59876a91d026e92d9",
       "source": "scripts/build-public-mirror.ts"
     },
     {
       "path": "scripts/check-dependency-licenses.ts",
-      "sha256": "21343bf38240b307519dab6a177734630f473a225dc1419273ca82b516ad0263",
+      "sha256": "3ca3545c9f100011878faa7bb81026b9dd62951585fbf82252897c405272a140",
       "source": "scripts/check-dependency-licenses.ts"
     },
     {
@@ -295,6 +350,11 @@
       "path": "scripts/ensure-web-build.ps1",
       "sha256": "e259bad83f0464957d5c703dbabf8c1328f9064a983ccf2366b29ed2d82ae23f",
       "source": "scripts/ensure-web-build.ps1"
+    },
+    {
+      "path": "scripts/extract-attachment.ts",
+      "sha256": "5e77092a2f69ff9ea9cd6f1c19c07a7bd3a2ba4864a2afaea787f6112cb4d393",
+      "source": "scripts/extract-attachment.ts"
     },
     {
       "path": "scripts/ezra-tray.ps1",
@@ -338,7 +398,7 @@
     },
     {
       "path": "scripts/mcp-server.ts",
-      "sha256": "b89f6f0d365773f51a301ffde2f8b6cc0a20017d48eec7a94d10fb8d481214d2",
+      "sha256": "b1fc6acf14ef3c6a34324a3553b79e715aefa2cf423ed21b1ebc1167905a2e86",
       "source": "scripts/mcp-server.ts"
     },
     {
@@ -352,8 +412,13 @@
       "source": "scripts/model-benchmark.ts"
     },
     {
+      "path": "scripts/prepare-restored-agent-access.ts",
+      "sha256": "82341ab584c9d1091e8af5715aecde350c9ac313482740925e1877172dadd6f3",
+      "source": "scripts/prepare-restored-agent-access.ts"
+    },
+    {
       "path": "scripts/public-mirror-policy.ts",
-      "sha256": "1c3b13858808d7e66a8c27cfabb73f3c4a6839657503f4d890905981f9c85d7f",
+      "sha256": "c8bddf79aa9b89408adbe4549af6f5750737982ccefcdffaa2e760a1df9bbef5",
       "source": "scripts/public-mirror-policy.ts"
     },
     {
@@ -363,7 +428,7 @@
     },
     {
       "path": "scripts/rehearse-email-restore.ts",
-      "sha256": "34ee500cc61aef01244b66148440bc66ede936ea2bc978aaf7251a1c7deef96c",
+      "sha256": "cc01c2c076bea353980fcc6675d815babb55cacbede2c69683a2710bde25444f",
       "source": "scripts/rehearse-email-restore.ts"
     },
     {
@@ -422,6 +487,76 @@
       "source": "src/app/api/activity/route.ts"
     },
     {
+      "path": "src/app/api/agent/v1/calendar/read/route.ts",
+      "sha256": "b93f97399c1d217d8ce2ae14f9e5b1dc9764e4fb6ae6c4108d648c5ca11c927c",
+      "source": "src/app/api/agent/v1/calendar/read/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/capabilities/route.ts",
+      "sha256": "8ee4576c44992b5d94f6997b22dbee9d027ceaa994323c404b0201b841a2df2b",
+      "source": "src/app/api/agent/v1/capabilities/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/mail/read/route.ts",
+      "sha256": "9138edb52c66e6a8f2f40e91b115433efaa11a24c3eab91f968adb4e5bad5226",
+      "source": "src/app/api/agent/v1/mail/read/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/mail/search/route.ts",
+      "sha256": "8e6ef718663fa87b2060187a7d9eb114cc5af95e3fc3fd1e65e5b9bad9f5b7df",
+      "source": "src/app/api/agent/v1/mail/search/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/operations/[operationId]/execute/route.ts",
+      "sha256": "971617b40f6dd67c9ded0086202027095330d54dd6620fb5c18ef660ac5ebff8",
+      "source": "src/app/api/agent/v1/operations/[operationId]/execute/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/operations/[operationId]/reconcile/route.ts",
+      "sha256": "ec2d0947a38a730a3c4e7e7154aa95eff2c8e424f420ad56547ef657729fc400",
+      "source": "src/app/api/agent/v1/operations/[operationId]/reconcile/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/operations/[operationId]/route.ts",
+      "sha256": "bb3fc00a4584d394f6e689f72401de4bd0d7bcb4191e6a0cf5accf76ce96f183",
+      "source": "src/app/api/agent/v1/operations/[operationId]/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/operations/route.ts",
+      "sha256": "85c77a6cbce8d2f3165449eeeb26fc61ff2ed4fa18314101241616cb0bf83ced",
+      "source": "src/app/api/agent/v1/operations/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/tasks/lists/route.ts",
+      "sha256": "b2945354c67f3776bd1468c7ef04ce1379d481fda180be82f519b34ba0695285",
+      "source": "src/app/api/agent/v1/tasks/lists/route.ts"
+    },
+    {
+      "path": "src/app/api/agent/v1/tasks/read/route.ts",
+      "sha256": "58e868e450d215077590fee1bd065564a46ba452f1813e0907f267c84b144cf1",
+      "source": "src/app/api/agent/v1/tasks/read/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/agent-grants/[keyId]/route.ts",
+      "sha256": "6aa42cc0f41ae8a1b9a1ccecf09d8a694f4d4a1087425d77955d8d7a6edc7075",
+      "source": "src/app/api/auth/agent-grants/[keyId]/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/agent-grants/resources/route.ts",
+      "sha256": "15ab6279f5a77fbbb57b160f2af4b752f8a25acc4459f7cfb67cf6cbb373a8e8",
+      "source": "src/app/api/auth/agent-grants/resources/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/agent-grants/review/route.ts",
+      "sha256": "f821915aa045203ad3586e56f2923ec37047eb795d4d82af5a7207de3cd15fdd",
+      "source": "src/app/api/auth/agent-grants/review/route.ts"
+    },
+    {
+      "path": "src/app/api/auth/agent-grants/route.ts",
+      "sha256": "d85927293009b12fbb82b53f4df87548f6fb4f8dbe493f4438fe157a9e4ba25c",
+      "source": "src/app/api/auth/agent-grants/route.ts"
+    },
+    {
       "path": "src/app/api/auth/devices/[deviceId]/route.ts",
       "sha256": "376b98ffb981e3ebc02926eb15ee8e8ea28a8b5ca74cc3656df61ff7a4d7ad31",
       "source": "src/app/api/auth/devices/[deviceId]/route.ts"
@@ -473,17 +608,17 @@
     },
     {
       "path": "src/app/api/auth/step-up/options/route.ts",
-      "sha256": "6001b804dd9e3f4cdbba564953fcc533ccaf909294724f2fea3127c0185deb0b",
+      "sha256": "fa51d5453a0cd5f7373e903b624e3dd82f66338a2c2ff49d7b785144b367a0e4",
       "source": "src/app/api/auth/step-up/options/route.ts"
     },
     {
       "path": "src/app/api/auth/step-up/verify/route.ts",
-      "sha256": "f9190b6d23c74fc5fd8f9cc8a38c1fb84244eb037621a82d619444e945026858",
+      "sha256": "f560130203c5f2d2e9a1b52bfd4bad9d5dd8b3182e91b871fcda000f19dda505",
       "source": "src/app/api/auth/step-up/verify/route.ts"
     },
     {
       "path": "src/app/api/calendar/actions/route.ts",
-      "sha256": "024876b10c33c25a6deedce461a2ed6c3e9d0a3566038f8e524ffce26d410f88",
+      "sha256": "875c7b8019bc3bc6020a60bea36f10202534fcd63a43c5aaa738db428bdef09b",
       "source": "src/app/api/calendar/actions/route.ts"
     },
     {
@@ -508,7 +643,7 @@
     },
     {
       "path": "src/app/api/email/route.ts",
-      "sha256": "9c5ee51c69848e6916fdba68d9f73c3cd29c9c433670e348ad7056860993626b",
+      "sha256": "361d4d3e7d5f8cd0b1b9f507cb2cdea8c6f7558ec0d689cb35f67e8c9122b2e9",
       "source": "src/app/api/email/route.ts"
     },
     {
@@ -712,6 +847,16 @@
       "source": "src/app/api/today/route.ts"
     },
     {
+      "path": "src/app/api/todo/actions/route.ts",
+      "sha256": "2ff9bdfa6744a6ec14b1b8bb7231dc01577384d04a093c2407aa1ab907938a98",
+      "source": "src/app/api/todo/actions/route.ts"
+    },
+    {
+      "path": "src/app/api/todo/route.ts",
+      "sha256": "e6e4584321dcf82d806f636661f30ae20eb7166b9af23a31649cedffcc94f6b5",
+      "source": "src/app/api/todo/route.ts"
+    },
+    {
       "path": "src/app/api/views/actions/route.ts",
       "sha256": "0f2d268baa07a95fc2ac1f84ec69e909cfd5abdf91f42ae5dd4647019913f12b",
       "source": "src/app/api/views/actions/route.ts"
@@ -767,13 +912,18 @@
       "source": "src/components/ezra/ActivityTimelineView.tsx"
     },
     {
+      "path": "src/components/ezra/AgentAccessSettings.tsx",
+      "sha256": "adf8e61edd234ba45a98c21e8653f8499bd876c1da3ca2346b29f871072fcce2",
+      "source": "src/components/ezra/AgentAccessSettings.tsx"
+    },
+    {
       "path": "src/components/ezra/BrowserNotificationControls.tsx",
       "sha256": "ca2df9652768adabf942aff734c1b5d4bdf832b046ec129ad18f116f9d6dc4fe",
       "source": "src/components/ezra/BrowserNotificationControls.tsx"
     },
     {
       "path": "src/components/ezra/CalendarView.tsx",
-      "sha256": "438f5e6f408cc9c7664d16dd8fb241871d1265b167ba5a7cb0aef63b93cc9d27",
+      "sha256": "6e38e7bca5e68c4d8be1fc6a02c36dd9ed9d48a1e78ea912fc03391663879fc2",
       "source": "src/components/ezra/CalendarView.tsx"
     },
     {
@@ -788,7 +938,7 @@
     },
     {
       "path": "src/components/ezra/EzraMailApp.tsx",
-      "sha256": "75e04afb3d64c203873dbd88f8609ad69cb4dfc5e562ab8b18ca1c828602bb29",
+      "sha256": "618ab9f423c483a667dbf2ec5060a18495d03856887d055063adc575ca4722d2",
       "source": "src/components/ezra/EzraMailApp.tsx"
     },
     {
@@ -833,7 +983,7 @@
     },
     {
       "path": "src/components/ezra/OpenSourceNotice.tsx",
-      "sha256": "1b3bc361f51ae4c33d66ac8d6604b22454557d353f5983081b5401510ac983ab",
+      "sha256": "1e5a8d043c22c67873fd702eb05f9afb724254c577c05e30310a65c6e8338413",
       "source": "src/components/ezra/OpenSourceNotice.tsx"
     },
     {
@@ -863,7 +1013,7 @@
     },
     {
       "path": "src/components/ezra/SettingsView.tsx",
-      "sha256": "9800358a0720b35f5fbf9265514ad79e59174702fc641a7fee8da6e00458e978",
+      "sha256": "8d3505b6eee9f056583cd29bd402f9be1148cf7c598e2af71bbb1707bbcf4f56",
       "source": "src/components/ezra/SettingsView.tsx"
     },
     {
@@ -882,13 +1032,18 @@
       "source": "src/components/ezra/TodayView.tsx"
     },
     {
+      "path": "src/components/ezra/TodoView.tsx",
+      "sha256": "32197e991c61ec8fd06fa2b19652c065610975273bc5eb9f27c163a95a8fab61",
+      "source": "src/components/ezra/TodoView.tsx"
+    },
+    {
       "path": "src/components/ezra/WritingPreferencesPanel.tsx",
       "sha256": "2ed47c2ee62704fb9680db3cb4510b6f13f585c4c894c6267210bbb9e0d92525",
       "source": "src/components/ezra/WritingPreferencesPanel.tsx"
     },
     {
       "path": "src/components/ezra/api.ts",
-      "sha256": "aa3dbfae458f49fbab879108432a475aacf37daf959f6152feae70a03fe754ea",
+      "sha256": "df3be9771d3ac8c1278d21d542e3d3b0877144dae0f2ff445b254234d4172981",
       "source": "src/components/ezra/api.ts"
     },
     {
@@ -948,7 +1103,7 @@
     },
     {
       "path": "src/lib/email/account-health.ts",
-      "sha256": "850c9e0f2ec21130e5ccbd82ba486fe48105cd0de574a0a3245f9ee337ca7edc",
+      "sha256": "5be5785f54fdf766b3df3adedcf614b0290d2e204c991c4232088896e043e549",
       "source": "src/lib/email/account-health.ts"
     },
     {
@@ -965,6 +1120,126 @@
       "path": "src/lib/email/activity.ts",
       "sha256": "50646cbe98481d81cbdf3dffe067d13d523fadb88052028ef6de73eec6dd0d1c",
       "source": "src/lib/email/activity.ts"
+    },
+    {
+      "path": "src/lib/email/agent-accounts.ts",
+      "sha256": "b8578ceb72ccba127a6e091d2a72c53a94088c12e2cb4116d8e2389a51283d4d",
+      "source": "src/lib/email/agent-accounts.ts"
+    },
+    {
+      "path": "src/lib/email/agent-actions.ts",
+      "sha256": "8504b97cef9385ebd31874d85da96179ee6dcd650915f20a1f7a66bde096135c",
+      "source": "src/lib/email/agent-actions.ts"
+    },
+    {
+      "path": "src/lib/email/agent-api-handlers.ts",
+      "sha256": "404259139cb738df779d33bd379804dc9c603f55c3d0403f2844337460ad85c4",
+      "source": "src/lib/email/agent-api-handlers.ts"
+    },
+    {
+      "path": "src/lib/email/agent-api.ts",
+      "sha256": "c8239b8936b99ae6581637e89f7dae384c2dfdf975d3241dd6a1aadcd129f861",
+      "source": "src/lib/email/agent-api.ts"
+    },
+    {
+      "path": "src/lib/email/agent-calendar.ts",
+      "sha256": "da73f2d0ac6a3f421ad70763af93dcac1fc477cc988cbf6d7eb5ef80b36e75ef",
+      "source": "src/lib/email/agent-calendar.ts"
+    },
+    {
+      "path": "src/lib/email/agent-dispatch.ts",
+      "sha256": "df02484ec9d94a3e0f8f2516e0ee9088a75a5cb21c4dd9981c08a401dfa10d13",
+      "source": "src/lib/email/agent-dispatch.ts"
+    },
+    {
+      "path": "src/lib/email/agent-grant-schema.ts",
+      "sha256": "393189834a1300a7d5f566e183a1aecf981b275fe51f709a927ed2908b21ef11",
+      "source": "src/lib/email/agent-grant-schema.ts"
+    },
+    {
+      "path": "src/lib/email/agent-grants.ts",
+      "sha256": "a9bbd214d9a76dd78fdb16d997db8d2792e95554e55440873986962605169959",
+      "source": "src/lib/email/agent-grants.ts"
+    },
+    {
+      "path": "src/lib/email/agent-http-client.ts",
+      "sha256": "8c117e5635b80f0b054109f89e0e0b60ba06269b52bb0a2313da07475cdd4d24",
+      "source": "src/lib/email/agent-http-client.ts"
+    },
+    {
+      "path": "src/lib/email/agent-key-mcp.ts",
+      "sha256": "2b64a1b4b78c616481b83ac0bccfc2ce498316c4f9ccd10bd588b772d5cbd7fe",
+      "source": "src/lib/email/agent-key-mcp.ts"
+    },
+    {
+      "path": "src/lib/email/agent-mail.ts",
+      "sha256": "0fbd83904026eb3b279bb0db0f27f4abfdfd0b5ca95ad5c9a9d1f0deac72449d",
+      "source": "src/lib/email/agent-mail.ts"
+    },
+    {
+      "path": "src/lib/email/agent-mcp.ts",
+      "sha256": "7f0a58e030cc2737c2515e2d6792d9f415fa6d02b5a67a28fcbe7ca7728a0f32",
+      "source": "src/lib/email/agent-mcp.ts"
+    },
+    {
+      "path": "src/lib/email/agent-operation-schema.ts",
+      "sha256": "7b934a7207185b0ee23f77fa818ca815496ae27d16c53a1cd0bcaf42df67acf7",
+      "source": "src/lib/email/agent-operation-schema.ts"
+    },
+    {
+      "path": "src/lib/email/agent-operation-store.ts",
+      "sha256": "2be73ed0b83deba93ee61a23b30ae07d8eed6e195b887caf91bc688b410de4d1",
+      "source": "src/lib/email/agent-operation-store.ts"
+    },
+    {
+      "path": "src/lib/email/agent-owner-catalogue.ts",
+      "sha256": "d04bb34533cce2d2b853305c251ce3b42f999b517d933fc47fd5b4e67b959d78",
+      "source": "src/lib/email/agent-owner-catalogue.ts"
+    },
+    {
+      "path": "src/lib/email/agent-provider-support.ts",
+      "sha256": "9af179f7db4afa8c59f36aec7996460c94c7b414309927c332d33b6de3806c9f",
+      "source": "src/lib/email/agent-provider-support.ts"
+    },
+    {
+      "path": "src/lib/email/agent-resource-operations.ts",
+      "sha256": "de264ec7fe730daa1035c410cfed5fc2f3a8de8e982bdc7775b27912c1c319cf",
+      "source": "src/lib/email/agent-resource-operations.ts"
+    },
+    {
+      "path": "src/lib/email/agent-resource-schema.ts",
+      "sha256": "1258a748156e6390681f60259fa913f8b298427716cd9e10466b294f5a640f4c",
+      "source": "src/lib/email/agent-resource-schema.ts"
+    },
+    {
+      "path": "src/lib/email/agent-resource-store.ts",
+      "sha256": "fd520e42114a53e375199c99d411b30e8a3eb1c2c5773f74e543a6f1a4c01b45",
+      "source": "src/lib/email/agent-resource-store.ts"
+    },
+    {
+      "path": "src/lib/email/agent-resource-types.ts",
+      "sha256": "65f20f39f620b4170a10d4c198362a7fd123bbdd9a4561306376446193aa6f39",
+      "source": "src/lib/email/agent-resource-types.ts"
+    },
+    {
+      "path": "src/lib/email/agent-safe-errors.ts",
+      "sha256": "01684f16273e6019b1a4fee0bc9665f5c961bcb978ae0c9c753d9af66b75d1ab",
+      "source": "src/lib/email/agent-safe-errors.ts"
+    },
+    {
+      "path": "src/lib/email/agent-tasks.ts",
+      "sha256": "a0505919e8b57b2438b2376c4abbeb8bcbe4176cc1d7d83edcf13b9979f1064c",
+      "source": "src/lib/email/agent-tasks.ts"
+    },
+    {
+      "path": "src/lib/email/agent-types.ts",
+      "sha256": "8b93bb0dd00c2d5cc0c03f1be36771ad35daabfd9196d408a69ecf038b90d227",
+      "source": "src/lib/email/agent-types.ts"
+    },
+    {
+      "path": "src/lib/email/agent-wire-schema.ts",
+      "sha256": "aba655f9b926fe3d10f5825648f2cfd41b09776c9839e8f88c4e3955f2d66cbd",
+      "source": "src/lib/email/agent-wire-schema.ts"
     },
     {
       "path": "src/lib/email/api.ts",
@@ -1007,8 +1282,18 @@
       "source": "src/lib/email/calendar-day.ts"
     },
     {
+      "path": "src/lib/email/calendar-mutation-actions.ts",
+      "sha256": "cdb1df6b6dd4879513526d64f0791dfc3c60583b174600ab71515d5fa2aa822f",
+      "source": "src/lib/email/calendar-mutation-actions.ts"
+    },
+    {
+      "path": "src/lib/email/calendar-time.ts",
+      "sha256": "ed50f2a62121edfe5e3fc37f83e2982eb8bc4500fba39e9206fec29711c9c7f7",
+      "source": "src/lib/email/calendar-time.ts"
+    },
+    {
       "path": "src/lib/email/calendar.ts",
-      "sha256": "cac6cbf3bd7223af71d416ad81cfb6ea5fbeb7679704959e1e37f90bdd86fd5a",
+      "sha256": "a8dd8e30892d90fee3b4f171ab6cb6e88eaf6b19b0c0ee72fdd2b935681d58c7",
       "source": "src/lib/email/calendar.ts"
     },
     {
@@ -1028,7 +1313,7 @@
     },
     {
       "path": "src/lib/email/database.ts",
-      "sha256": "05eca3889d91f27aedfc9af5f2c55c4d8753d36b4c8ef5fea7a77b3791cbd712",
+      "sha256": "722332fcacf82694173ff0cf68e0939c4134a834c2d9cb171d52996042c2353f",
       "source": "src/lib/email/database.ts"
     },
     {
@@ -1043,8 +1328,18 @@
     },
     {
       "path": "src/lib/email/gmail.ts",
-      "sha256": "b1835d110719d74d6a2a805c780e6cd82d6b01928ee9f80901f57d36c5af5de7",
+      "sha256": "76a5a3302f39776c1d49db4e9b6e7381078879f2f061c325da03b60ca3d8e43b",
       "source": "src/lib/email/gmail.ts"
+    },
+    {
+      "path": "src/lib/email/google-calendar-actions.ts",
+      "sha256": "d97b2a7d30c57d2a6966bd4e64c3ffcc51d9228f01d76756bc4a8df84d960aee",
+      "source": "src/lib/email/google-calendar-actions.ts"
+    },
+    {
+      "path": "src/lib/email/google-calendar-helper.ts",
+      "sha256": "5b9f4bbd7098d8258f87d021ecf185a488d60632f2519760d2fc993b6ba24000",
+      "source": "src/lib/email/google-calendar-helper.ts"
     },
     {
       "path": "src/lib/email/message-content.ts",
@@ -1052,8 +1347,28 @@
       "source": "src/lib/email/message-content.ts"
     },
     {
+      "path": "src/lib/email/microsoft-calendar-actions.ts",
+      "sha256": "886671883dad7ed5cbbbd890ad37d54f3c287de140a04e968f839480e981c3da",
+      "source": "src/lib/email/microsoft-calendar-actions.ts"
+    },
+    {
+      "path": "src/lib/email/microsoft-calendar-delete-policy.ts",
+      "sha256": "c8ec456e1eccbd127f0f25338606632d40936993fea2b2a491dcfb1cefedaa7c",
+      "source": "src/lib/email/microsoft-calendar-delete-policy.ts"
+    },
+    {
+      "path": "src/lib/email/microsoft-todo.ts",
+      "sha256": "b706fb7b39cd38d03d157219a7f17031a06a995db39a88a8efc56e4462a9cc47",
+      "source": "src/lib/email/microsoft-todo.ts"
+    },
+    {
+      "path": "src/lib/email/microsoft-value-evidence.ts",
+      "sha256": "b176739a00b7e37f652b0d70b1dbed945ec5b77dd3edce7a37ecc105cfc57bfc",
+      "source": "src/lib/email/microsoft-value-evidence.ts"
+    },
+    {
       "path": "src/lib/email/microsoft.ts",
-      "sha256": "b02e5a5572347f4e3231df0af8fb86a6d44d79435de2f2e914788111e9ded310",
+      "sha256": "61f631cca922c10632f7e65b709fdc3d8fe65a5695989c4e04eee45af8b7fbed",
       "source": "src/lib/email/microsoft.ts"
     },
     {
@@ -1292,13 +1607,18 @@
       "source": "src/lib/email/outbox.ts"
     },
     {
+      "path": "src/lib/email/owner-task-authority.ts",
+      "sha256": "eb733672aa307422075512d041d69c93171f0eee965e7b95dce3d393af3455e0",
+      "source": "src/lib/email/owner-task-authority.ts"
+    },
+    {
       "path": "src/lib/email/passkeys.ts",
-      "sha256": "84dcb57d2b56b07c2486c42e5f15976077a1375f0eb5a37f5762777ab86f9959",
+      "sha256": "de1fb5e8361f16f159ae401f31e96e4c7ff7a84771b9f3bebdfb2255099d692f",
       "source": "src/lib/email/passkeys.ts"
     },
     {
       "path": "src/lib/email/permissions.ts",
-      "sha256": "114d877cb132eaac4200e71551ab299314e7a3cded26697d00e7bd68128619f1",
+      "sha256": "aaaa3f4c9fe64711154134877139c4ed3fe5ccf9255015eff753c5fa28550ea9",
       "source": "src/lib/email/permissions.ts"
     },
     {
@@ -1318,7 +1638,7 @@
     },
     {
       "path": "src/lib/email/provider-adapter.ts",
-      "sha256": "533f87baa8e1fbc73691a574ab9b156e7a11068130fc694e4a7ae97dec3f822a",
+      "sha256": "517badff6cd6f6a204b319a81d0e6261c93ba57dd789db778ff9748260c19944",
       "source": "src/lib/email/provider-adapter.ts"
     },
     {
@@ -1328,7 +1648,7 @@
     },
     {
       "path": "src/lib/email/provider-registry.ts",
-      "sha256": "f6b5c8b2fc5665e487cc9ae16ff330a49cce51692f3d85331eca620efec3721b",
+      "sha256": "1a62ff2da3e639fc94e28fe61194ea63c3f79f85bd1adeb705b416a8b176775b",
       "source": "src/lib/email/provider-registry.ts"
     },
     {
@@ -1363,12 +1683,12 @@
     },
     {
       "path": "src/lib/email/service.ts",
-      "sha256": "6aaf72290ee39a16e87910c436aaf9b6496ff4744b9539145a9f2e588fc856bd",
+      "sha256": "0ff415262e40cd270919e5df81d253ac994283cf0d5e339de712e2c97de9fb37",
       "source": "src/lib/email/service.ts"
     },
     {
       "path": "src/lib/email/system-recovery.ts",
-      "sha256": "0ea67abd2c4bc1ba6c409420780f418f00d1eb66518f3df8aeab6b6123388395",
+      "sha256": "007dc5175d3e2038a906d2e6a52e8a2879f4dda964388616e6c820f5f4964192",
       "source": "src/lib/email/system-recovery.ts"
     },
     {
@@ -1388,7 +1708,7 @@
     },
     {
       "path": "src/lib/email/types.ts",
-      "sha256": "af58901ee4105f37d675bf3a9e5cc76afe1e92ecce1f4a34140a589ea96b61cb",
+      "sha256": "03adb2fe1403bc6d6644d0e30ba7a63f01861d835cc450816e7e4f894b13c2fb",
       "source": "src/lib/email/types.ts"
     },
     {
@@ -1452,6 +1772,171 @@
       "source": "tests/activity-timeline.test.ts"
     },
     {
+      "path": "tests/agent-access-settings.test.tsx",
+      "sha256": "3b63f90302254d815413594af767990bd09b27cf478916b48456edbc237d4434",
+      "source": "tests/agent-access-settings.test.tsx"
+    },
+    {
+      "path": "tests/agent-accounts.test.ts",
+      "sha256": "776562867201f210e42baf64436412214f6b7684b599d80e592f3a3b8bdff665",
+      "source": "tests/agent-accounts.test.ts"
+    },
+    {
+      "path": "tests/agent-actions.test.ts",
+      "sha256": "540202d743f657a21c702c85d776da92fbd4fd6d13d6adfa286906b15a96d56d",
+      "source": "tests/agent-actions.test.ts"
+    },
+    {
+      "path": "tests/agent-api.test.ts",
+      "sha256": "ce09dd4e94b769ec4a375b5202495ccc884eb11ad28db94c025d58057fcf6b95",
+      "source": "tests/agent-api.test.ts"
+    },
+    {
+      "path": "tests/agent-calendar-http.test.ts",
+      "sha256": "5ac9003cb16d8805f5f64f90128aef5d395bd5f0ee32285fffe0a1ea1a375855",
+      "source": "tests/agent-calendar-http.test.ts"
+    },
+    {
+      "path": "tests/agent-calendar-mutations.test.ts",
+      "sha256": "c9d7ae5a4ddbda77262fc5dd46cfe57e5b390cdd832252ff61c1dc4d65082736",
+      "source": "tests/agent-calendar-mutations.test.ts"
+    },
+    {
+      "path": "tests/agent-calendar.test.ts",
+      "sha256": "272f72bf175bdaa81f2f994bcb4346ceff77a6298861238abe63c77c378a216a",
+      "source": "tests/agent-calendar.test.ts"
+    },
+    {
+      "path": "tests/agent-conditional-operations.test.ts",
+      "sha256": "82ef7793e83429dcb9569e55390e46211ff69b1589ef230f6a218e1c78f286b6",
+      "source": "tests/agent-conditional-operations.test.ts"
+    },
+    {
+      "path": "tests/agent-delete-dispatch-boundary.test.ts",
+      "sha256": "7771dacb398630180b691e8f5842be34ee2e6e17440851365f92987b664f3fd5",
+      "source": "tests/agent-delete-dispatch-boundary.test.ts"
+    },
+    {
+      "path": "tests/agent-dispatch.test.ts",
+      "sha256": "4d5a07ae819ca31c82c45235f969415c4d7b1275e1b5203b7f9b7a2604cd36cf",
+      "source": "tests/agent-dispatch.test.ts"
+    },
+    {
+      "path": "tests/agent-grant-schema.test.ts",
+      "sha256": "609ecc32eaeadbf5a092c36601195e965004101fc4e71dc345fdca1f08bb812a",
+      "source": "tests/agent-grant-schema.test.ts"
+    },
+    {
+      "path": "tests/agent-grants-api.test.ts",
+      "sha256": "b6d6991d892afb3d15ebc6e6b9177a0cb23e5591ba1abbe21423c2724a3b74cb",
+      "source": "tests/agent-grants-api.test.ts"
+    },
+    {
+      "path": "tests/agent-grants.test.ts",
+      "sha256": "d069f271a38cf042b84939c6aea5774dd68b3aac47536998c64d5561b8b41680",
+      "source": "tests/agent-grants.test.ts"
+    },
+    {
+      "path": "tests/agent-http-client.test.ts",
+      "sha256": "84fbead5c742d157741e51d0493a5d5f7b37de9415b8698c7e15aaad790a48a3",
+      "source": "tests/agent-http-client.test.ts"
+    },
+    {
+      "path": "tests/agent-key-calendar-create.test.ts",
+      "sha256": "a7f6ef28d75427b1df537726a4a662a5f438127dc9535120fa5ce3d8830301a7",
+      "source": "tests/agent-key-calendar-create.test.ts"
+    },
+    {
+      "path": "tests/agent-key-interface.test.ts",
+      "sha256": "ab1206b3711870ac7cba27ca80c1205b31fa0d57653b4691ff0a6594f8544a87",
+      "source": "tests/agent-key-interface.test.ts"
+    },
+    {
+      "path": "tests/agent-key-mcp.test.ts",
+      "sha256": "5c8a64834e87054cbc5103407d603d7e34248fa8feba281ea395dbe1649217b7",
+      "source": "tests/agent-key-mcp.test.ts"
+    },
+    {
+      "path": "tests/agent-mail.test.ts",
+      "sha256": "7d5e2dd9accf6054868cb15c706037e942033ff9421efe2e28b29c4185b39bad",
+      "source": "tests/agent-mail.test.ts"
+    },
+    {
+      "path": "tests/agent-mcp.test.ts",
+      "sha256": "30f787f670bd8c2460d490c86b9b7b4707feac9359bdb5fb606d71959ca9d086",
+      "source": "tests/agent-mcp.test.ts"
+    },
+    {
+      "path": "tests/agent-operation-schema.test.ts",
+      "sha256": "2c2feaca4ad186e8608c2cbde9344d62205ddfb231ad88daba32078b7d3ab479",
+      "source": "tests/agent-operation-schema.test.ts"
+    },
+    {
+      "path": "tests/agent-operation-store.test.ts",
+      "sha256": "a5ba246178d164bb77a5e1820007f19745bac79e063620fbffef4e97e1f8e85e",
+      "source": "tests/agent-operation-store.test.ts"
+    },
+    {
+      "path": "tests/agent-owner-catalogue.test.ts",
+      "sha256": "d127fb74e66cec22c6347e3a75bc4eb90155de8a69a1b189e490e32aec2960e6",
+      "source": "tests/agent-owner-catalogue.test.ts"
+    },
+    {
+      "path": "tests/agent-permission-regressions.test.ts",
+      "sha256": "1075a8260cf108b33c716bdcd042b369e01be23a3b7ee361dc8be89a2129f1bc",
+      "source": "tests/agent-permission-regressions.test.ts"
+    },
+    {
+      "path": "tests/agent-provider-support.test.ts",
+      "sha256": "e4f5918781c83599a5eb7cea25129d198dc38ff79924cac106e5de3620ab885d",
+      "source": "tests/agent-provider-support.test.ts"
+    },
+    {
+      "path": "tests/agent-reminder-batch.test.ts",
+      "sha256": "377a7f07807f33409286e87c782fc7039935b0cbdb5428f3d42388c682101238",
+      "source": "tests/agent-reminder-batch.test.ts"
+    },
+    {
+      "path": "tests/agent-resource-schema.test.ts",
+      "sha256": "531e4ad1945c4cf96eedca594299c452c80f3d23ff93ce00965c8e823afc687a",
+      "source": "tests/agent-resource-schema.test.ts"
+    },
+    {
+      "path": "tests/agent-resource-store.test.ts",
+      "sha256": "e39746f1405aad88ec31952c5b22c6f8440ad84e3d0a0e8171096eb500e7f6f3",
+      "source": "tests/agent-resource-store.test.ts"
+    },
+    {
+      "path": "tests/agent-safe-errors.test.ts",
+      "sha256": "e2ee23a4424dee157913925e95ebbe05b4af3a482ad4d5a1d174325fd4f3ac83",
+      "source": "tests/agent-safe-errors.test.ts"
+    },
+    {
+      "path": "tests/agent-scoped-integration.test.ts",
+      "sha256": "2bd691d14d0773c5ffc63e0d0323864ec1ab54280c190001bee81f06b9b59957",
+      "source": "tests/agent-scoped-integration.test.ts"
+    },
+    {
+      "path": "tests/agent-task-mutations.test.ts",
+      "sha256": "d4ecc116ef785be0da591b42ed916180aa983f472907c61b4f92c1d6dca51245",
+      "source": "tests/agent-task-mutations.test.ts"
+    },
+    {
+      "path": "tests/agent-task-operation-verification.test.ts",
+      "sha256": "db4c246428b6be3651be5f442d878eb388e7162b18bb7497003c282a5ecea7dc",
+      "source": "tests/agent-task-operation-verification.test.ts"
+    },
+    {
+      "path": "tests/agent-tasks.test.ts",
+      "sha256": "c60974e38cd996b618afb25b01bd57a3669d7ae4b4595e8deaeb814b2a0a3bee",
+      "source": "tests/agent-tasks.test.ts"
+    },
+    {
+      "path": "tests/agent-wire-schema.test.ts",
+      "sha256": "738576f48c16a26ed7d75fe2cb0d6fa69be8e0e793db725364385e3fea670e92",
+      "source": "tests/agent-wire-schema.test.ts"
+    },
+    {
       "path": "tests/approval.test.ts",
       "sha256": "35713373f97d3fe94699a3590521c468108f1610e5254ab384e0780487ffc85f",
       "source": "tests/approval.test.ts"
@@ -1497,19 +1982,49 @@
       "source": "tests/calendar-daily-brief-refresh.test.tsx"
     },
     {
+      "path": "tests/calendar-evidence-schema.test.ts",
+      "sha256": "80b4955a750d69da198c61ff4eae7d23f8a592737fd4655e64a1e3637b8beb4f",
+      "source": "tests/calendar-evidence-schema.test.ts"
+    },
+    {
+      "path": "tests/calendar-operation-flow.test.ts",
+      "sha256": "701aba49990899fe09d2b5bca7f820929bb2957c7e6dd9ff26c347bc192cf82b",
+      "source": "tests/calendar-operation-flow.test.ts"
+    },
+    {
+      "path": "tests/calendar-provider-reads.test.ts",
+      "sha256": "9156f98d62da98682e87d5e7c845da68ffb1a5053f8248f82880c7cd5bad8986",
+      "source": "tests/calendar-provider-reads.test.ts"
+    },
+    {
+      "path": "tests/calendar-provider-reminders.test.ts",
+      "sha256": "79671fcc01938bd1c9ab57793b81939bac48e0c9f7be9fcf5380567a67582d67",
+      "source": "tests/calendar-provider-reminders.test.ts"
+    },
+    {
+      "path": "tests/calendar-reminder-view.test.tsx",
+      "sha256": "bdde770626e7a72785f10312b3a814caa7efb88b6607550e4fa29f5b425150f2",
+      "source": "tests/calendar-reminder-view.test.tsx"
+    },
+    {
+      "path": "tests/calendar-time.test.ts",
+      "sha256": "01f574b7b50144bc7a45132d88734c2a46d4d4ff49a6475d48144a9a26527953",
+      "source": "tests/calendar-time.test.ts"
+    },
+    {
       "path": "tests/calendar-view-state.test.ts",
       "sha256": "ade0c802efab30205a63c40b6416db89e99f3320ab22cf235ebdc6ef3039e880",
       "source": "tests/calendar-view-state.test.ts"
     },
     {
       "path": "tests/calendar.test.ts",
-      "sha256": "23a6ba1364af89d5c82993848338bb524fc63afce7350ff8cf9dfe3d498ce1f4",
+      "sha256": "87b013739bdac9875b3e3d05c1e534b02027a3465116b18a8710fa715ff9804e",
       "source": "tests/calendar.test.ts"
     },
     {
       "path": "tests/ci-runner-contract.test.ts",
-      "sha256": "b1836dc3b5d7909502530e49f7a84dc567b67bc1a485dbc4117ae333247263aa",
-      "source": "public-release/tests/ci-runner-contract.test.ts.in"
+      "sha256": "70785c5b85e752f3634eef3272e54d8b9ba3333846a18019d6a673d1d2262b98",
+      "source": "tests/ci-runner-contract.test.ts"
     },
     {
       "path": "tests/cockpit.test.tsx",
@@ -1538,7 +2053,7 @@
     },
     {
       "path": "tests/dependency-license-policy.test.ts",
-      "sha256": "3543da91774d67a3dc10f1213bb0fab100c6ac6cfb6ada20660ec2d5ec114dd9",
+      "sha256": "177f0c4a182f7d708b1ee8b850e03ddd8efbafe92aac7d0153d336f6775c65d7",
       "source": "tests/dependency-license-policy.test.ts"
     },
     {
@@ -1553,7 +2068,7 @@
     },
     {
       "path": "tests/e2e/cockpit.spec.ts",
-      "sha256": "cad07f77af609c38f9515b7e9c16e6c74e5c51d7c592d3c15395d3001d6138f7",
+      "sha256": "28fc2446de9fdbbc89ba96a9959037ac891699c092e53ec5cdb88193d649bf36",
       "source": "tests/e2e/cockpit.spec.ts"
     },
     {
@@ -1570,6 +2085,11 @@
       "path": "tests/e2e/pwa.spec.ts",
       "sha256": "94161a87919091cba781a26e79c3cc5eb623abe84801b1a770955834dcc72263",
       "source": "tests/e2e/pwa.spec.ts"
+    },
+    {
+      "path": "tests/e2e/scoped-agent-access.spec.ts",
+      "sha256": "c6a7865cf73010ee1fa60185960c233fc3e03dba6da9b726bd07e2fb4acfd2cf",
+      "source": "tests/e2e/scoped-agent-access.spec.ts"
     },
     {
       "path": "tests/email-policy.test.ts",
@@ -1633,8 +2153,38 @@
     },
     {
       "path": "tests/gmail.test.ts",
-      "sha256": "ff5ae9171538d897f835f0e79983bb2e7b95060ccb1ba40d0745fdd4efc381de",
+      "sha256": "f073b8d2abc7573bcd859857250a6990dd77a57fc83ee7af5edbbe5849b83b50",
       "source": "tests/gmail.test.ts"
+    },
+    {
+      "path": "tests/google-calendar-actions.test.ts",
+      "sha256": "652a734eb47ff595bef20ad23fc00d06047a1377232589f1e9df3283c1b53754",
+      "source": "tests/google-calendar-actions.test.ts"
+    },
+    {
+      "path": "tests/google-calendar-build.test.ts",
+      "sha256": "b9d446af7596ef95bc29ff30d122ec1027b50d97edf9a1dcc7409bc78fb12a18",
+      "source": "tests/google-calendar-build.test.ts"
+    },
+    {
+      "path": "tests/google-calendar-capabilities.test.ts",
+      "sha256": "90baa5188d1983aa0579b99f94256578fcec4b19ee68ceec833e69c56bb23402",
+      "source": "tests/google-calendar-capabilities.test.ts"
+    },
+    {
+      "path": "tests/google-calendar-helper.test.ts",
+      "sha256": "f0d702167406ea89261e5f930482ebc23bbd405505d4faf99469915c3170b57d",
+      "source": "tests/google-calendar-helper.test.ts"
+    },
+    {
+      "path": "tests/google-calendar-operations.test.ts",
+      "sha256": "3cfaa117353bf22dd1f428dc2bb9a35bc47f8e47c4a8c350f0c4891db6cdc065",
+      "source": "tests/google-calendar-operations.test.ts"
+    },
+    {
+      "path": "tests/google-calendar-update.test.ts",
+      "sha256": "b759600bb4224a866134dad602a89d8171c290d3cf5f60e4d5388b9f279cd8be",
+      "source": "tests/google-calendar-update.test.ts"
     },
     {
       "path": "tests/helpers/notification-ledger.ts",
@@ -1643,7 +2193,7 @@
     },
     {
       "path": "tests/helpers/public-test-accounting.ts",
-      "sha256": "9a550d1f48115c4e0e30ddc547fb6855f26d8fadce658dfd94bccd792cdf10d8",
+      "sha256": "5e6d34eeba3356be40144d1a10efd853fab3310ed0c6c851f96ac1413e7a2f65",
       "source": "tests/helpers/public-test-accounting.ts"
     },
     {
@@ -1682,6 +2232,11 @@
       "source": "tests/mailSelection.test.ts"
     },
     {
+      "path": "tests/mammoth-dependency.test.ts",
+      "sha256": "78ea9077081c3a36025a6e62143f683ec687ab7511d87810fb393774f3cb5538",
+      "source": "tests/mammoth-dependency.test.ts"
+    },
+    {
       "path": "tests/message-content.test.ts",
       "sha256": "9907f296076cdf90b0b45da7059cf16b15ebb5a6e7445dc0ca9b98c7a677be73",
       "source": "tests/message-content.test.ts"
@@ -1702,8 +2257,18 @@
       "source": "tests/microsoft-account-identity.test.ts"
     },
     {
+      "path": "tests/microsoft-tasks-consent.test.ts",
+      "sha256": "32987e01ee81ac9a2632d6a60831f153cb64a5b9517dffdf7ba7891cdf48a353",
+      "source": "tests/microsoft-tasks-consent.test.ts"
+    },
+    {
+      "path": "tests/microsoft-todo.test.ts",
+      "sha256": "dadf73d5bca846becfc08aac98ab86471d1cc9e99f51189b8a15fc1be951c82b",
+      "source": "tests/microsoft-todo.test.ts"
+    },
+    {
       "path": "tests/microsoft.test.ts",
-      "sha256": "2a9b1a53c2b47514ce2cdf8808fc0bb6f7b4b82998a4fd6419654fa9c8fb89f2",
+      "sha256": "bd3532d8694a9ef4e89aa83a9e3e88106cdedb77092f694d31eb35b7a05078d0",
       "source": "tests/microsoft.test.ts"
     },
     {
@@ -1873,12 +2438,12 @@
     },
     {
       "path": "tests/onboarding.test.ts",
-      "sha256": "9723d0416be80c0bff026c6840c8f3a7b7c4e746c38b40bd39de8d7b9880866d",
+      "sha256": "e2ed3a125a2257659586cd0437d860550333ea053643eec2ed047e8b5a459122",
       "source": "tests/onboarding.test.ts"
     },
     {
       "path": "tests/open-source-notice.test.tsx",
-      "sha256": "f577e727c3ea92d4ada33f3870bbacaca39218c07574a34d58ee747c9c26dd17",
+      "sha256": "e6a8ac6327bb38e706a4d168076de0691febe9883be20c2ed4484b0b6c1c65d2",
       "source": "tests/open-source-notice.test.tsx"
     },
     {
@@ -1893,17 +2458,17 @@
     },
     {
       "path": "tests/passkey-verification.test.ts",
-      "sha256": "c7bc30ab18311424308597a37809e35a206f37fe609fe5fc0d63d3ff1ed3483a",
+      "sha256": "a7d352eede1cbe6b8275c12d005c3deef7e6bdd850d2a95b43a8d6e6b0c5eebd",
       "source": "tests/passkey-verification.test.ts"
     },
     {
       "path": "tests/passkeys.test.ts",
-      "sha256": "6097364688690c6b175557a7cc5acc5fdc5d5a3976622fb81249c36a4b885d1c",
+      "sha256": "48055f3b7f472263930b3942b0dd8f64126a3e0a310597e8f6e4b560d3109720",
       "source": "tests/passkeys.test.ts"
     },
     {
       "path": "tests/permissions.test.ts",
-      "sha256": "3a11f50ac0485adf9cd424264cce61f57ecc003eebdafe7d36d822016e1e5183",
+      "sha256": "496276e99053091aa85a8bcf7b7ec3b8f603891adf570738b4fd20ed71d8bba4",
       "source": "tests/permissions.test.ts"
     },
     {
@@ -1923,7 +2488,7 @@
     },
     {
       "path": "tests/provider-adapter.test.ts",
-      "sha256": "4fb64a29a38cd90eeff7a34a77bd92adb377ae8225d99b2d9e89a3a663687cd2",
+      "sha256": "7d72b1f304dc8c187985ba3eca4e16488ae39501e5276e0cc40bc1d473e4d636",
       "source": "tests/provider-adapter.test.ts"
     },
     {
@@ -1973,17 +2538,17 @@
     },
     {
       "path": "tests/public-mirror-export.test.ts",
-      "sha256": "6b0f40d10a5344fef22a818b488521cf38748fae464d63e29123382319ca5fcf",
+      "sha256": "52e998a116e40604940071dd04e20bf81b4ce605deba0f5c237db4d72279ef93",
       "source": "tests/public-mirror-export.test.ts"
     },
     {
       "path": "tests/public-mirror-policy.test.ts",
-      "sha256": "63c3a802277439a0eaa687bd90a282d85ad5b2be6cd85c72ce0a59e2c0a10228",
+      "sha256": "737c5b1462b6254964afbbf2d270d4a137bd81d64608bcd173cdd3d56ea137b3",
       "source": "tests/public-mirror-policy.test.ts"
     },
     {
       "path": "tests/public-release-docs.test.ts",
-      "sha256": "7dee9c9129aff3cc8d319d1558ee27ed7f5156271c5bf5c2b0f61aa471cd5161",
+      "sha256": "73a8e68821e7c439ae9f9c79c0cd92e079ddc61ee4fc922840e4abbb118a6656",
       "source": "tests/public-release-docs.test.ts"
     },
     {
@@ -2088,7 +2653,7 @@
     },
     {
       "path": "tests/system-recovery.test.ts",
-      "sha256": "3bfbad171c1c7c954816c39b2fc86d06baa7924de21bc04a678ad8fa047830a3",
+      "sha256": "d6546b24868cfd553a87f8b6949abfa7fb358a61a6ff19d1d3728f07e93bf1fb",
       "source": "tests/system-recovery.test.ts"
     },
     {
@@ -2117,6 +2682,16 @@
       "source": "tests/today-morning-brief.test.tsx"
     },
     {
+      "path": "tests/todo-api.test.ts",
+      "sha256": "233f9973c3f0a6d6572bd350d6d6e8966f244c6fc22f1e6e95a40850ca430c4d",
+      "source": "tests/todo-api.test.ts"
+    },
+    {
+      "path": "tests/todo-view.test.tsx",
+      "sha256": "ade0fc64ebb102dbb6eb5034a2b5edeaba6ea7a1c82cf2fc2656d6d8f74476d7",
+      "source": "tests/todo-view.test.tsx"
+    },
+    {
       "path": "tests/useLatestRequest.test.tsx",
       "sha256": "510b46c40589cd92f727f25a925113af22e8cecefe6276d5f116d79fadd72cab",
       "source": "tests/useLatestRequest.test.tsx"
@@ -2133,8 +2708,8 @@
     },
     {
       "path": "tests/version.test.ts",
-      "sha256": "deeb7e824d0153fdee4a6f0fbe047e081eede23c3f5f0589a6e9fcda2d5023c2",
-      "source": "public-release/tests/version.test.ts.in"
+      "sha256": "a47438b6e66f787a1a0fe0cb11a01e966160e09b4a86afdd845ac835a067a56d",
+      "source": "tests/version.test.ts"
     },
     {
       "path": "tests/vocabulary.test.ts",
@@ -2155,6 +2730,26 @@
       "path": "tests/writing-settings.test.ts",
       "sha256": "7324da1bcf6a13a24faa90f1bfce9d418673c6c2eb3a8cd3b4e3ce947872f4f7",
       "source": "tests/writing-settings.test.ts"
+    },
+    {
+      "path": "tools/gog-ezra/README.md",
+      "sha256": "3ac82f930905198eda3dd2c448e0e808b0f5b3a1e769ae95daced507df26247f",
+      "source": "tools/gog-ezra/README.md"
+    },
+    {
+      "path": "tools/gog-ezra/build.mjs",
+      "sha256": "20f3fe2104cd9719d36b05d9eaa8337e1f08365ccd24b87e043346274980fb77",
+      "source": "tools/gog-ezra/build.mjs"
+    },
+    {
+      "path": "tools/gog-ezra/calendar_ezra_event.go",
+      "sha256": "e3fc56f672d755c6625195e90a21c8293a6034dc7564a380d5bd3714d9860c23",
+      "source": "tools/gog-ezra/calendar_ezra_event.go"
+    },
+    {
+      "path": "tools/gog-ezra/calendar_ezra_event_test.go",
+      "sha256": "f9a37421faa443752d2c696acaa100984f20ad1e94b800203519bd10d2dbedd9",
+      "source": "tools/gog-ezra/calendar_ezra_event_test.go"
     },
     {
       "path": "tsconfig.json",

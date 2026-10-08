@@ -173,3 +173,11 @@ For source verification use `npm run lint`, `npm test`, `npm run build`,
 `npm run license:check` and `npm run public:scan`. Browser tests additionally need
 Playwright's matching browser dependencies. These checks use synthetic fixtures;
 they do not establish real provider, native notification or installer acceptance.
+
+
+## Optional personal conversation plugin
+
+After the app works with your own accounts, see the
+[personal plugin guide](PERSONAL_PLUGIN.md) for the advanced Linux MCP bridge.
+Its account-profile and provider qualification steps are separate from installing
+the app; the public source is not a one-click plugin or shared hosted service.

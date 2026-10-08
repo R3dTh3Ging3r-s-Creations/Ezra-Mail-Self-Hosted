@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { authenticated } from "@/lib/email/api";
 import {
   cancelCalendarDraft,
@@ -22,6 +23,7 @@ const draftSchema = z.object({
   isAllDay: z.boolean().optional(),
   timezone: z.string().max(100).optional(),
   attendees: z.union([z.array(z.string()), z.string()]).optional(),
+  reminderMode: z.enum(["default", "none", "minutes"]).optional(),
   reminderMinutes: z.number().int().min(0).max(40_320).nullable().optional(),
   isBusy: z.boolean().optional(),
   privacy: z.enum(["default", "private", "public"]).optional(),
@@ -79,6 +81,7 @@ export async function POST(request: Request) {
       case "create_event":
         return createEventFromDraft({
           draftId: body.draftId,
+          authority: { source: "owner_ui", principal: "authenticated-owner", requestId: randomUUID() },
           confirmInvites: body.confirmInvites,
           sendUpdates: body.sendUpdates,
         });

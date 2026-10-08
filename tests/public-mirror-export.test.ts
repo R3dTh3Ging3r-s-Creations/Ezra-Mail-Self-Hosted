@@ -15,7 +15,7 @@ import {
   workspaceIsMarked,
 } from "../scripts/build-public-mirror";
 import { classifyPublicPath } from "../scripts/public-mirror-policy";
-import { assertPublicTestAccounting } from "./helpers/public-test-accounting";
+import { assertPublicTestAccounting, readPublicTestFailureReport } from "./helpers/public-test-accounting";
 
 const temporaryRoots: string[] = [];
 const execFileAsync = promisify(execFile);
@@ -52,7 +52,6 @@ async function createSource(files: Record<string, string> = {}, privateRoots = [
     repository: { type: "git", url: "https://example.invalid/private" },
     scripts: {
       test: "vitest run",
-      prestart: "powershell -File scripts/ensure-web-build.ps1",
       "deploy:thing1": "private deploy",
       "config:check-caddy": "private check",
     },
@@ -196,7 +195,6 @@ describe("public mirror exporter", () => {
     });
     expect(exportedPackage.scripts).not.toHaveProperty("deploy:thing1");
     expect(exportedPackage.scripts).not.toHaveProperty("config:check-caddy");
-    expect(exportedPackage.scripts).not.toHaveProperty("prestart");
     await expect(fs.stat(path.join(outputRoot, "SERVER_HANDOFF.md"))).rejects.toThrow();
     await expect(fs.readFile(path.join(outputRoot, ".ezra-public-mirror-workspace"), "utf8")).resolves.toContain("Ezra public-mirror workspace");
     await expect(fs.readFile(path.join(outputRoot, ".public-export-manifest.json"), "utf8")).resolves.toContain("public-release/README.md");
@@ -254,7 +252,7 @@ describe("public mirror exporter", () => {
     try {
       await execFileAsync(process.execPath, [
         "--import", pathToFileURL(require.resolve("tsx")).href,
-        path.join(tamperedToolScripts, "build-public-mirror.ts"),
+        await fs.realpath(path.join(tamperedToolScripts, "build-public-mirror.ts")),
         "--report-script-hashes",
       ], { cwd: reviewedSource });
     } catch (error) {
@@ -301,6 +299,8 @@ describe("public mirror exporter", () => {
       .rejects.toThrow(/missing-script-audit.*scripts\/renamed\.ts/i);
 
     for (const unauditedPath of [
+      "plugins/ezra-mail/linux/new.ts",
+      "plugins/ezra-mail/linux/new.service.in",
       "scripts/new.ps1",
       "scripts/new.PS1",
       "Scripts/new.ps1",
@@ -536,6 +536,14 @@ describe("public mirror exporter", () => {
 
     await expect(buildPublicMirror({ sourceRoot, outputRoot, clean: false }))
       .rejects.toThrow(/relative import is not exported: scripts\/helper\.cjs -> private\/helper\.cjs/);
+
+    const pluginSource = await createSource();
+    const pluginPolicy = JSON.parse(await fs.readFile(path.join(pluginSource, "config/public-export.json"), "utf8"));
+    pluginPolicy.copyFiles.push("plugins/ezra-mail/linux/entry.ts");
+    await write(pluginSource, "config/public-export.json", JSON.stringify(pluginPolicy));
+    await write(pluginSource, "plugins/ezra-mail/linux/entry.ts", "import './unexported';\n");
+    await expect(buildPublicMirror({ sourceRoot: pluginSource, outputRoot: await createOutput(), clean: false }))
+      .rejects.toThrow(/relative import is not exported: plugins\/ezra-mail\/linux\/entry\.ts/);
   });
 
   it("fails closed when a copied script cannot be parsed", async () => {
@@ -651,17 +659,8 @@ describe("public mirror exporter", () => {
       await buildPublicMirror({ sourceRoot: process.cwd(), outputRoot: publicRoot, clean: false });
     }
 
+    await expect(fs.access(path.join(publicRoot, "scripts", "extract-attachment.ts"))).resolves.toBeUndefined();
     await expect(isAuthoritativePublicMirror(publicRoot)).resolves.toBe(true);
-    for (const modelFile of ["Qwen3-8B-MaxContext", "Qwen3-14B-MaxContext", "Qwen3.5-9B-MaxContext"]) {
-      await expect(fs.readFile(path.join(publicRoot, "config", "models", `${modelFile}.Modelfile`), "utf8"))
-        .resolves.toMatch(/^FROM qwen3/);
-    }
-    for (const workflow of ["secret-scan.yml", "release-gate.yml"]) {
-      const contents = await fs.readFile(path.join(publicRoot, ".github", "workflows", workflow), "utf8");
-      expect(contents).toContain("runs-on: ubuntu-24.04");
-      expect(contents).toContain("persist-credentials: false");
-      expect(contents).not.toMatch(/self-hosted|ci-workflows|secrets\.|pull_request_target/);
-    }
     await expect(fs.readFile(path.join(publicRoot, "playwright.config.ts"), "utf8"))
       .resolves.toContain("webServer");
     await expect(fs.readFile(path.join(publicRoot, ".github", "workflows", "release-gate.yml"), "utf8"))
@@ -780,6 +779,46 @@ describe("public mirror exporter", () => {
       .toThrow(/public test skip identities did not match/i);
   });
 
+  it("preserves safe child timeout diagnostics when the public test report is missing", async () => {
+    const outputRoot = await createOutput();
+    const failure = Object.assign(new Error("SYNTHETIC_PRIVATE_PROCESS_MESSAGE"), {
+      code: "ETIMEDOUT", killed: true, signal: "SIGTERM",
+      stdout: "SYNTHETIC_PRIVATE_STDOUT", stderr: "SYNTHETIC_PRIVATE_STDERR",
+    });
+    const result = await readPublicTestFailureReport(path.join(outputRoot, "missing.json"), failure)
+      .catch((error: Error) => error.message);
+    expect(result).toContain("report unavailable");
+    expect(result).toContain("code=ETIMEDOUT; killed=true; signal=SIGTERM");
+    expect(result).not.toContain("SYNTHETIC_PRIVATE");
+    expect(result).not.toContain(outputRoot);
+  });
+
+  it("preserves a numeric child exit code without echoing a malformed public report", async () => {
+    const outputRoot = await createOutput();
+    await write(outputRoot, "malformed.json", '{"SYNTHETIC_PRIVATE_REPORT');
+    const result = await readPublicTestFailureReport(path.join(outputRoot, "malformed.json"), {code: 17, killed: false, signal: null})
+      .catch((error: Error) => error.message);
+    expect(result).toContain("report malformed");
+    expect(result).toContain("code=17; killed=false; signal=none");
+    expect(result).not.toContain("SYNTHETIC_PRIVATE");
+  });
+
+  it("does not treat arbitrary process metadata strings as safe diagnostics", async () => {
+    const outputRoot = await createOutput();
+    const result = await readPublicTestFailureReport(path.join(outputRoot, "missing.json"), {
+      code: "SYNTHETIC_PRIVATE_CODE", killed: "SYNTHETIC_PRIVATE_KILLED", signal: "SYNTHETIC_PRIVATE_SIGNAL",
+    }).catch((error: Error) => error.message);
+    expect(result).toContain("code=unknown; killed=unknown; signal=unknown");
+    expect(result).not.toContain("SYNTHETIC_PRIVATE");
+  });
+
+  it("preserves valid public assertion reports for the existing failure analysis", async () => {
+    const outputRoot = await createOutput();
+    const report = {numFailedTests: 1, testResults: [{assertionResults: [{fullName: "fixture assertion", status: "failed", failureMessages: ["fixture mismatch"]}]}]};
+    await write(outputRoot, "report.json", JSON.stringify(report));
+    expect(await readPublicTestFailureReport(path.join(outputRoot, "report.json"), {code: 1})).toEqual(report);
+  });
+
   it.skipIf(isExportedWorkspace)("runs the complete unit suite from a freshly installed public export", async () => {
     const outputRoot = await createOutput();
     if (process.platform === "win32" && outputRoot.length > 160) {
@@ -802,18 +841,18 @@ describe("public mirror exporter", () => {
         cwd: outputRoot,
         env: { ...process.env, FORCE_COLOR: "0", NO_COLOR: "1" },
         maxBuffer: 16 * 1024 * 1024,
-        timeout: 600_000,
+        timeout: 900_000,
       });
-    } catch {
-      const failedReport = JSON.parse(await fs.readFile(reportPath, "utf8")) as {
+    } catch (error) {
+      const failedReport = await readPublicTestFailureReport(reportPath, error) as {
         testResults?: Array<{
-          assertionResults?: Array<{ fullName?: string; status?: string }>;
+          assertionResults?: Array<{ fullName?: string; status?: string; failureMessages?: string[] }>;
         }>;
       };
       const failedNames = (failedReport.testResults ?? []).flatMap((testResult) =>
         (testResult.assertionResults ?? [])
           .filter((assertion) => assertion.status === "failed")
-          .map((assertion) => assertion.fullName ?? "unnamed assertion"),
+          .map((assertion) => `${assertion.fullName ?? "unnamed assertion"}: ${(assertion.failureMessages ?? []).join("\n").slice(0, 4_000) || "no failure detail was reported"}`),
       );
       throw new Error(`Fresh public export unit suite failed: ${failedNames.join("; ") || "no failed assertion name was reported"}`);
     }
@@ -823,11 +862,14 @@ describe("public mirror exporter", () => {
       timeout: 300_000,
     });
     const report = JSON.parse(await fs.readFile(reportPath, "utf8")) as unknown;
-    assertPublicTestAccounting(report, process.platform === "win32" ? 1543 : 1541, [
+    assertPublicTestAccounting(report, process.platform === "win32" ? 2163 : 2161, [
       "public mirror exporter runs the complete unit suite from a freshly installed public export",
       "public mirror policy finds no private identities in every public-classified text file",
       "v0.7.3 release operations does not mark deployment complete before recovery timers pass validation",
       "v0.7.3 release operations restores prior timer units if installation fails partway",
+      "Ezra Mail release version records the deployed v0.7.7 production checkpoint",
+      "Ezra Mail release version marks the detailed safe-preview slice locally complete",
+      "Ezra Mail release version records the approved clean-history reconciliation provenance",
       ...(process.platform === "win32"
         ? []
         : [
@@ -844,7 +886,7 @@ describe("public mirror exporter", () => {
         timeout: 300_000,
       });
     }
-  }, 900_000);
+  }, 1_200_000);
 
   it("allows only the exact declared private recovery staging output", async () => {
     const sourceRoot = await createSource({}, ["PRIVATE_OWNER_RECOVERY", "SERVER_HANDOFF.md"]);

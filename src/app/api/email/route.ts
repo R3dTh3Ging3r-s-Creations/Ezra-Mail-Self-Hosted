@@ -59,7 +59,7 @@ const actionSchema = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("connect_microsoft"),
     email: z.string().email(),
-    access: z.enum(["readonly", "maintenance", "calendar", "send", "full"]),
+    access: z.enum(["readonly", "maintenance", "calendar", "send", "full", "tasks"]),
   }),
   z.object({
     action: z.literal("complete_microsoft_auth"),

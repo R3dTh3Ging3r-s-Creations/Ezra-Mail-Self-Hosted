@@ -15,8 +15,8 @@ describe("owner passkeys", () => {
   });
 
   it("binds registration options to the exact HTTPS relying party", async () => {
-    const started = await beginPasskeyRegistration(new Request("https://ezra.example.invalid:8450"), { deviceId: "device_1" });
-    expect(started.options.rp.id).toBe("ezra.example.invalid");
+    const started = await beginPasskeyRegistration(new Request("https://thing1.example.invalid:8450"), { deviceId: "device_1" });
+    expect(started.options.rp.id).toBe("thing1.example.invalid");
     expect(started.options.authenticatorSelection?.userVerification).toBe("required");
     const challenge = await execute(`SELECT kind, action, device_id FROM auth_challenges WHERE id = ?`, [started.challengeId]);
     expect(challenge.rows[0]).toMatchObject({ kind: "passkey_registration", action: "register_passkey", device_id: "device_1" });
@@ -27,7 +27,7 @@ describe("owner passkeys", () => {
   });
 
   it("does not offer step-up without an enrolled passkey", async () => {
-    await expect(beginStepUp(new Request("https://ezra.example.invalid:8450"), {
+    await expect(beginStepUp(new Request("https://thing1.example.invalid:8450"), {
       action: "change_auth_policy",
       deviceId: "device_1",
     })).rejects.toMatchObject({ status: 409 });
@@ -45,7 +45,7 @@ describe("owner passkeys", () => {
     );
 
     const started = await beginStepUp(
-      new Request("https://ezra.example.invalid:8450"),
+      new Request("https://thing1.example.invalid:8450"),
       { action: "change_auth_policy", deviceId: "device_1" },
     );
 
@@ -64,12 +64,32 @@ describe("owner passkeys", () => {
     );
 
     const started = await beginStepUp(
-      new Request("https://ezra.example.invalid:8450"),
+      new Request("https://thing1.example.invalid:8450"),
       { action: "change_auth_policy", deviceId: "device_1" },
     );
 
     expect(started.options.allowCredentials).toEqual([
       { id: "security-key-credential", type: "public-key", transports: ["usb"] },
     ]);
+  });
+});
+
+describe("exact agent grant review binding", () => {
+  beforeEach(async () => {
+    configureEmailDatabaseForTests(`file:./agent-passkeys-${randomUUID()}.sqlite`);
+    await execute("SELECT 1");
+  });
+  it("requires an exact review hash for agent access step-up", async () => {
+    await expect(beginStepUp(new Request("https://mail.example.test"), { action: "manage_agent_grants", deviceId: "device" })).rejects.toMatchObject({ status: 400 });
+  });
+  it("binds the one-use receipt to both device and exact review", async () => {
+    const { createAuthChallenge } = await import("@/lib/email/auth");
+    const { consumeStepUpReceipt } = await import("@/lib/email/passkeys");
+    const hash = "a".repeat(64);
+    const receipt = await createAuthChallenge({ kind: "step_up_receipt", action: `manage_agent_grants:${hash}`, deviceId: "device", challenge: "fixture" });
+    await expect(consumeStepUpReceipt({ action: "manage_agent_grants", deviceId: "device", receiptId: receipt.id, reviewHash: "b".repeat(64) })).rejects.toMatchObject({ status: 403 });
+    await expect(consumeStepUpReceipt({ action: "manage_agent_grants", deviceId: "other", receiptId: receipt.id, reviewHash: hash })).rejects.toMatchObject({ status: 403 });
+    await expect(consumeStepUpReceipt({ action: "manage_agent_grants", deviceId: "device", receiptId: receipt.id, reviewHash: hash })).resolves.toBeUndefined();
+    await expect(consumeStepUpReceipt({ action: "manage_agent_grants", deviceId: "device", receiptId: receipt.id, reviewHash: hash })).rejects.toMatchObject({ status: 403 });
   });
 });

@@ -1,5 +1,6 @@
+import { getServiceState } from "./database";
 import { spawn } from "node:child_process";
-import { calendarDateRange } from "./calendar-day";
+import { calendarDateInZone, calendarDateRange } from "./calendar-day";
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -7,7 +8,8 @@ import type { CalendarAttendee, CalendarEvent, EmailEnvelope, EmailRecipient } f
 import type { ProviderReplyMetadata } from "./reply-recipients";
 import type { ProviderSentEvidence, ProviderSentEvidenceOptions, ProviderSentEvidencePage } from "./provider-adapter";
 
-export type MicrosoftAccessMode = "readonly" | "maintenance" | "calendar" | "send" | "full";
+export type MicrosoftAccessMode = "readonly" | "maintenance" | "calendar" | "send" | "full" | "tasks";
+type MicrosoftRefreshAccess = MicrosoftAccessMode | "profile" | "calendar-readonly" | "calendar-write" | "tasks-readonly" | "tasks-write";
 
 type DeviceCodeResponse = {
   device_code?: string;
@@ -75,12 +77,15 @@ type MicrosoftGraphAttachment = {
 };
 
 export type MicrosoftGraphCalendarEvent = {
+  "@odata.etag"?: string;
   id?: string;
   subject?: string;
   bodyPreview?: string;
   body?: { contentType?: string; content?: string };
   start?: { dateTime?: string; timeZone?: string };
   end?: { dateTime?: string; timeZone?: string };
+  originalStartTimeZone?: string;
+  originalEndTimeZone?: string;
   isAllDay?: boolean;
   location?: { displayName?: string };
   organizer?: { emailAddress?: { name?: string; address?: string } };
@@ -93,6 +98,12 @@ export type MicrosoftGraphCalendarEvent = {
   showAs?: string;
   sensitivity?: string;
   isCancelled?: boolean;
+  isReminderOn?: boolean;
+  reminderMinutesBeforeStart?: number;
+  changeKey?: string;
+  transactionId?: string;
+  seriesMasterId?: string;
+  type?: string;
   lastModifiedDateTime?: string;
   createdDateTime?: string;
 };
@@ -115,6 +126,12 @@ export const MICROSOFT_CALENDAR_EVENT_SELECT_FIELDS = [
   "showAs",
   "sensitivity",
   "isCancelled",
+  "isReminderOn",
+  "reminderMinutesBeforeStart",
+  "changeKey",
+  "transactionId",
+  "seriesMasterId",
+  "type",
   "lastModifiedDateTime",
   "createdDateTime",
 ] as const;
@@ -123,11 +140,11 @@ export function isMicrosoftAuthConfigured() {
   return Boolean(process.env.MICROSOFT_CLIENT_ID);
 }
 
-export async function startMicrosoftDeviceAuthorization(access: MicrosoftAccessMode) {
+export async function startMicrosoftDeviceAuthorization(access: MicrosoftAccessMode, preservedScopes: string[] = []) {
   const clientId = microsoftClientId();
   const body = new URLSearchParams({
     client_id: clientId,
-    scope: microsoftScopes(access).join(" "),
+    scope: [...new Set([...microsoftScopes(access), ...(access === "tasks" ? preservedScopes.filter(scope => /^(User\.Read|Mail\.(Read|ReadWrite|Send)|Calendars\.(Read|ReadWrite)|Tasks\.(Read|ReadWrite)|openid|profile|email|offline_access)$/.test(scope)) : [])])].join(" "),
   });
   const response = await fetch(`${microsoftAuthority()}/oauth2/v2.0/devicecode`, {
     method: "POST",
@@ -193,17 +210,24 @@ function microsoftGrantedScopes(payload: TokenResponse) {
 
 export async function getMicrosoftAccessToken(
   email: string,
-  access: MicrosoftAccessMode = "readonly",
+  access: MicrosoftRefreshAccess = "readonly",
+  signal?: AbortSignal,
 ) {
+  if (access === "tasks" || access === "tasks-write" || access === "tasks-readonly") {
+    const stored: unknown = JSON.parse(await getServiceState(`microsoft_scopes:${email.trim().toLowerCase()}`) || "[]");
+    const granted = Array.isArray(stored) ? stored.filter((value): value is string => typeof value === "string").map(value => value.toLowerCase()) : [];
+    if (!(access === "tasks-readonly" ? granted.includes("tasks.read") || granted.includes("tasks.readwrite") : granted.includes("tasks.readwrite"))) throw new Error("Microsoft task permission is not granted.");
+  }
   const refreshToken = await getStoredMicrosoftRefreshToken(email);
-  const token = await refreshMicrosoftAccessToken(refreshToken, access);
+  const token = await refreshMicrosoftAccessToken(refreshToken, access, signal);
   if (token.refreshToken) await storeMicrosoftRefreshToken(email, token.refreshToken);
   return token.accessToken;
 }
 
 export async function refreshMicrosoftAccessToken(
   refreshToken: string,
-  access: MicrosoftAccessMode = "readonly",
+  access: MicrosoftRefreshAccess = "readonly",
+  signal?: AbortSignal,
 ) {
   const clientId = microsoftClientId();
   const body = new URLSearchParams({
@@ -213,6 +237,7 @@ export async function refreshMicrosoftAccessToken(
     scope: microsoftScopes(access).join(" "),
   });
   const response = await fetch(`${microsoftAuthority()}/oauth2/v2.0/token`, {
+    signal,
     method: "POST",
     headers: { "content-type": "application/x-www-form-urlencoded" },
     body,
@@ -233,10 +258,10 @@ export async function refreshMicrosoftAccessToken(
   };
 }
 
-export async function getMicrosoftProfile(accessToken: string) {
+export async function getMicrosoftProfile(accessToken: string, signal?: AbortSignal) {
   const response = await fetch(
     `${GRAPH_ROOT}/me?$select=displayName,mail,userPrincipalName`,
-    { headers: { authorization: `Bearer ${accessToken}` } },
+    { signal, redirect: "error", headers: { authorization: `Bearer ${accessToken}` } },
   );
   const payload = (await response.json()) as ProfileResponse & {
     error?: { message?: string };
@@ -424,27 +449,74 @@ export async function restoreMicrosoftMessagesFromJunk(email: string, messageIds
   return moveMicrosoftMessages(email, messageIds, "inbox");
 }
 
+function validateCalendarId(id: string) {
+  if (!id || id.length > 1024 || /[\x00-\x1f]/.test(id)) throw new Error("Calendar id is invalid.");
+  return id;
+}
+
+export async function resolveMicrosoftCalendarId(accessToken: string, calendarId = "primary", signal?: AbortSignal) {
+  validateCalendarId(calendarId);
+  if (calendarId !== "primary") return calendarId;
+  const payload = await microsoftGraphJson<{ id?: string }>(accessToken, `${GRAPH_ROOT}/me/calendar?$select=id`, {
+    signal: signal || AbortSignal.timeout(120_000), redirect: "error", headers: { prefer: 'IdType="ImmutableId"' },
+  }, "calendar");
+  if (typeof payload.id !== "string" || !payload.id) throw new Error("Microsoft primary calendar could not be resolved.");
+  return validateCalendarId(payload.id);
+}
+
 export async function listMicrosoftCalendarEvents(
   accessToken: string,
   accountId: string,
-  options: { from: string; to: string },
+  options: { from: string; to: string; calendarId?: string },
 ) {
-  const fields = MICROSOFT_CALENDAR_EVENT_SELECT_FIELDS.join(",");
-  const url =
-    `${GRAPH_ROOT}/me/calendarView?startDateTime=${encodeURIComponent(options.from)}` +
-    `&endDateTime=${encodeURIComponent(options.to)}&$top=100&$orderby=start/dateTime&$select=${fields}`;
-  const payload = await microsoftGraphJson<{ value?: MicrosoftGraphCalendarEvent[] }>(
-    accessToken,
-    url,
-    { headers: { Prefer: 'outlook.timezone="UTC", IdType="ImmutableId"' } },
-    "calendar",
-  );
-  return (payload.value || []).map((event) => normalizeMicrosoftCalendarEvent(accountId, event));
+  const deadline = Date.now() + 120_000;
+  const signal = AbortSignal.timeout(120_000);
+  const calendarId = await resolveMicrosoftCalendarId(accessToken, options.calendarId || "primary", signal);
+  let url = `${GRAPH_ROOT}/me/calendars/${encodeURIComponent(calendarId)}/calendarView?startDateTime=${encodeURIComponent(options.from)}` +
+    `&endDateTime=${encodeURIComponent(options.to)}&$top=100&$orderby=start/dateTime`;
+  const initial = new URL(url);
+  const seen = new Set<string>();
+  const events: Array<ReturnType<typeof normalizeMicrosoftCalendarEvent>> = [];
+  for (let page = 0; page < 100; page += 1) {
+    if (Date.now() >= deadline || signal.aborted) throw new Error("Microsoft calendar read deadline exceeded.");
+    seen.add(url);
+    const payload = await microsoftGraphJson<{ value?: MicrosoftGraphCalendarEvent[]; "@odata.nextLink"?: unknown }>(accessToken, url, {
+      signal, redirect: "error", headers: { prefer: 'outlook.timezone="UTC", outlook.body-content-type="text", IdType="ImmutableId"' },
+    }, "calendar");
+    if (Date.now() >= deadline || signal.aborted) throw new Error("Microsoft calendar read deadline exceeded.");
+    if (!payload || !Array.isArray(payload.value)) throw new Error("Microsoft calendar response is incomplete.");
+    for (const event of payload.value) events.push(await normalizeMicrosoftCalendarRead(accessToken, accountId, event, calendarId, signal));
+    if (Date.now() >= deadline || signal.aborted) throw new Error("Microsoft calendar read deadline exceeded.");
+    const next = payload["@odata.nextLink"];
+    if (next === undefined || next === null) return events;
+    if (typeof next !== "string" || !next) throw new Error("Microsoft calendar continuation is invalid.");
+    let parsed: URL;
+    try { parsed = new URL(next); } catch { throw new Error("Microsoft calendar continuation is invalid."); }
+    if (parsed.protocol !== "https:" || parsed.origin !== initial.origin || parsed.pathname !== initial.pathname || parsed.username || parsed.password || parsed.hash || seen.has(parsed.href)) throw new Error("Microsoft calendar continuation is unsafe.");
+    url = parsed.href;
+  }
+  throw new Error("Microsoft calendar read exceeded its page limit.");
+}
+
+export async function getMicrosoftCalendarEvent(accessToken: string, accountId: string, calendarId: string, eventId: string) {
+  const signal = AbortSignal.timeout(120_000);
+  const resolved = await resolveMicrosoftCalendarId(accessToken, calendarId, signal);
+  validateCalendarId(eventId);
+  const response = await fetch(`${GRAPH_ROOT}/me/calendars/${encodeURIComponent(resolved)}/events/${encodeURIComponent(eventId)}`, {
+    signal, redirect: "error", headers: { ...microsoftGraphHeaders(accessToken), prefer: 'outlook.timezone="UTC", outlook.body-content-type="text", IdType="ImmutableId"' },
+  });
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`Microsoft calendar read failed (${response.status}).`);
+  const event = await normalizeMicrosoftCalendarRead(accessToken, accountId, await response.json() as MicrosoftGraphCalendarEvent, resolved, signal);
+  if (event.externalEventId !== eventId) throw new Error("Microsoft returned a different event id.");
+  return event;
 }
 
 export async function createMicrosoftCalendarEvent(
   email: string,
   input: {
+    calendarId?: string;
+    transactionId?: string;
     title: string;
     description: string;
     location: string;
@@ -453,27 +525,34 @@ export async function createMicrosoftCalendarEvent(
     isAllDay: boolean;
     timezone: string;
     attendees: string[];
+    reminderMode?: "default" | "none" | "minutes";
     reminderMinutes: number | null;
     isBusy: boolean;
     privacy: string;
   },
+  options: { signal?: AbortSignal } = {},
 ) {
-  const accessToken = await getMicrosoftAccessToken(email, "calendar");
+  const signal = options.signal || AbortSignal.timeout(120_000);
+  const accessToken = await getMicrosoftAccessToken(email, "calendar-write", signal);
+  const calendarId = await resolveMicrosoftCalendarId(accessToken, input.calendarId || "primary", signal);
   const event = await microsoftGraphJson<MicrosoftGraphCalendarEvent>(
     accessToken,
-    `${GRAPH_ROOT}/me/events`,
+    `${GRAPH_ROOT}/me/calendars/${encodeURIComponent(calendarId)}/events`,
     {
+      signal,
+      redirect: "error",
       method: "POST",
       body: JSON.stringify({
+        transactionId: input.transactionId,
         subject: input.title,
         body: { contentType: "text", content: input.description },
         start: {
-          dateTime: input.isAllDay ? input.startsAt.slice(0, 10) : input.startsAt,
-          timeZone: input.isAllDay ? "UTC" : input.timezone,
+          dateTime: input.isAllDay ? `${calendarDateInZone(input.startsAt, input.timezone)}T00:00:00` : new Date(input.startsAt).toISOString().replace(/Z$/, ""),
+          timeZone: input.isAllDay ? input.timezone : "UTC",
         },
         end: {
-          dateTime: input.isAllDay ? input.endsAt.slice(0, 10) : input.endsAt,
-          timeZone: input.isAllDay ? "UTC" : input.timezone,
+          dateTime: input.isAllDay ? `${calendarDateInZone(input.endsAt, input.timezone)}T00:00:00` : new Date(input.endsAt).toISOString().replace(/Z$/, ""),
+          timeZone: input.isAllDay ? input.timezone : "UTC",
         },
         isAllDay: input.isAllDay,
         location: input.location ? { displayName: input.location } : undefined,
@@ -483,13 +562,40 @@ export async function createMicrosoftCalendarEvent(
         })),
         showAs: input.isBusy ? "busy" : "free",
         sensitivity: input.privacy === "private" ? "private" : "normal",
-        isReminderOn: input.reminderMinutes !== null,
-        reminderMinutesBeforeStart: input.reminderMinutes ?? undefined,
+        ...(input.reminderMode === "default" ? {} : {
+          isReminderOn: input.reminderMode === "none" ? false : input.reminderMinutes !== null,
+          reminderMinutesBeforeStart: input.reminderMode === "none" ? undefined : input.reminderMinutes ?? undefined,
+        }),
       }),
     },
     "calendar",
   );
-  return normalizeMicrosoftCalendarEvent("pending", event);
+  return normalizeMicrosoftCalendarRead(accessToken, "pending", event, calendarId, signal);
+}
+
+function nativeAllDayBounds(event: MicrosoftGraphCalendarEvent) {
+  const midnight = (value?: string) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}T00:00:00(?:\.0+)?$/.test(value);
+  return midnight(event.start?.dateTime) && midnight(event.end?.dateTime)
+    && !!event.start?.timeZone && event.start.timeZone === event.end?.timeZone
+    && (!event.originalStartTimeZone || event.originalStartTimeZone === event.start.timeZone)
+    && (!event.originalEndTimeZone || event.originalEndTimeZone === event.end?.timeZone);
+}
+
+/** Let Graph interpret its Windows/IANA zone names; never guess date-only bounds from UTC. */
+async function normalizeMicrosoftCalendarRead(accessToken: string, accountId: string, event: MicrosoftGraphCalendarEvent, calendarId: string, signal: AbortSignal) {
+  if (event?.isAllDay && !nativeAllDayBounds(event)) {
+    const zone = event.originalStartTimeZone;
+    if (!zone || !/^[A-Za-z0-9_+\-/. :]{1,100}$/.test(zone) || zone.startsWith("tzone:") || (event.originalEndTimeZone && event.originalEndTimeZone !== zone) || !event.changeKey) throw new Error("Microsoft all-day timezone evidence is incomplete.");
+    validateCalendarId(event.id || "");
+    const response = await fetch(`${GRAPH_ROOT}/me/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(event.id!)}`, {
+      signal, redirect: "error", headers: { ...microsoftGraphHeaders(accessToken), prefer: `outlook.timezone="${zone}", outlook.body-content-type="text", IdType="ImmutableId"` },
+    });
+    if (!response.ok) throw new Error("Microsoft all-day calendar read could not be completed.");
+    const native = await response.json() as MicrosoftGraphCalendarEvent;
+    if (!native || native.id !== event.id || native.isAllDay !== true || native.changeKey !== event.changeKey || native.start?.timeZone !== zone || !nativeAllDayBounds(native)) throw new Error("Microsoft all-day event changed or its dates could not be verified.");
+    event = native;
+  }
+  return normalizeMicrosoftCalendarEvent(accountId, event, calendarId);
 }
 
 export async function sendMicrosoftOutgoing(
@@ -720,26 +826,39 @@ function assertMicrosoftRecipients(
 export function normalizeMicrosoftCalendarEvent(
   accountId: string,
   event: MicrosoftGraphCalendarEvent,
+  calendarId = "primary",
 ): Omit<CalendarEvent, "id" | "accountLabel" | "accountProvider" | "syncedAt"> {
+  if (!event || typeof event.id !== "string" || !event.id) throw new Error("Microsoft calendar event id is invalid.");
+  if (event.attendees !== undefined && (!Array.isArray(event.attendees) || event.attendees.some(attendee => !attendee || typeof attendee.emailAddress?.address !== "string" || !attendee.emailAddress.address))) throw new Error("Microsoft calendar attendees are malformed.");
   const organizer = event.organizer?.emailAddress;
+  if (event.isAllDay && !nativeAllDayBounds(event)) throw new Error("Microsoft all-day calendar range is invalid: native midnight evidence is required.");
   const dateRange = event.isAllDay ? calendarDateRange(event.start?.dateTime?.slice(0, 10), event.end?.dateTime?.slice(0, 10)) : null;
   if (event.isAllDay && (!dateRange || !Number.isFinite(Date.parse(normalizeMicrosoftDateTime(event.start?.dateTime) || "")) || !Number.isFinite(Date.parse(normalizeMicrosoftDateTime(event.end?.dateTime) || "")))) throw new Error("Microsoft all-day calendar range is invalid.");
+  // All-day values are sortable date placeholders, matching the legacy cache contract.
+  // dateRange is authoritative; a Windows-zone midnight is not a UTC instant.
+  const startsAt = event.isAllDay ? `${dateRange!.startDate}T00:00:00.000Z` : normalizeMicrosoftDateTime(event.start?.dateTime);
+  const endsAt = event.isAllDay ? `${dateRange!.endDate}T00:00:00.000Z` : normalizeMicrosoftDateTime(event.end?.dateTime);
+  if (!startsAt || !endsAt || !Number.isFinite(Date.parse(startsAt)) || !Number.isFinite(Date.parse(endsAt)) || Date.parse(endsAt) <= Date.parse(startsAt)) throw new Error("Microsoft calendar event times are invalid.");
   return {
     accountId,
-    externalEventId: event.id || "",
-    calendarId: "primary",
-    calendarName: "Primary",
+    externalEventId: event.id,
+    reminder: event.isReminderOn === false ? { mode: "none" } : event.isReminderOn === true && Number.isInteger(event.reminderMinutesBeforeStart) && event.reminderMinutesBeforeStart! >= 0 ? { mode: "minutes", minutes: event.reminderMinutesBeforeStart! } : { mode: "unknown" },
+    revision: event["@odata.etag"] || event.changeKey || null,
+    correlationId: event.transactionId || null,
+    recurrenceId: event.seriesMasterId || null,
+    calendarId,
+    calendarName: calendarId === "primary" ? "Primary" : calendarId,
     title: event.subject || "(no title)",
-    description: stripHtml(event.body?.content || event.bodyPreview || "") || null,
+    description: (event.body?.contentType?.toLowerCase() === "text" ? event.body.content : stripHtml(event.body?.content || event.bodyPreview || "")) || null,
     location: event.location?.displayName || null,
-    startsAt: normalizeMicrosoftDateTime(event.start?.dateTime) || new Date(0).toISOString(),
-    endsAt: normalizeMicrosoftDateTime(event.end?.dateTime) || new Date(0).toISOString(),
+    startsAt,
+    endsAt,
     isAllDay: Boolean(event.isAllDay),
     dateRange,
     timezone: event.start?.timeZone || event.end?.timeZone || null,
     status: event.isCancelled ? "cancelled" : "confirmed",
     visibility: event.sensitivity || null,
-    isBusy: !["free", "tentative"].includes(String(event.showAs || "busy").toLowerCase()),
+    isBusy: String(event.showAs || "busy").toLowerCase() !== "free",
     organizerName: organizer?.name || null,
     organizerEmail: organizer?.address || null,
     attendees: normalizeMicrosoftAttendees(event.attendees),
@@ -766,8 +885,9 @@ export function normalizeMicrosoftMessage(
     subject: message.subject || "(no subject)",
     receivedAt: message.receivedDateTime || new Date(0).toISOString(),
     snippet: message.bodyPreview || "",
-    bodyText: stripHtml(message.body?.content || message.bodyPreview || ""),
+    bodyText: message.body?.content === undefined ? undefined : message.body.contentType?.toLowerCase() === "text" ? message.body.content : stripHtml(message.body.content),
     bodyHtml: message.body?.contentType?.toLowerCase() === "html" ? message.body.content?.slice(0, 200_000) : undefined,
+    ...(message.body?.contentType?.toLowerCase() === "html" && (message.body.content?.length || 0) > 200_000 ? { bodyHtmlTruncated: true } : {}),
     providerRevision: message.lastModifiedDateTime || message.internetMessageId || null,
     gmailUrl: message.webLink || "#",
     isUnread: message.isRead === false,
@@ -842,7 +962,12 @@ function stripHtml(value: string) {
     .trim();
 }
 
-function microsoftScopes(access: MicrosoftAccessMode) {
+function microsoftScopes(access: MicrosoftRefreshAccess) {
+  if (access === "tasks-readonly") return ["offline_access", "User.Read", "Tasks.Read"];
+  if (access === "tasks" || access === "tasks-write") return ["offline_access", "User.Read", "Tasks.ReadWrite"];
+  if (access === "profile") return ["offline_access", "User.Read"];
+  if (access === "calendar-readonly") return ["offline_access", "User.Read", "Calendars.Read"];
+  if (access === "calendar-write") return ["offline_access", "User.Read", "Calendars.ReadWrite"];
   const scopes = ["offline_access", "User.Read", "Mail.Read"];
   if (access === "maintenance") scopes.push("Mail.ReadWrite");
   if (access === "calendar") scopes.push("Mail.ReadWrite", "Calendars.ReadWrite");
@@ -928,7 +1053,7 @@ async function microsoftGraphJson<T = unknown>(
   return payload;
 }
 
-function microsoftPermissionMessage(access: MicrosoftAccessMode, message: string) {
+function microsoftPermissionMessage(access: MicrosoftRefreshAccess, message: string) {
   if (access === "maintenance") return `${message} Reconnect Hotmail from Settings to grant Microsoft Mail.ReadWrite access.`;
   if (access === "calendar") return `${message} Reconnect Hotmail from Settings to grant Microsoft calendar access.`;
   if (access === "send") return `${message} Reconnect Hotmail from Settings to grant Microsoft Mail.Send access.`;
@@ -1054,3 +1179,5 @@ function runCredentialCommand(args: string[]) {
     });
   });
 }
+
+export { updateMicrosoftEvent, deleteMicrosoftEvent } from "./microsoft-calendar-actions";

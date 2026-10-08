@@ -23,11 +23,11 @@ const authoritativeIdentityIgnoredRoots = [
   ...generatedPublishedArtifacts,
 ];
 const authoritativeTrackedControlPaths = new Set([workspaceMarker, manifestName]);
-const authoritativePublicPolicySha256 = "9c09f144b7f58e95e16644c6d4c2b25ba5f1514af8c39a77db4c6921a4224a17";
+const authoritativePublicPolicySha256 = "e4336c31d672c94e8684123092f60df3c137cd30113aa94c6e8ada63b584a2de";
 const authorityVerifierPath = "scripts/build-public-mirror.ts";
 const policyHelperPath = "scripts/public-mirror-policy.ts";
-const authoritativePolicyHelperSha256 = "1c3b13858808d7e66a8c27cfabb73f3c4a6839657503f4d890905981f9c85d7f";
-const authoritativeManifestCommitment = "6d6a8590a143a26bedad91e4bbf2205b1b5471f0270615b9964fb7850ddd2376";
+const authoritativePolicyHelperSha256 = "c8bddf79aa9b89408adbe4549af6f5750737982ccefcdffaa2e760a1df9bbef5";
+const authoritativeManifestCommitment = "1df1c59b77446a43fd33941d9d714354a22031b857466e58c21a359e55d1847b";
 const publicRepositoryUrl = "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted.git";
 const generatedAt = "1970-01-01T00:00:00.000Z";
 const privateRecoveryRoot = "PRIVATE_OWNER_RECOVERY";
@@ -368,7 +368,7 @@ async function assertCopiedScriptImportsResolved(sourceRoot: string, candidates:
   const exportedPaths = new Set(candidates.map((candidate) => normalizeRelativePath(candidate.destination).toLowerCase()));
   for (const candidate of candidates) {
     const identity = scriptIdentity(candidate.destination);
-    if (!isAtOrBelow(identity.foldedPath, "scripts") || !moduleScriptExtensions.includes(identity.extension)) continue;
+    if (!(isAtOrBelow(identity.foldedPath, "scripts") || isAtOrBelow(identity.foldedPath, "plugins/ezra-mail/linux")) || !moduleScriptExtensions.includes(identity.extension)) continue;
     const contents = await fs.promises.readFile(targetPath(sourceRoot, candidate.source), "utf8");
     for (const specifier of relativeScriptImports(candidate.destination, contents)) {
       if (resolvedImportCandidates(candidate.destination, specifier).some((target) => exportedPaths.has(target.toLowerCase()))) continue;
@@ -387,10 +387,13 @@ function scriptIdentity(candidate: string): { canonicalPath: string; foldedPath:
 function auditedScriptCandidates(candidates: ExportCandidate[]): ExportCandidate[] {
   return candidates.filter((candidate) => {
     const identity = scriptIdentity(candidate.destination);
-    if (identity.canonicalPath === authorityVerifierPath || !auditedScriptExtensions.includes(identity.extension)) return false;
+    if (identity.canonicalPath === authorityVerifierPath) return false;
+    if (isAtOrBelow(identity.foldedPath, "plugins/ezra-mail/linux") && identity.foldedPath.endsWith(".service.in")) return true;
+    if (!auditedScriptExtensions.includes(identity.extension)) return false;
     return !identity.canonicalPath.includes("/")
       || isAtOrBelow(identity.foldedPath, "scripts")
-      || isAtOrBelow(identity.foldedPath, "installer");
+      || isAtOrBelow(identity.foldedPath, "installer")
+      || isAtOrBelow(identity.foldedPath, "plugins/ezra-mail/linux");
   }).sort((left, right) => left.destination < right.destination ? -1 : left.destination > right.destination ? 1 : 0);
 }
 
@@ -466,8 +469,6 @@ function publicPackageJson(contents: Buffer): Buffer {
   const scripts = { ...(packageJson.scripts as Record<string, unknown> | undefined) };
   delete scripts["deploy:thing1"];
   delete scripts["config:check-caddy"];
-  // Public installs build explicitly before starting on any supported platform.
-  delete scripts.prestart;
   packageJson.private = false;
   packageJson.author = "Eric Michael Mathews";
   packageJson.license = "AGPL-3.0-only";

@@ -1,0 +1,30 @@
+import {randomUUID} from "node:crypto";
+import {beforeEach,describe,expect,it,vi} from "vitest";
+import {configureEmailDatabaseForTests,execute,setSetting} from "@/lib/email/database";
+import {prepareAgentOperation} from "@/lib/email/agent-resource-store";
+import {executeAgentOperation,reconcileAgentOperation} from "@/lib/email/agent-resource-operations";
+import {ProviderPreconditionError} from "@/lib/email/agent-provider-support";
+const mocks=vi.hoisted(()=>({support:vi.fn(),prepare:vi.fn(),read:vi.fn(),update:vi.fn(),remove:vi.fn()}));
+vi.mock("@/lib/email/microsoft-calendar-actions",()=>({prepareCalendarMutationEvidence:mocks.prepare,readMicrosoftEventMutationEvidence:mocks.read,updateMicrosoftEvent:mocks.update,deleteMicrosoftEvent:mocks.remove}));
+vi.mock("@/lib/email/agent-provider-support",async original=>({...await original<typeof import("@/lib/email/agent-provider-support")>(),getConditionalWriteSupport:mocks.support}));
+vi.mock("@/lib/email/microsoft-calendar-delete-policy",()=>({getMicrosoftCalendarDeleteSupport:async()=>({...await mocks.support(),policyId:"fixture-policy"})}));
+const account={accountId:"ms",provider:"microsoft" as const,expectedEmail:"owner@hotmail.test"};
+const target={account,kind:"calendar" as const,id:"cal"};
+const principal={keyId:"fixture",revision:1};
+const deletion={kind:"calendar.delete" as const,target,eventId:"event",expectedRevision:'W/"old"'};
+describe("conditional operation receipts",()=>{
+  beforeEach(async()=>{
+    configureEmailDatabaseForTests(`file:./conditional-${randomUUID()}.sqlite`);vi.clearAllMocks();
+    await setSetting("agent_personal_accounts",JSON.stringify([account,{accountId:"gg",provider:"gmail",expectedEmail:"owner@gmail.test"}]));
+    await execute("INSERT INTO email_accounts(id,provider,email,label,status,created_at,updated_at) VALUES ('ms','microsoft',?,'Fixture','connected',?,?)",[account.expectedEmail,new Date().toISOString(),new Date().toISOString()]);
+    await execute("INSERT INTO agent_grants(key_id,secret_digest,grant_json,revision,created_at,expires_at) VALUES ('fixture','synthetic',?,1,?,?)",[JSON.stringify({label:"Fixture",lifetimeDays:7,accounts:[account],resources:[target],scopes:["calendar.update","calendar.delete"]}),new Date().toISOString(),new Date(Date.now()+86_400_000).toISOString()]);
+    mocks.support.mockResolvedValue({available:true});mocks.prepare.mockImplementation(async()=>({target,complete:true,providerRevision:'W/"old"',fetchedAt:new Date().toISOString(),identityVerifiedAt:new Date().toISOString(),before:{},deletePolicyId:"fixture-policy"}));
+    mocks.remove.mockImplementation(async(...args:any[])=>{await args.at(-1)();});mocks.update.mockImplementation(async(...args:any[])=>{await args.at(-1)();});mocks.read.mockResolvedValue({status:"absent"});
+  });
+  it("verified delete records a receipt only after provider adapter verification",async()=>{const op=await prepareAgentOperation(principal,"request",deletion);expect(await executeAgentOperation(principal,op.id,op.payloadHash)).toMatchObject({status:"succeeded",receipt:{providerId:"event",outcome:"deleted"}});expect(mocks.remove).toHaveBeenCalledOnce();});
+  it("unknown delete reconciliation only reads exact-resource absence",async()=>{const op=await prepareAgentOperation(principal,"request",deletion);mocks.remove.mockImplementationOnce(async(...args:any[])=>{await args.at(-1)();throw new Error("lost response");});expect(await executeAgentOperation(principal,op.id,op.payloadHash)).toMatchObject({status:"unknown"});expect(await reconcileAgentOperation(principal,op.id)).toMatchObject({status:"succeeded",receipt:{outcome:"deleted"}});expect(mocks.remove).toHaveBeenCalledOnce();expect(mocks.read).toHaveBeenCalledWith(target,"event",expect.any(AbortSignal));});
+  it("initial absence during fresh preflight produces no delete or receipt",async()=>{const op=await prepareAgentOperation(principal,"request",deletion);mocks.prepare.mockRejectedValueOnce(new Error("event unavailable"));const result=await executeAgentOperation(principal,op.id,op.payloadHash);expect(result.status).toBe("failed");expect(result.receipt).toBeUndefined();expect(mocks.remove).not.toHaveBeenCalled();});
+  it("HTTP412 is a definitive failed precondition and releases its lock",async()=>{const op=await prepareAgentOperation(principal,"request",deletion);mocks.remove.mockImplementationOnce(async(...args:any[])=>{await args.at(-1)();throw new ProviderPreconditionError();});expect(await executeAgentOperation(principal,op.id,op.payloadHash)).toMatchObject({status:"failed",errorCode:"provider_precondition_failed"});expect((await execute("SELECT * FROM agent_resource_locks")).rows).toHaveLength(0);});
+  it("unqualified capability is rejected before claiming dispatch",async()=>{const op=await prepareAgentOperation(principal,"request",deletion);mocks.support.mockResolvedValue({available:false});await expect(executeAgentOperation(principal,op.id,op.payloadHash)).rejects.toMatchObject({status:503});expect((await execute("SELECT * FROM agent_resource_operation_attempts")).rows).toHaveLength(0);expect(mocks.remove).not.toHaveBeenCalled();});
+  it("unknown update cannot be proven by a later matching body",async()=>{const op=await prepareAgentOperation(principal,"request",{kind:"calendar.update",target,eventId:"event",expectedRevision:'W/"old"',patch:{title:"After"}});mocks.update.mockImplementationOnce(async(...args:any[])=>{await args.at(-1)();throw new Error("lost response");});expect(await executeAgentOperation(principal,op.id,op.payloadHash)).toMatchObject({status:"unknown"});expect(await reconcileAgentOperation(principal,op.id)).toMatchObject({status:"unknown"});expect(mocks.update).toHaveBeenCalledOnce();expect(mocks.read).not.toHaveBeenCalled();});
+});

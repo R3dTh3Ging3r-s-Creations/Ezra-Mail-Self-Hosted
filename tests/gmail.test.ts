@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const gog = vi.hoisted(() => ({ spawn: vi.fn() }));
 
@@ -12,12 +12,80 @@ vi.mock("node:child_process", async (importOriginal) => {
 });
 import {
   gmailAuthorizationCapabilitiesFromAuthList,
+  getGoogleCalendarIdentity,
+  getGmailMessageEnvelope,
   parseUnsubscribeMetadata,
   unwrapGogMetadata,
   searchGmailSentEvidence,
+  searchGmailMessagePage,
 } from "../src/lib/email/gmail";
 
 describe("Gmail metadata", () => {
+  beforeEach(() => gog.spawn.mockClear());
+  it("reads the nested sanitized message body, numeric receipt time and attachment metadata", async () => {
+    gog.spawn.mockImplementation(() => fakeGog(JSON.stringify({message:{
+      id:"nested",threadId:"thread",internalDate:1791376496123,labelIds:["INBOX"],
+      headers:{from:"Sender <sender@example.test>",subject:"Nested",date:"Wed, 7 Oct 2026 08:14:56 -0500"},
+      body:'<<<EXTERNAL_UNTRUSTED_CONTENT id="0123456789abcdef">>>\nSource: google_api\n---\nFull sanitized body\n<<<END_EXTERNAL_UNTRUSTED_CONTENT id="0123456789abcdef">>>',
+      snippet:"Short preview",attachments:[{attachmentId:"attachment",filename:"fixture.txt",mimeType:"text/plain",size:12}],
+    }})));
+    const message=await getGmailMessageEnvelope("owner@gmail.test","nested");
+    expect(message).toMatchObject({externalMessageId:"nested",subject:"Nested",senderEmail:"sender@example.test",bodyText:"Full sanitized body",receivedAt:"2026-10-07T12:34:56.123Z",attachments:[{id:"attachment",name:"fixture.txt",mimeType:"text/plain",size:12}]});
+  });
+  it("uses the same exact internal receipt timestamp for Gmail search and read", async () => {
+    gog.spawn.mockImplementationOnce(() => fakeGog(JSON.stringify({messages:[{id:"same",date:"2026-10-07 08:14",internalDateIso:"2026-10-07T07:34:56.123-05:00",from:"sender@example.test",subject:"Fixture"}]})));
+    const page=await searchGmailMessagePage("owner@gmail.test",{query:"in:inbox",maxResults:1});
+    gog.spawn.mockImplementationOnce(() => fakeGog(JSON.stringify({message:{id:"same",internalDate:1791376496123,headers:{date:"Wed, 7 Oct 2026 08:14:56 -0500"},body:"Full body"}})));
+    const read=await getGmailMessageEnvelope("owner@gmail.test","same");
+    expect(page.messages[0].receivedAt).toBe("2026-10-07T12:34:56.123Z");
+    expect(read.receivedAt).toBe(page.messages[0].receivedAt);
+    expect(page.messages[0].snippet).toBe("");
+    expect(gog.spawn.mock.calls[0][1]).not.toContain("--include-body");
+  });
+  it("does not invent a current receipt time when provider metadata is missing",async()=>{
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({id:"undated",body:"Text"})));
+    expect((await getGmailMessageEnvelope("owner@gmail.test","undated")).receivedAt).toBe("1970-01-01T00:00:00.000Z");
+  });
+  it("retains literal embedded body markers while removing only the outer transport wrapper",async()=>{
+    const literal='Quoted example:\n<<<EXTERNAL_UNTRUSTED_CONTENT>>>\nquoted text\n<<<END_EXTERNAL_UNTRUSTED_CONTENT>>>\nEnd example';
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({message:{id:"quoted",body:`<<<EXTERNAL_UNTRUSTED_CONTENT id="0123456789abcdef">>>\nSource: google_api\n---\n${literal}\n<<<END_EXTERNAL_UNTRUSTED_CONTENT id="0123456789abcdef">>>`}})));
+    expect((await getGmailMessageEnvelope("owner@gmail.test","quoted")).bodyText).toBe(literal);
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({id:"quoted",body:literal})));
+    expect((await getGmailMessageEnvelope("owner@gmail.test","quoted")).bodyText).toBe(literal);
+  });
+  it("retains nested sanitized body truncation evidence",async()=>{
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({message:{id:"long-nested",body:"x".repeat(80_001)}})));
+    const message=await getGmailMessageEnvelope("owner@gmail.test","long-nested");
+    expect(message.bodyText).toHaveLength(80_000);expect(message.bodyTextTruncated).toBe(true);
+  });
+  it.each([
+    '<<<EXTERNAL_UNTRUSTED_CONTENT>>>\nLiteral quoted content\n<<<END_EXTERNAL_UNTRUSTED_CONTENT>>>',
+    '<<<EXTERNAL_UNTRUSTED_CONTENT id="0123456789abcdef">>>\nSource: google_api\n---\nLiteral mismatched markers\n<<<END_EXTERNAL_UNTRUSTED_CONTENT id="fedcba9876543210">>>',
+  ])("leaves a literal body resembling a wrapper intact: %s",async body=>{
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({message:{id:"literal",body}})));
+    expect((await getGmailMessageEnvelope("owner@gmail.test","literal")).bodyText).toBe(body);
+  });
+  it("retains truncation evidence when the Gmail HTML source exceeds its adapter cap",async()=>{
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({id:"html",html:`<p>${"x".repeat(200_001)}</p>`})));
+    const message=await getGmailMessageEnvelope("owner@gmail.test","html");
+    expect(message.bodyHtml).toHaveLength(200_000);
+    expect(message.bodyHtmlTruncated).toBe(true);
+  });
+  it("retains truncation evidence for a bounded provider body",async()=>{
+    gog.spawn.mockImplementation(()=>fakeGog(JSON.stringify({id:"long-message",body:"x".repeat(80_001)})));
+    const message=await getGmailMessageEnvelope("owner@gmail.test","long-message");
+    expect(message.bodyText).toHaveLength(80_000);expect(message.bodyTextTruncated).toBe(true);
+  });
+  it("verifies account identity using the authenticated primary calendar, never a label", async () => {
+    gog.spawn.mockImplementation(() => fakeGog(JSON.stringify({ calendars: [
+      { id: "owner@gmail.test", primary: true, summary: "Untrusted label" },
+    ] })));
+    expect(await getGoogleCalendarIdentity("owner@gmail.test")).toBe("owner@gmail.test");
+    gog.spawn.mockImplementation(() => fakeGog(JSON.stringify({ calendars: [
+      { id: "other@gmail.test", primary: false, summary: "owner@gmail.test" },
+    ] })));
+    await expect(getGoogleCalendarIdentity("owner@gmail.test")).rejects.toThrow(/identity/i);
+  });
   it("reads only capped in-window Sent evidence and strips provider content", async () => {
     const rows = Array.from({ length: 100 }, (_, index) => ({
       id: index === 1 ? undefined : index === 0 ? "sent-1" : `sent-${index}`,
@@ -136,9 +204,9 @@ describe("Gmail metadata", () => {
       ],
     };
 
-    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "writer@gmail.example")).toEqual({ modify: true });
-    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "reader@gmail.example")).toEqual({ modify: false });
-    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "missing@gmail.example")).toEqual({ modify: false });
+    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "writer@gmail.example")).toMatchObject({ modify: true });
+    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "reader@gmail.example")).toMatchObject({ modify: false });
+    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "missing@gmail.example")).toMatchObject({ modify: false });
   });
 
   it("isolates modify permission when the authorization list is keyed by account email", () => {
@@ -153,8 +221,8 @@ describe("Gmail metadata", () => {
       },
     };
 
-    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "writer@gmail.example")).toEqual({ modify: true });
-    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "reader@gmail.example")).toEqual({ modify: false });
+    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "writer@gmail.example")).toMatchObject({ modify: true });
+    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "reader@gmail.example")).toMatchObject({ modify: false });
   });
 
   it("does not aggregate sibling scopes from a top-level selected-account field", () => {
@@ -172,7 +240,7 @@ describe("Gmail metadata", () => {
       ],
     };
 
-    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "reader@gmail.example")).toEqual({ modify: false });
+    expect(gmailAuthorizationCapabilitiesFromAuthList(authList, "reader@gmail.example")).toMatchObject({ modify: false });
   });
 
   it("removes gog's transport wrapper from a complete metadata value", () => {

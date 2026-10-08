@@ -37,6 +37,8 @@ import {
 } from "./calendarViewState";
 import { isInitialPanelLoad } from "./refreshState";
 import { isAbortError, useLatestRequest } from "./useLatestRequest";
+import { resolveCalendarTime } from "@/lib/email/calendar-time";
+import { calendarDayBounds } from "@/lib/email/calendar-day";
 import styles from "./EzraMail.module.css";
 
 type CalendarForm = {
@@ -553,9 +555,9 @@ function EventDraftDialog(props: {
         <label>Attendees<input value={props.form.attendees} onChange={(event) => update("attendees", event.target.value)} placeholder="Optional, comma-separated emails" /></label>
         <label>Description<textarea rows={4} value={props.form.description} onChange={(event) => update("description", event.target.value)} /></label>
         <div className={styles.calendarFormGrid}>
-          <label>Reminder<select value={props.form.reminderMinutes} onChange={(event) => update("reminderMinutes", event.target.value)}><option value="">Default</option><option value="10">10 minutes</option><option value="30">30 minutes</option><option value="60">1 hour</option><option value="1440">1 day</option></select></label>
+          <label>Reminder<select value={props.form.reminderMinutes} onChange={(event) => update("reminderMinutes", event.target.value)}><option value="">Default</option><option value="none">No reminder</option><option value="0">At start</option><option value="10">10 minutes</option><option value="30">30 minutes</option><option value="60">1 hour</option><option value="1440">1 day</option></select></label>
           <label>Show as<select value={props.form.isBusy ? "busy" : "free"} onChange={(event) => update("isBusy", event.target.value === "busy")}><option value="busy">Busy</option><option value="free">Free</option></select></label>
-          <label>Privacy<select value={props.form.privacy} onChange={(event) => update("privacy", event.target.value as CalendarPrivacy)}><option value="default">Default</option><option value="private">Private</option><option value="public">Public</option></select></label>
+          <label>Privacy<select value={props.form.privacy} onChange={(event) => update("privacy", event.target.value as CalendarPrivacy)}><option value="default">Default</option><option value="private">Private</option><option value="public" disabled={account?.provider === "microsoft"}>Public</option></select></label>
         </div>
         <footer><button type="button" className={styles.secondaryButton} onClick={props.onClose}>Cancel</button><button className={styles.primaryButton} disabled={props.saving}>{props.saving ? "Saving..." : "Save draft for review"}</button></footer>
       </form>
@@ -580,7 +582,8 @@ function ReviewDialog(props: {
       <section className={styles.sendDialog} role="alertdialog" aria-modal="true" aria-labelledby="calendar-review-title">
         <span className={styles.dialogEyebrow}>Exact calendar review</span>
         <h2 id="calendar-review-title">{props.draft.title}</h2>
-        <p>{props.draft.accountLabel} · {props.draft.isAllDay ? `${formatDate(props.draft.startsAt)} all day` : `${formatDateTime(props.draft.startsAt)} – ${formatDateTime(props.draft.endsAt)}`}</p>
+        <p>{props.draft.accountLabel} · {props.draft.isAllDay ? `${formatDate(props.draft.startsAt)} all day` : `${formatDateTime(props.draft.startsAt, props.draft.timezone)} – ${formatDateTime(props.draft.endsAt, props.draft.timezone)}`}</p>
+        <p>Timezone: {props.draft.timezone} · Reminder: {props.draft.reminderMode === "none" ? "No reminder" : props.draft.reminderMinutes === 0 ? "At start" : props.draft.reminderMinutes != null ? `${props.draft.reminderMinutes} minutes before` : "Default"}</p>
         {props.draft.location ? <p>Location: {props.draft.location}</p> : null}
         {props.draft.description ? <p>{props.draft.description}</p> : null}
         {props.draft.attendees.length ? <p>Attendees: {props.draft.attendees.join(", ")}</p> : <p>No attendees. This creates a private calendar block only.</p>}
@@ -601,16 +604,18 @@ function ReviewDialog(props: {
 }
 
 function defaultForm(timezone = "America/Chicago"): CalendarForm {
-  const now = new Date();
-  now.setMinutes(0, 0, 0);
-  const end = new Date(now);
-  end.setHours(end.getHours() + 1);
+  const parts = new Intl.DateTimeFormat("en-CA", { timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", hourCycle: "h23" }).formatToParts(new Date());
+  const part = (type: string) => parts.find(item => item.type === type)!.value;
+  const wall = new Date(`${part("year")}-${part("month")}-${part("day")}T${part("hour")}:00:00Z`);
+  // The form has one date; keep its default hour within that date at midnight.
+  if (wall.getUTCHours() === 23) wall.setUTCHours(24);
+  const end = new Date(wall.getTime() + 3_600_000);
   return {
     accountId: "",
     title: "",
-    date: dateInput(now),
-    startTime: timeInput(now),
-    endTime: timeInput(end),
+    date: wall.toISOString().slice(0, 10),
+    startTime: wall.toISOString().slice(11, 16),
+    endTime: end.toISOString().slice(11, 16),
     allDay: false,
     timezone,
     location: "",
@@ -624,10 +629,11 @@ function defaultForm(timezone = "America/Chicago"): CalendarForm {
 }
 
 function draftPayload(form: CalendarForm) {
-  const allDayStart = new Date(`${form.date}T00:00:00`);
-  const allDayEnd = addDays(allDayStart, 1);
-  const startsAt = form.allDay ? allDayStart.toISOString() : new Date(`${form.date}T${form.startTime}`).toISOString();
-  const endsAt = form.allDay ? allDayEnd.toISOString() : new Date(`${form.date}T${form.endTime}`).toISOString();
+  const timezone = form.timezone || "America/Chicago";
+  const day = form.allDay ? calendarDayBounds(form.date, timezone) : null;
+  const startsAt = day ? day.startIso : resolveCalendarTime({ date: form.date, time: form.startTime, timezone });
+  const endsAt = day ? day.endIso : resolveCalendarTime({ date: form.date, time: form.endTime, timezone });
+  if (Date.parse(endsAt) <= Date.parse(startsAt)) throw new Error("Calendar event end time must be after the start time.");
   return {
     accountId: form.accountId,
     calendarId: "primary",
@@ -639,7 +645,8 @@ function draftPayload(form: CalendarForm) {
     isAllDay: form.allDay,
     timezone: form.timezone || "America/Chicago",
     attendees: form.attendees,
-    reminderMinutes: form.reminderMinutes ? Number(form.reminderMinutes) : null,
+    reminderMode: form.reminderMinutes === "" ? "default" : form.reminderMinutes === "none" ? "none" : "minutes",
+    reminderMinutes: form.reminderMinutes === "" || form.reminderMinutes === "none" ? null : Number(form.reminderMinutes),
     isBusy: form.isBusy,
     privacy: form.privacy,
     sendUpdates: form.sendUpdates,
@@ -665,5 +672,5 @@ function shortWeekday(value: Date) { return value.toLocaleDateString("en-US", { 
 function capitalize(value: string) { return value.charAt(0).toUpperCase() + value.slice(1); }
 function formatTime(value: string) { return new Date(value).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }); }
 function formatDate(value: string) { return new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
-function formatDateTime(value: string) { return new Date(value).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); }
+function formatDateTime(value: string, timeZone?: string) { return new Date(value).toLocaleString("en-US", { timeZone, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); }
 function relativeTime(value: string) { const minutes = Math.max(0, Math.round((Date.now() - new Date(value).getTime()) / 60_000)); if (minutes < 60) return `${Math.max(1, minutes)}m ago`; if (minutes < 1_440) return `${Math.round(minutes / 60)}h ago`; return `${Math.round(minutes / 1_440)}d ago`; }

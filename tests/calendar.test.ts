@@ -1,5 +1,16 @@
 import { randomUUID } from "node:crypto";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { allDayRangeFromInstants } from "@/lib/email/calendar-day";
+import type { CalendarEvent } from "@/lib/email/types";
+const calendarFixture = vi.hoisted(() => ({ event: null as CalendarEvent | null }));
+vi.mock("@/lib/email/agent-accounts", () => ({ assertConnectedAccount: vi.fn(async ref => ({ id: ref.accountId, provider: ref.provider, email: ref.expectedEmail, label: "Test" })), assertPersonalAccount: vi.fn(async ref => ({ id: ref.accountId, provider: ref.provider, email: ref.expectedEmail, label: "Test" })), getAgentCapabilities: vi.fn(async ref => ({ account: ref, scopes: ["fixture"], identityVerifiedAt: new Date().toISOString(), calendarWrite: "available" })) }));
+vi.mock("@/lib/email/agent-calendar", () => ({ readAgentCalendar: vi.fn(async (account, calendarId, range) => ({ account, calendarId, range, fetchedAt: new Date().toISOString(), complete: true, events: [] })), readAgentEvent: vi.fn(async () => ({ status: "found", event: calendarFixture.event })) }));
+vi.mock("@/lib/email/microsoft", async original => ({ ...await original<typeof import("@/lib/email/microsoft")>(), createMicrosoftCalendarEvent: vi.fn(async (_email, input) => calendarFixture.event = fixtureEvent("microsoft", input)) }));
+vi.mock("@/lib/email/gmail", async original => ({ ...await original<typeof import("@/lib/email/gmail")>(), createGoogleCalendarEvent: vi.fn(async input => calendarFixture.event = fixtureEvent("gmail", input)) }));
+const ownerAuthority = { source: "owner_ui" as const, principal: "owner", requestId: "fixture-request" };
+function fixtureEvent(provider: "microsoft" | "gmail", input: { calendarId: string; title: string; description: string; location: string; startsAt: string; endsAt: string; isAllDay: boolean; timezone: string; attendees: string[]; reminderMode: "default" | "none" | "minutes"; reminderMinutes: number | null; isBusy: boolean; privacy: string }): CalendarEvent {
+  return { revision: "fixture-revision", correlationId: "fixture-correlation", recurrenceId: null, id: "fixture-event", externalEventId: "fixture-event", accountId: provider === "microsoft" ? "acct-ms" : "acct-gmail", accountLabel: "Test", accountProvider: provider, calendarId: input.calendarId, calendarName: "Primary", title: input.title, description: input.description || null, location: input.location || null, startsAt: input.startsAt, endsAt: input.endsAt, isAllDay: input.isAllDay, timezone: input.timezone, dateRange: input.isAllDay ? allDayRangeFromInstants(input.startsAt, input.endsAt, input.timezone) : null, status: "confirmed", visibility: input.privacy, isBusy: input.isBusy, attendees: input.attendees.map(email => ({ email })), reminder: input.reminderMode === "minutes" ? { mode: "minutes", minutes: input.reminderMinutes! } : { mode: input.reminderMode }, organizerName: "Test", organizerEmail: null, webLink: null, updatedAt: new Date().toISOString(), syncedAt: new Date().toISOString() };
+}
 import {
   calendarRangeCovered,
   createCalendarDraft,
@@ -18,6 +29,22 @@ import {
 } from "@/lib/email/microsoft";
 
 describe("calendar workspaces", () => {
+  it("retains normalized provider evidence when a verified event enters the UI cache",async()=>{
+    const draft=await createCalendarDraft({accountId:"acct-ms",title:"Evidence",startsAt:"2026-10-09T12:00:00Z",endsAt:"2026-10-09T12:10:00Z",reminderMode:"minutes",reminderMinutes:0});
+    const result=await createEventFromDraft({draftId:draft.id,authority:ownerAuthority});
+    expect(result.event).toMatchObject({reminder:{mode:"minutes",minutes:0},revision:"fixture-revision",correlationId:"fixture-correlation",recurrenceId:null});
+  });
+  it("persists explicit reminder modes and preserves legacy provider defaults", async () => {
+    const input = { accountId: "acct-ms", title: "Reminder", startsAt: "2026-10-09T12:00:00Z", endsAt: "2026-10-09T12:10:00Z" };
+    for (const reminderMode of ["default", "none", "minutes"] as const) {
+      const reminderMinutes = reminderMode === "minutes" ? 0 : null;
+      expect(await createCalendarDraft({ ...input, reminderMode, reminderMinutes })).toMatchObject({ reminderMode, reminderMinutes });
+    }
+    expect(await createCalendarDraft(input)).toMatchObject({ reminderMode: "none", reminderMinutes: null });
+    expect(await createCalendarDraft({ ...input, accountId: "acct-gmail" })).toMatchObject({ reminderMode: "default", reminderMinutes: null });
+    await expect(createCalendarDraft({ ...input, endsAt: input.startsAt })).rejects.toThrow(/after/);
+    await expect(createCalendarDraft({ ...input, reminderMode: "minutes", reminderMinutes: -1 })).rejects.toThrow(/reminder/i);
+  });
   beforeEach(async () => {
     configureEmailDatabaseForTests(`file:./calendar-${randomUUID()}.sqlite`);
     await seedAccount("acct-gmail", "gmail", "owner@gmail.test", "Gmail Test");
@@ -82,7 +109,7 @@ describe("calendar workspaces", () => {
 
   it("derives local all-day dates in the draft timezone and persists the lossless range", async () => {
     const draft = await createCalendarDraft({ accountId: "acct-gmail", title: "Local day", startsAt: "2026-08-30T15:00:00.000Z", endsAt: "2026-08-31T15:00:00.000Z", isAllDay: true, timezone: "Asia/Tokyo" });
-    const result = await createEventFromDraft({ draftId: draft.id });
+    const result = await createEventFromDraft({ authority: ownerAuthority, draftId: draft.id });
     expect(result.event).toMatchObject({ dateRange: { startDate: "2026-08-31", endDate: "2026-09-01" } });
     expect((await execute("SELECT start_date, end_date FROM calendar_events")).rows).toEqual([{ start_date: "2026-08-31", end_date: "2026-09-01" }]);
   });
@@ -165,11 +192,11 @@ describe("calendar workspaces", () => {
     });
     expect(Number(eventsBeforeApproval.rows[0]?.count || 0)).toBe(0);
 
-    const result = await createEventFromDraft({ draftId: draft.id });
+    const result = await createEventFromDraft({ authority: ownerAuthority, draftId: draft.id });
     const saved = await execute(`SELECT status, provider_event_id FROM calendar_drafts WHERE id = ?`, [draft.id]);
 
     expect(result).toMatchObject({ ok: true, event: { title: "Application follow-up" } });
-    expect(saved.rows[0]).toMatchObject({ status: "created", provider_event_id: `test-${draft.id}` });
+    expect(saved.rows[0]).toMatchObject({ status: "created", provider_event_id: "fixture-event" });
   });
 
   it("blocks Microsoft attendee event creation until invite sending is explicitly confirmed", async () => {
@@ -181,9 +208,9 @@ describe("calendar workspaces", () => {
       attendees: ["manager@example.com"],
     });
 
-    await expect(createEventFromDraft({ draftId: draft.id })).rejects.toThrow("Confirm invitation sending");
+    await expect(createEventFromDraft({ authority: ownerAuthority, draftId: draft.id })).rejects.toThrow("Confirm invitation sending");
 
-    const result = await createEventFromDraft({ draftId: draft.id, confirmInvites: true });
+    const result = await createEventFromDraft({ authority: ownerAuthority, draftId: draft.id, confirmInvites: true });
     expect(result).toMatchObject({ ok: true, event: { accountProvider: "microsoft" } });
   });
 });
