@@ -346,6 +346,20 @@ test("Gmail Reply and Hotmail Reply all save safely to Outbox", async ({ page })
 });
 
 test("Activity navigation opens the timeline", async ({ page }) => {
+  // Navigation is independent of other tests changing the shared owner's trust state.
+  await mockEzraMailApi(page, []);
+  const activityWorkspaces: Array<string | null> = [];
+  await page.route("**/api/activity?**", (route) => {
+    const workspaceId = new URL(route.request().url()).searchParams.get("workspaceId");
+    activityWorkspaces.push(workspaceId);
+    return route.fulfill({ json: {
+      generatedAt: "2026-07-13T12:00:00.000Z",
+      filters: { workspaceId, q: "", kind: "all", accountId: "", provider: "all", from: null, to: null, limit: 120 },
+      counts: { total: 0, shown: 0, errors: 0, warnings: 0, byKind: [] },
+      accounts: [],
+      items: [],
+    } });
+  });
   await page.goto("/");
   if ((page.viewportSize()?.width || 1000) <= 500) {
     await page.getByRole("button", { name: "More", exact: true }).click();
@@ -354,6 +368,7 @@ test("Activity navigation opens the timeline", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Activity", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ezra's receipts, in order" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Apply/i })).toBeVisible();
+  expect(activityWorkspaces).toContain("workspace:gmail");
 });
 
 test("Settings opens the provider permissions dashboard", async ({ page }) => {
