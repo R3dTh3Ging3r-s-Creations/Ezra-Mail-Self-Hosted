@@ -4,7 +4,7 @@ import { rehearseLatestRestore } from "../src/lib/email/system-recovery";
 loadEnvConfig(process.cwd());
 
 void rehearseLatestRestore().then((result) => {
-  process.stdout.write(`Restore rehearsal passed for ${result.sourceFile} (${result.tableCount} tables).\n`);
+  process.stdout.write(`Restore rehearsal passed for ${result.sourceFile} (${result.tableCount} tables; ${result.revokedAgentKeys} restored agent keys revoked).\n`);
 }).catch((error) => {
   process.stderr.write(`${error instanceof Error ? error.stack || error.message : String(error)}\n`);
   process.exitCode = 1;

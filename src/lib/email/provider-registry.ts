@@ -28,7 +28,7 @@ const providers: readonly ProviderInventoryItem[] = [
     id: "microsoft",
     label: "Microsoft",
     available: true,
-    setupGuidance: "Connect a Microsoft account to read mail and use the permissions you explicitly approve.",
+    setupGuidance: "Connect a Microsoft account for mail and calendars. Personal Microsoft To Do requires its separate task-access confirmation.",
     capabilities: {
       mailRead: true,
       readState: true,

@@ -25,7 +25,7 @@ export async function getAccountFreshness(): Promise<AccountFreshnessPage> {
     execute(
       `SELECT a.id, a.provider, a.email, a.label, a.status, a.last_sync_at,
          p.purpose_label, p.sync_range_days, c.status AS calendar_status, c.last_sync_at AS calendar_last_sync_at,
-         c.last_error AS calendar_error
+         c.last_error AS calendar_error, c.range_from AS calendar_range_from, c.range_to AS calendar_range_to
        FROM email_accounts a
        LEFT JOIN account_profile_settings p ON p.account_id = a.id
        LEFT JOIN calendar_sync_state c ON c.account_id = a.id AND c.calendar_id = 'primary'
@@ -102,6 +102,13 @@ export async function getAccountFreshness(): Promise<AccountFreshnessPage> {
       : reconnectRecommended
         ? lastError || `Reconnect ${provider === "microsoft" ? "Hotmail" : "Gmail"} to restore provider access.`
         : null;
+    const checkedAt = row.calendar_last_sync_at ? Date.parse(String(row.calendar_last_sync_at)) : NaN;
+    const calendarAge = Date.now() - checkedAt;
+    const hasCurrentCoverage = row.calendar_range_from && row.calendar_range_to
+      && Date.parse(String(row.calendar_range_from)) <= Date.now()
+      && Date.parse(String(row.calendar_range_to)) > Date.now();
+    const calendarFreshness = calendarAge >= 0 && calendarAge <= 600_000
+      ? hasCurrentCoverage ? "ok" as const : "incomplete" as const : "stale" as const;
     return {
       accountId,
       accountLabel: String(row.label),
@@ -129,9 +136,11 @@ export async function getAccountFreshness(): Promise<AccountFreshnessPage> {
         {
           feature: "calendar" as const,
           status: String(row.calendar_status || "needs_setup") === "connected" && !calendarIssue
-            ? "ok" as const
+            ? calendarFreshness
             : calendarIssue ? "error" as const : "needs_setup" as const,
-          message: calendarIssue?.message || (String(row.calendar_status || "") === "connected" ? null : "Calendar access has not been validated."),
+          message: calendarIssue?.message || (String(row.calendar_status || "") === "connected"
+            ? calendarFreshness === "ok" ? null : calendarFreshness === "stale" ? "Calendar data is stale; refresh to check for changes."
+              : "Calendar range coverage is incomplete; refresh to verify this range." : "Calendar access has not been validated."),
           reconnectRecommended: Boolean(calendarIssue?.reconnectRecommended),
           lastSuccessAt: row.calendar_last_sync_at ? String(row.calendar_last_sync_at) : null,
         },

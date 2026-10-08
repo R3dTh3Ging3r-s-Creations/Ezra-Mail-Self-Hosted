@@ -19,7 +19,7 @@ import {
   finishStepUp,
 } from "@/lib/email/passkeys";
 
-const origin = "https://ezra.example.invalid:8450";
+const origin = "https://thing1.example.invalid:8450";
 const request = new Request(origin);
 
 describe("owner passkey verification", () => {
@@ -29,7 +29,7 @@ describe("owner passkey verification", () => {
     await execute(`SELECT 1`);
     webauthn.generateRegistrationOptions.mockResolvedValue({
       challenge: "registration-challenge",
-      rp: { id: "ezra.example.invalid", name: "Ezra Mail" },
+      rp: { id: "thing1.example.invalid", name: "Ezra Mail" },
     });
     webauthn.generateAuthenticationOptions.mockResolvedValue({ challenge: "authentication-challenge" });
   });
@@ -65,7 +65,7 @@ describe("owner passkey verification", () => {
     expect(webauthn.verifyRegistrationResponse).toHaveBeenCalledWith(expect.objectContaining({
       expectedChallenge: "registration-challenge",
       expectedOrigin: origin,
-      expectedRPID: "ezra.example.invalid",
+      expectedRPID: "thing1.example.invalid",
       requireUserVerification: true,
     }));
     await expect(finishPasskeyRegistration(request, {
@@ -98,7 +98,7 @@ describe("owner passkey verification", () => {
     expect(webauthn.verifyAuthenticationResponse).toHaveBeenCalledWith(expect.objectContaining({
       expectedChallenge: "authentication-challenge",
       expectedOrigin: origin,
-      expectedRPID: "ezra.example.invalid",
+      expectedRPID: "thing1.example.invalid",
       requireUserVerification: true,
       credential: expect.objectContaining({ id: "credential-1", counter: 4 }),
     }));

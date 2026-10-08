@@ -1,5 +1,5 @@
 import fs from "node:fs/promises";
-import { calendarDateRange } from "./calendar-day";
+import { calendarDateInZone, calendarDateRange } from "./calendar-day";
 import os from "node:os";
 import path from "node:path";
 import { spawn } from "node:child_process";
@@ -81,17 +81,38 @@ export async function getGmailAuthorizationCapabilities(email?: string) {
     );
     return gmailAuthorizationCapabilitiesFromAuthList(JSON.parse(payload) as unknown, email);
   } catch {
-    return { modify: false };
+    return gmailAuthorizationCapabilitiesFromAuthList(null, email);
   }
 }
 
 export function gmailAuthorizationCapabilitiesFromAuthList(value: unknown, email?: string) {
   const scopes = email ? collectScopesForAccount(value, email) : collectScopes(value);
   return {
+    known: scopes.size > 0,
+    scopes: [...scopes].sort(),
+    send: scopes.has("https://www.googleapis.com/auth/gmail.send") ||
+      scopes.has("https://www.googleapis.com/auth/gmail.modify") || scopes.has("https://mail.google.com/"),
+    calendarRead: ["calendar", "calendar.readonly", "calendar.events", "calendar.events.readonly"].some(
+      scope => scopes.has(`https://www.googleapis.com/auth/${scope}`)),
+    calendarWrite: ["calendar", "calendar.events"].some(
+      scope => scopes.has(`https://www.googleapis.com/auth/${scope}`)),
     modify:
       scopes.has("https://www.googleapis.com/auth/gmail.modify") ||
       scopes.has("https://mail.google.com/"),
   };
+}
+
+export async function getGoogleCalendarIdentity(account: string): Promise<string> {
+  const payload: unknown = JSON.parse(await runGog(
+    ["calendar", "calendars", "--account", account, "--json", "--no-input"], 30_000, "calendar.calendars",
+  ));
+  const rows = Array.isArray(payload) ? payload : isRecord(payload) ? payload.calendars || payload.items : null;
+  if (!Array.isArray(rows)) throw new Error("Google calendar identity is unavailable.");
+  const primary = rows.filter((row): row is JsonRecord => isRecord(row) && row.primary === true);
+  if (primary.length !== 1 || typeof primary[0].id !== "string" || !primary[0].id.includes("@")) {
+    throw new Error("Google calendar identity is unavailable.");
+  }
+  return primary[0].id;
 }
 
 export async function searchGmailMessages(account: string, options?: { syncRangeDays?: number }): Promise<EmailEnvelope[]> {
@@ -548,13 +569,13 @@ export type GoogleCalendarEventRecord = JsonRecord;
 export async function listGoogleCalendarEvents(
   account: string,
   accountId: string,
-  options: { from: string; to: string },
+  options: { from: string; to: string; calendarId?: string },
 ) {
   const payload = await runGog(
     [
       "calendar",
       "events",
-      "primary",
+      options.calendarId || "primary",
       "--account",
       account,
       "--from",
@@ -570,9 +591,54 @@ export async function listGoogleCalendarEvents(
     120_000,
     "calendar.events",
   );
-  return extractRecords(JSON.parse(payload) as unknown)
-    .map((record) => normalizeGoogleCalendarEvent(accountId, record))
-    .filter((event): event is Omit<CalendarEvent, "id" | "accountLabel" | "accountProvider" | "syncedAt"> => Boolean(event));
+  const parsed: unknown = JSON.parse(payload);
+  if (!isRecord(parsed) || !Array.isArray(parsed.events) || (parsed.nextPageToken !== undefined && parsed.nextPageToken !== "") || parsed.nextPageTokens !== undefined) throw new Error("Google calendar response is incomplete.");
+  return parsed.events.map(record => requireGoogleCalendarEvent(accountId, record, options.calendarId || "primary"));
+}
+
+export async function getGoogleCalendarEvent(account: string, accountId: string, calendarId: string, eventId: string) {
+  const payload: unknown = JSON.parse(await runGog(["calendar", "event", calendarId, eventId, "--account", account, "--json", "--no-input"], 120_000, "calendar.event"));
+  if (!isRecord(payload) || !isRecord(payload.event)) throw new Error("Google calendar event response is incomplete.");
+  const event = requireGoogleCalendarEvent(accountId, payload.event, calendarId);
+  if (event.externalEventId !== eventId) throw new Error("Google returned a different event id.");
+  return event;
+}
+
+function requireGoogleCalendarEvent(accountId: string, record: unknown, calendarId: string) {
+  if (!isRecord(record)) throw new Error("Google calendar event is malformed.");
+  if (record.attendees !== undefined && (!Array.isArray(record.attendees) || record.attendees.some(attendee => !isRecord(attendee) || typeof attendee.email !== "string" || !attendee.email))) throw new Error("Google calendar attendees are malformed.");
+  const declaredCalendar = stringValue(record.calendarId, record.calendar_id, record.calendar);
+  if (declaredCalendar && declaredCalendar !== calendarId) throw new Error("Google returned a different calendar.");
+  // gog's complete typed Event JSON omits false useDefault and empty overrides.
+  // Interpret its explicit empty reminders object only at this CLI boundary;
+  // the generic raw-provider normalizer must keep incomplete evidence unknown.
+  const typedRecord = isRecord(record.reminders) && Object.keys(record.reminders).length === 0
+    ? { ...record, reminders: { useDefault: false } } : record;
+  const event = normalizeGoogleCalendarEvent(accountId, typedRecord);
+  if (!event) throw new Error("Google calendar event is malformed.");
+  return { ...event, calendarId };
+}
+
+function googleReminderEvidence(value: unknown): import("./types").CalendarReminderEvidence {
+  if (!isRecord(value)) return { mode: "unknown" };
+  if (value.useDefault === true) return { mode: "default" };
+  if (value.useDefault !== false && !Array.isArray(value.overrides)) return { mode: "unknown" };
+  const overrides = value.overrides ?? [];
+  if (!Array.isArray(overrides) || overrides.some(item => !isRecord(item) || typeof item.method !== "string" || !Number.isInteger(item.minutes) || Number(item.minutes) < 0)) return { mode: "unknown" };
+  if (overrides.length === 0) return { mode: "none" };
+  const normalized = overrides.map(item => ({ method: String(item.method), minutes: Number(item.minutes) }));
+  if (normalized.length === 1 && normalized[0].method === "popup") return { mode: "minutes", minutes: normalized[0].minutes };
+  return { mode: "custom", overrides: normalized };
+}
+
+/** Check installed CLI support without contacting a provider or attempting a write. */
+export async function assertGoogleCalendarReminderSupport(signal?: AbortSignal) {
+  let help = "";
+  try { help = await runGog(["calendar", "create", "--help"], 10_000, "calendar.create", signal); }
+  catch { throw new Error("Installed Google calendar tool reminder support could not be verified."); }
+  if (!/(?:^|\s)--no-reminders(?:\s|=|$)/m.test(help)) {
+    throw new Error("Installed Google calendar tool does not support disabling reminders. Choose a supported reminder mode or qualify a compatible tool version.");
+  }
 }
 
 export async function createGoogleCalendarEvent(input: {
@@ -586,11 +652,13 @@ export async function createGoogleCalendarEvent(input: {
   isAllDay: boolean;
   timezone: string;
   attendees: string[];
+  reminderMode?: "default" | "none" | "minutes";
   reminderMinutes: number | null;
   isBusy: boolean;
   privacy: string;
   sendUpdates: boolean;
-}) {
+}, options: { signal?: AbortSignal } = {}) {
+  if (input.reminderMode === "none") await assertGoogleCalendarReminderSupport(options.signal);
   const args = [
     "calendar",
     "create",
@@ -600,9 +668,9 @@ export async function createGoogleCalendarEvent(input: {
     "--summary",
     input.title,
     "--from",
-    input.isAllDay ? input.startsAt.slice(0, 10) : input.startsAt,
+    input.isAllDay ? calendarDateInZone(input.startsAt, input.timezone) : input.startsAt,
     "--to",
-    input.isAllDay ? input.endsAt.slice(0, 10) : input.endsAt,
+    input.isAllDay ? calendarDateInZone(input.endsAt, input.timezone) : input.endsAt,
     "--description",
     input.description,
     "--location",
@@ -622,10 +690,12 @@ export async function createGoogleCalendarEvent(input: {
     args.push("--all-day");
   }
   if (input.attendees.length) args.push("--attendees", input.attendees.join(","));
-  if (input.reminderMinutes !== null) args.push("--reminder", `popup:${input.reminderMinutes}m`);
-  const payload = await runGog(args, 120_000, "calendar.create");
-  const record = extractRecords(JSON.parse(payload) as unknown)[0] || {};
-  return normalizeGoogleCalendarEvent("pending", record);
+  if (input.reminderMode === "none") args.push("--no-reminders");
+  else if (input.reminderMode !== "default" && input.reminderMinutes !== null) args.push("--reminder", `popup:${input.reminderMinutes}m`);
+  const payload = await runGog(args, 120_000, "calendar.create", options.signal);
+  const parsed: unknown = JSON.parse(payload);
+  const record = isRecord(parsed) && isRecord(parsed.event) ? parsed.event : parsed;
+  return requireGoogleCalendarEvent("pending", record, input.calendarId || "primary");
 }
 
 export async function startGmailAuthorization(input: {
@@ -741,7 +811,7 @@ export function normalizeGoogleCalendarEvent(
   if (!id) return null;
   const start = normalizeGoogleEventTime(record.start);
   const end = normalizeGoogleEventTime(record.end);
-  if (!start.value || !end.value) return null;
+  if (!start.value || !end.value || !Number.isFinite(Date.parse(start.value)) || !Number.isFinite(Date.parse(end.value)) || Date.parse(end.value) <= Date.parse(start.value)) return null;
   const isAllDay = start.allDay || end.allDay;
   const dateRange = isAllDay ? calendarDateRange(isRecord(record.start) ? record.start.date : null, isRecord(record.end) ? record.end.date : null) : null;
   if (isAllDay && (!start.allDay || !end.allDay || !dateRange)) return null;
@@ -750,6 +820,10 @@ export function normalizeGoogleCalendarEvent(
   return {
     accountId,
     externalEventId: id,
+    reminder: googleReminderEvidence(record.reminders),
+    revision: stringValue(record.etag) || null,
+    correlationId: isRecord(record.extendedProperties) && isRecord(record.extendedProperties.private) ? stringValue(record.extendedProperties.private.ezraOperationId) || null : null,
+    recurrenceId: stringValue(record.recurringEventId) || null,
     calendarId: stringValue(record.calendarId, record.calendar_id, record.calendar, "primary") || "primary",
     calendarName: stringValue(record.calendarSummary, record.calendar_name, record.calendar, "Primary") || "Primary",
     title: unwrapGogMetadata(stringValue(record.summary, record.title) || "(no title)"),
@@ -801,9 +875,10 @@ function normalizeGoogleAttendees(value: unknown): CalendarAttendee[] {
   })).filter((attendee) => attendee.email);
 }
 
-async function runGog(args: string[], timeoutMs: number, exactCommand?: string) {
+async function runGog(args: string[], timeoutMs: number, exactCommand?: string, signal?: AbortSignal) {
   const executable = process.env.GOG_PATH || "gog.exe";
   return new Promise<string>((resolve, reject) => {
+    if (signal?.aborted) { reject(new Error("gog operation was interrupted")); return; }
     const guardedArgs = exactCommand
       ? ["--enable-commands-exact", exactCommand, ...args]
       : args;
@@ -816,8 +891,11 @@ async function runGog(args: string[], timeoutMs: number, exactCommand?: string) 
     let stderr = "";
     const timer = setTimeout(() => {
       child.kill();
+      signal?.removeEventListener("abort", abort);
       reject(new Error(`gog timed out after ${timeoutMs}ms`));
     }, timeoutMs);
+    const abort = () => { clearTimeout(timer); child.kill(); reject(new Error("gog operation was interrupted")); };
+    signal?.addEventListener("abort", abort, { once: true });
     child.stdout.on("data", (chunk) => {
       stdout += chunk.toString();
     });
@@ -826,10 +904,12 @@ async function runGog(args: string[], timeoutMs: number, exactCommand?: string) 
     });
     child.on("error", (error) => {
       clearTimeout(timer);
+      signal?.removeEventListener("abort", abort);
       reject(error);
     });
     child.on("close", (code) => {
       clearTimeout(timer);
+      signal?.removeEventListener("abort", abort);
       if (code === 0) resolve(stdout.trim());
       else reject(new Error(stderr.trim() || `gog exited with code ${code}`));
     });
@@ -893,6 +973,9 @@ function extractGmailRawSlots(value: unknown): unknown[] {
 }
 
 function normalizeMessage(account: string, record: JsonRecord): EmailEnvelope | null {
+  // Sanitized `gmail get` nests all fields under message; ordinary full reads
+  // additionally expose flattened headers/body beside the raw message.
+  if (isRecord(record.message)) record = { ...record.message, ...record };
   const headers = normalizeHeaders(
     record.headers ||
       nested(record, "payload", "headers") ||
@@ -919,17 +1002,21 @@ function normalizeMessage(account: string, record: JsonRecord): EmailEnvelope | 
   const subject = unwrapGogMetadata(
     stringValue(record.subject, headers.subject) || "(no subject)",
   );
-  const receivedAt =
-    normalizeDate(
-      stringValue(record.date, record.receivedAt, record.received_at, headers.date, record.internalDate),
-    ) || new Date().toISOString();
-  const bodyText = stringValue(
+  const internalDate = record.internalDate ?? record.internal_date;
+  const internalMilliseconds = typeof internalDate === "number" || (typeof internalDate === "string" && /^\d+$/.test(internalDate)) ? Number(internalDate) : NaN;
+  const internalTime = Number.isSafeInteger(internalMilliseconds) && internalMilliseconds > 0 ? new Date(internalMilliseconds) : null;
+  const receivedAt = canonicalIsoTimestamp(stringValue(record.internalDateIso))
+    || (internalTime && Number.isFinite(internalTime.getTime()) ? internalTime.toISOString() : null)
+    || normalizeDate(stringValue(record.receivedAt, record.received_at, headers.date, record.date))
+    || new Date(0).toISOString();
+  const rawBodyText = stringValue(
     record.body,
     record.bodyText,
     record.body_text,
     record.text,
     nested(record, "body", "text"),
   );
+  const bodyText = rawBodyText === undefined ? undefined : unwrapGogBody(rawBodyText);
   const bodyHtml = stringValue(
     record.html,
     record.bodyHtml,
@@ -953,13 +1040,22 @@ function normalizeMessage(account: string, record: JsonRecord): EmailEnvelope | 
     receivedAt,
     snippet,
     bodyText: bodyText?.slice(0, 80_000),
+    ...(bodyText && bodyText.length > 80_000 ? { bodyTextTruncated: true } : {}),
     bodyHtml: bodyHtml?.slice(0, 200_000),
+    ...(bodyHtml && bodyHtml.length > 200_000 ? { bodyHtmlTruncated: true } : {}),
     providerRevision: stringValue(record.historyId, record.history_id) || null,
     gmailUrl: `https://mail.google.com/mail/u/${encodeURIComponent(account)}/#inbox/${threadId}`,
     isUnread: labels.includes("UNREAD"),
     labels,
     attachments: normalizeAttachments(record),
   };
+}
+
+function unwrapGogBody(value: string) {
+  // Match only the pinned gog transport envelope, including its paired ID.
+  // Embedded examples and generic quoted markers remain ordinary mail text.
+  const match = value.match(/^<<<EXTERNAL_UNTRUSTED_CONTENT id="([a-f0-9]{16})">>>\r?\nSource: google_api\r?\n---\r?\n([\s\S]*)\r?\n<<<END_EXTERNAL_UNTRUSTED_CONTENT id="\1">>>$/);
+  return match ? match[2] : value;
 }
 
 function normalizeLabels(record: JsonRecord) {

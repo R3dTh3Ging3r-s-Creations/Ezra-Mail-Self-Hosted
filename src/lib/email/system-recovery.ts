@@ -213,7 +213,7 @@ export async function rehearseLatestRestore() {
       throw new Error("The managed backup does not match its durable SHA-256 manifest.");
     }
     await fs.copyFile(latest.absolutePath, restoredPath);
-    await migrateRestoredDatabase(restoredPath);
+    const accessPreparation = await prepareRestoredAgentAccess(restoredPath);
     const inspected = await inspectBackup(restoredPath);
     const client = createClient({ url: libsqlFileUrl(restoredPath) });
     let tableCount = 0;
@@ -253,7 +253,7 @@ export async function rehearseLatestRestore() {
         schemaVersion,
       }),
     ]);
-    return { sourceFile: latest.fileName, rehearsedAt, tableCount, schemaVersion, sourceSha256: sourceHash, ...inspected };
+    return { sourceFile: latest.fileName, rehearsedAt, tableCount, schemaVersion, revokedAgentKeys: accessPreparation.revokedKeys, sourceSha256: sourceHash, ...inspected };
   } finally {
     await fs.rm(temporaryDirectory, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   }
@@ -525,4 +525,40 @@ async function migrateRestoredDatabase(restoredPath: string) {
 
 function normalizeReason(value: string | undefined) {
   return (value || "Emergency pause requested from Settings").replace(/\s+/g, " ").trim().slice(0, 240);
+}
+
+/** Offline only: restored credentials are never reusable, even from pre-revocation snapshots. */
+export async function prepareRestoredAgentAccess(stagedDatabasePath: string): Promise<{ revokedKeys: number }> {
+  const staged = await fs.realpath(path.resolve(stagedDatabasePath));
+  const stagedStats = await fs.stat(staged);
+  if (!stagedStats.isFile()) throw new Error("Restore preparation requires a staged database file.");
+  const activePath = getEmailDatabasePath();
+  if (!activePath) throw new Error("Restore preparation requires a configured active database path.");
+  let active = path.resolve(activePath);
+  try { active = await fs.realpath(active); } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+  const normalize = (value: string) => process.platform === "win32" ? value.toLowerCase() : value;
+  if (normalize(staged) === normalize(active)) throw new Error("Cannot prepare the active database.");
+  try {
+    const activeStats = await fs.stat(active);
+    if (activeStats.ino === stagedStats.ino && activeStats.dev === stagedStats.dev) throw new Error("Cannot prepare an alias of the active database.");
+  } catch (error) { if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error; }
+  // Verified staged backups are checkpointed SQLite files. Reject a future
+  // format before migrations/native handles can alter or lock that copy.
+  const header = Buffer.alloc(64);
+  const file = await fs.open(staged, "r");
+  try {
+    const read = await file.read(header, 0, header.length, 0);
+    if (read.bytesRead !== header.length || header.subarray(0, 16).toString("binary") !== "SQLite format 3\0") throw new Error("Invalid staged SQLite database.");
+  } finally { await file.close(); }
+  const stagedVersion = header.readUInt32BE(60);
+  if (stagedVersion > EMAIL_SCHEMA_VERSION) throw new Error(`Restored schema version ${stagedVersion} does not match required version ${EMAIL_SCHEMA_VERSION}.`);
+  await migrateRestoredDatabase(staged);
+  const client = createClient({ url: libsqlFileUrl(staged) });
+  try {
+    const version = Number((await client.execute("PRAGMA user_version")).rows[0].user_version);
+    if (version !== EMAIL_SCHEMA_VERSION) throw new Error(`Restored schema version ${version} does not match required version ${EMAIL_SCHEMA_VERSION}.`);
+    const result = await client.execute({ sql: "UPDATE agent_grants SET revoked_at=? WHERE revoked_at IS NULL", args: [nowIso()] });
+    await client.execute("PRAGMA wal_checkpoint(TRUNCATE)");
+    return { revokedKeys: result.rowsAffected };
+  } finally { client.close(); }
 }

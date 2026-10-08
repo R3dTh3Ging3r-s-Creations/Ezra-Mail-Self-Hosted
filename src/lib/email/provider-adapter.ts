@@ -57,7 +57,7 @@ export type { OrganizationKind, ProviderOrganizationCapabilities, ProviderOrgani
 export type ProviderMaintenanceAction = "mark_read" | "spam";
 export type ProviderWorkspaceAction = "read" | "spam" | "trash";
 export type ProviderSetupCapability = "mail_read" | "send";
-export type ProviderAuthorizationAccess = "readonly" | "maintenance" | "calendar" | "send" | "full";
+export type ProviderAuthorizationAccess = "readonly" | "maintenance" | "calendar" | "send" | "full" | "tasks";
 export type ProviderAuthorizationStart =
   | ({ provider: "gmail" } & GmailAuthorizationStart)
   | {
@@ -147,7 +147,7 @@ export type ProviderMaintenanceAdapter = {
   preflight: (capability: ProviderSetupCapability) => Promise<ProviderSetupTest>;
   folderMappings: () => ProviderFolderMappings;
   getHealth: () => Promise<ProviderHealth>;
-  startAuthorization: (input: { email: string; access: ProviderAuthorizationAccess }) => Promise<ProviderAuthorizationStart>;
+  startAuthorization: (input: { email: string; access: ProviderAuthorizationAccess; preservedScopes?: string[] }) => Promise<ProviderAuthorizationStart>;
   readInbox: (email: string, accountId: string, options?: ProviderInboxReadOptions) => Promise<ProviderInboxRead>;
   readSentEvidence: (email: string, accountId: string, options: ProviderSentEvidenceOptions) => Promise<ProviderSentEvidencePage>;
   readMessage: (email: string, accountId: string, messageId: string) => Promise<EmailEnvelope | null>;
@@ -195,7 +195,7 @@ const gmailAdapter: ProviderMaintenanceAdapter = {
       throw new Error("The local Gmail bridge is not installed or GOG_PATH is not configured.");
     }
     const { email, access } = input;
-    if (access === "send" || access === "full") {
+    if (access === "send" || access === "full" || access === "tasks") {
       throw new Error("Gmail authorization does not support that access level.");
     }
     return { provider: "gmail", ...await startGmailAuthorization({ email, access }) };
@@ -306,7 +306,7 @@ const microsoftAdapter: ProviderMaintenanceAdapter = {
     if (!isMicrosoftAuthConfigured()) {
       throw new Error("Microsoft sign-in needs MICROSOFT_CLIENT_ID configured.");
     }
-    const challenge = await startMicrosoftDeviceAuthorization(input.access);
+    const challenge = await startMicrosoftDeviceAuthorization(input.access, input.preservedScopes);
     return { provider: "microsoft", ...challenge };
   },
   async readInbox(email, accountId, options) {

@@ -8,6 +8,7 @@ export const runtime = "nodejs";
 const schema = z.object({
   challengeId: z.string().min(1).max(200),
   action: z.string().min(1).max(100),
+  reviewHash: z.string().regex(/^[a-f0-9]{64}$/).optional(),
   response: z.record(z.unknown()),
 });
 

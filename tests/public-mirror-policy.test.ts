@@ -162,6 +162,34 @@ describe("public mirror policy", () => {
     expect(findings).toEqual([]);
   });
 
+  it("allows only documented Linux bridge paths in the exact publication files", () => {
+    const standard = ["", "etc", "ezra-mail-cloud-mcp", "profile.json"].join("/");
+    const unrelated = ["", "home", "private-owner", "mail"].join("/");
+    const file = "plugins/ezra-mail/linux/agent-linux-runtime.ts";
+    expect(scanPublicText(file, `const profilePath = "${standard}";`)).toEqual([]);
+    expect(scanPublicText("src/unrelated.ts", `const path = "${standard}";`)).toEqual([
+      expect.objectContaining({ ruleId: "absolute-linux-path" }),
+    ]);
+    expect(scanPublicText(file, `"${standard}" "${unrelated}"`)).toEqual([
+      expect.objectContaining({ ruleId: "absolute-linux-path" }),
+    ]);
+    expect(scanPublicText(file, `"${standard}.private"`)).toEqual([
+      expect.objectContaining({ ruleId: "absolute-linux-path" }),
+    ]);
+  });
+
+  it("permits only the fixed systemd tunnel credential reference in the service template", () => {
+    const file = "public-release/ezra-mail-cloud-mcp.service.in";
+    const option = "--control-plane.api-" + "key=";
+    expect(scanPublicText(file, option + "file:%d/openai-runtime-key")).toEqual([]);
+    expect(scanPublicText(file, option + "live-opaque-value")).toEqual([
+      expect.objectContaining({ ruleId: "token-assignment" }),
+    ]);
+    expect(scanPublicText("src/unrelated.ts", option + "file:%d/openai-runtime-key")).toEqual([
+      expect.objectContaining({ ruleId: "token-assignment" }),
+    ]);
+  });
+
   it("classifies explicit public and private paths", () => {
     expect(classifyPublicPath("src/app/page.tsx")).toBe("copy");
     expect(classifyPublicPath("public-release/README.md")).toBe("mapped");

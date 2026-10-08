@@ -14,3 +14,13 @@ Source: https://github.com/web-push-libs/web-push/tree/v3.6.7
 License and upstream notices: https://github.com/web-push-libs/web-push/blob/v3.6.7/LICENSE
 The package retains its upstream license and notices. Ezra Mail's commercial
 terms do not relicense this third-party code.
+
+Third-party document-reader command-line parser
+argparse 2.0.1 is used unmodified under its upstream Python-2.0 license.
+Source: https://github.com/nodeca/argparse/tree/2.0.1
+The complete upstream license, copyright notices and historical license terms
+are retained in docs/licenses/argparse-2.0.1.txt and the installed package LICENSE.
+The parser source credits the Python Software Foundation (2010-2020) and
+argparse.js authors (2020). Ezra Mail changes only Mammoth's dependency selection;
+it does not modify argparse. Ezra Mail's commercial terms do not relicense this
+third-party code.

@@ -10,7 +10,7 @@ import { getOnboardingChecklist } from "@/lib/email/onboarding";
 import { updateNotificationPolicy } from "@/lib/email/notification-center";
 
 vi.mock("@/lib/email/gmail", () => ({
-  getGmailAuthorizationCapabilities: vi.fn(async () => ({ modify: true })),
+  getGmailAuthorizationCapabilities: vi.fn(async () => ({ known: true, modify: true, send: true, calendarRead: true, calendarWrite: true, scopes: ["https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/calendar.events"] })),
 }));
 
 describe("onboarding checklist", () => {

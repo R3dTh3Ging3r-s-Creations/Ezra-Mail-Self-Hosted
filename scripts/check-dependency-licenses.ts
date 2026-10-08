@@ -36,6 +36,16 @@ const reviewedPackageLicenseOverrides = new Map<string, {
     "2. Redistributions in binary form must reproduce",
     "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"",
   ],
+}], ["argparse@2.0.1", {
+  license: "Python-2.0",
+  evidencePath: "node_modules/argparse/LICENSE",
+  sha256: "de4d1f2d2ad5ad0cfd1657a106476b31cb5db5ef9d1ff842b237c0c81f0c8a23",
+  requiredFragments: [
+    "PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2",
+    "BEOPEN.COM LICENSE AGREEMENT FOR PYTHON 2.0",
+    "CNRI LICENSE AGREEMENT FOR PYTHON 1.6.1",
+    "CWI LICENSE AGREEMENT FOR PYTHON 0.9.0 THROUGH 1.2",
+  ],
 }]]);
 
 interface LockfilePackage {
@@ -521,7 +531,9 @@ export function dependencyPolicyFailures(inventory: InventoryEntry[]): string[] 
     const failures: string[] = [];
     if (!license || /(?:^|\s)(?:UNKNOWN|UNLICENSED)(?:\s|$)/.test(license)) {
       failures.push(`${packageLabel}: missing or unknown license (${license || "none"})`);
-    } else if (!isApprovedProductionLicense(license)) {
+    } else if (!isApprovedProductionLicense(license)
+      && !(reviewedPackageLicenseOverrides.get(packageName)?.license === license
+        && path.posix.dirname(reviewedPackageLicenseOverrides.get(packageName)!.evidencePath) === packagePath)) {
       failures.push(`${packageLabel}: unreviewed license (${license})`);
     }
     if (!sourceUrl) failures.push(`${packageLabel}: missing source URL`);

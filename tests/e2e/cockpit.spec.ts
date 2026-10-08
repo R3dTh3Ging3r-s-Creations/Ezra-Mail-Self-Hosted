@@ -370,11 +370,6 @@ test("Settings opens the provider permissions dashboard", async ({ page }) => {
 });
 
 test("Setup checklist shows honest status and safe next-step links", async ({ page }) => {
-  // Other browser projects can enable owner protection on the shared server.
-  // This UI fixture must work even when every unmocked API requires authentication.
-  await page.route("**/api/**", (route) => route.fulfill({
-    status: 401, json: { error: "Authentication is required." },
-  }));
   await mockEzraMailApi(page, []);
   await mockSetupChecklistApi(page);
   await page.goto("/?view=settings");
@@ -1598,10 +1593,6 @@ async function mockCalendarModesApi(page: Page, requests: URLSearchParams[], emp
 }
 
 async function mockSetupChecklistApi(page: Page, browserNotificationsAvailable = false) {
-  await page.route("**/api/accounts", (route) => route.fulfill({ json: {
-    generatedAt: "2026-07-10T12:00:00.000Z",
-    pollIntervalMinutes: 5, manualSyncCooldownSeconds: 60, items: [],
-  } }));
   await page.route("**/api/auth/devices", (route) => route.fulfill({ json: {
     devices: [],
     passkeys: [],
@@ -1688,7 +1679,7 @@ async function mockSetupChecklistApi(page: Page, browserNotificationsAvailable =
   }));
 }
 
-async function mockAccountFreshnessApi(page: Page, posts: Array<Record<string, unknown>>) {
+async function mockAccountFreshnessApi(page: Page, posts: Array<Record<string, unknown>>, calendarFreshness?: "stale" | "incomplete") {
   let purposeLabel = "General / Signup / Noise Catcher";
   let cooldown = false;
   const freshness = () => ({
@@ -1708,6 +1699,7 @@ async function mockAccountFreshnessApi(page: Page, posts: Array<Record<string, u
       nextExpectedCheckAt: "2026-07-10T12:04:00.000Z",
       manualSyncAvailableAt: cooldown ? new Date(Date.now() + 60_000).toISOString() : null,
       canSyncNow: !cooldown,
+      issues: calendarFreshness ? [{ feature: "calendar", status: calendarFreshness, message: `Calendar data is ${calendarFreshness}; refresh to verify this range.`, reconnectRecommended: false, lastSuccessAt: "2026-07-01T12:00:00.000Z" }] : [],
     }],
   });
   await page.route("**/api/settings", (route) => route.fulfill({
@@ -2548,4 +2540,44 @@ test("PWA-controlled navigation preserves an exact Mail target without provider 
   await expect(page).toHaveURL(/view=mail&message=mail-forward$/);
   expect(posts).toEqual([]);
   expect(await page.evaluate(() => caches.keys())).toEqual([]);
+});
+
+for (const freshness of ["stale", "incomplete"] as const) {
+  test(`Settings shows ${freshness} calendar coverage without requesting reconnect`, async ({ page }) => {
+    await mockEzraMailApi(page, []);
+    await mockSetupChecklistApi(page);
+    await mockAccountFreshnessApi(page, [], freshness);
+    await page.goto("/?view=settings");
+    await page.getByRole("button", { name: "Accounts", exact: true }).click();
+    await expect(page.getByLabel("Feature health")).toContainText(freshness === "stale" ? "Stale" : "Incomplete");
+    await expect(page.getByLabel("Feature health")).not.toContainText("Current");
+    await expect(page.getByRole("button", { name: /Reconnect/i })).toHaveCount(0);
+  });
+}
+
+test("Calendar draft binds the chosen personal account and preserves at-start Chicago time", async ({ page }) => {
+  const posts: Array<Record<string, any>> = [];
+  await mockEzraMailApi(page, []);
+  const accounts = [
+    { accountId: "acct-gmail", accountLabel: "Personal Gmail", accountEmail: "owner@gmail.test", provider: "gmail", status: "connected", calendarStatus: "connected", calendarAccess: "write" },
+    { accountId: "acct-ms", accountLabel: "Personal Hotmail", accountEmail: "owner@hotmail.test", provider: "microsoft", status: "connected", calendarStatus: "connected", calendarAccess: "write" },
+  ];
+  await page.route("**/api/calendar?**", route => route.fulfill({ json: { events: [], drafts: [], accounts, range: { from: "2026-10-01T00:00:00Z", to: "2026-12-31T00:00:00Z", timezone: "America/Chicago" } } }));
+  await page.route("**/api/calendar/actions", async route => {
+    const body = route.request().postDataJSON(); posts.push(body);
+    await route.fulfill({ json: { ok: true, message: "Draft saved", draft: { ...body.draft, id: "fixture-draft", accountLabel: "Personal Hotmail", accountProvider: "microsoft", attendees: [], status: "draft" } } });
+  });
+  await page.goto("/?view=calendar");
+  await page.getByRole("button", { name: /New event draft/i }).click();
+  const dialog=page.getByRole("dialog", { name: "Create event draft" });
+  await dialog.getByRole("combobox", { name: "Account", exact: true }).selectOption("acct-ms");
+  for (const [label,value] of [["Title","Get new paystub / sign in for Ezra"],["Date","2026-11-06"],["Start","07:00"],["End","07:10"],["Timezone","America/Chicago"]]) await dialog.getByLabel(label, { exact: true }).fill(value);
+  await dialog.getByRole("combobox", { name: "Reminder", exact: true }).selectOption("0");
+  await dialog.getByRole("combobox", { name: "Show as", exact: true }).selectOption("free");
+  await dialog.getByRole("button", { name: "Save draft for review" }).click();
+  await expect.poll(()=>posts.length).toBe(1);
+  expect(posts[0]).toMatchObject({ action: "draft_create", draft: { accountId: "acct-ms", calendarId: "primary", title: "Get new paystub / sign in for Ezra", startsAt: "2026-11-06T13:00:00.000Z", endsAt: "2026-11-06T13:10:00.000Z", timezone: "America/Chicago", reminderMode: "minutes", reminderMinutes: 0, isBusy: false, attendees: "", sendUpdates: false } });
+  await expect(page.getByRole("alertdialog")).toContainText("At start");
+  await expect(page.getByRole("alertdialog")).toContainText("Personal Hotmail");
+  await expect(page.getByRole("alertdialog")).toContainText("No attendees");
 });

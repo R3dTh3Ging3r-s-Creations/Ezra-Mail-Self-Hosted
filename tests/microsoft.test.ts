@@ -16,6 +16,21 @@ import {
 } from "@/lib/email/microsoft";
 
 describe("Microsoft credential storage", () => {
+  it("keeps a Graph preview separate from an unavailable full body",()=>{
+    const message=normalizeMicrosoftMessage("account-microsoft",{id:"preview",bodyPreview:"Only a preview"});
+    expect(message.snippet).toBe("Only a preview");
+    expect(message.bodyText).toBeUndefined();
+    expect(message.bodyHtml).toBeUndefined();
+  });
+  it("preserves literal plain Graph body text and line breaks",()=>{
+    const message=normalizeMicrosoftMessage("account-microsoft",{id:"plain",body:{contentType:"text",content:"Use <placeholder> literally\nSecond line"},bodyPreview:"Short"});
+    expect(message.bodyText).toBe("Use <placeholder> literally\nSecond line");
+  });
+  it("retains Graph HTML source truncation evidence",()=>{
+    const message=normalizeMicrosoftMessage("account-microsoft",{id:"html",body:{contentType:"html",content:`<p>${"x".repeat(200_001)}</p>`}});
+    expect(message.bodyHtml).toHaveLength(200_000);
+    expect(message.bodyHtmlTruncated).toBe(true);
+  });
   const originalBackend = process.env.EZRA_MICROSOFT_TOKEN_BACKEND;
   const originalDirectory = process.env.EZRA_CREDENTIAL_DIR;
   const originalClientId = process.env.MICROSOFT_CLIENT_ID;

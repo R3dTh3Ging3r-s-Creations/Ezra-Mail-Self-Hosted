@@ -15,14 +15,18 @@
   "overrides": {
     "postcss": "8.5.25",
     "nanoid": "3.3.18",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "uuid": "^11.1.1",
-    "tmp": "^0.2.6"
+    "tmp": "^0.2.6",
+    "mammoth": {
+      "argparse": "2.0.1"
+    }
   },
   "scripts": {
     "dev": "next dev -H 127.0.0.1",
     "build": "next build",
     "postinstall": "node scripts/apply-dependency-patches.mjs",
+    "prestart": "powershell -ExecutionPolicy Bypass -File scripts/ensure-web-build.ps1",
     "start": "next start -H 127.0.0.1",
     "worker": "tsx scripts/email-worker.ts",
     "mcp": "tsx scripts/mcp-server.ts",
@@ -52,7 +56,7 @@
   },
   "dependencies": {
     "@libsql/client": "^0.15.15",
-    "@modelcontextprotocol/sdk": "1.30.0",
+    "@modelcontextprotocol/sdk": "1.31.0",
     "@simplewebauthn/server": "13.3.2",
     "exceljs": "4.4.1-prerelease.0",
     "lucide-react": "^0.468.0",
@@ -61,7 +65,7 @@
     "pdf-parse": "^1.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sanitize-html": "^2.17.6",
+    "sanitize-html": "^2.17.7",
     "tsx": "^4.22.4",
     "web-push": "3.6.7",
     "zod": "^3.24.1"
@@ -82,6 +86,6 @@
     "license-checker-rseidelsohn": "4.4.2",
     "spdx-expression-parse": "4.0.0",
     "typescript": "^5.7.2",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.11"
   }
 }

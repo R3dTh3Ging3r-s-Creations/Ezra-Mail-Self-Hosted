@@ -28,6 +28,10 @@ describe("public release legal documents", () => {
     const support = read("SUPPORT.md");
     expect(support).not.toContain("docs/TRUST_TRIAL_RUNBOOK.md");
     expect(support).toContain("[Security policy](SECURITY.md)");
+    for (const model of ["Qwen3-8B-MaxContext", "Qwen3-14B-MaxContext", "Qwen3.5-9B-MaxContext"]) {
+      const modelRoot = isExportedWorkspace ? "config/models" : "public-release/models";
+      expect(read(`${modelRoot}/${model}.Modelfile`)).toMatch(/^FROM qwen3(?:\.5)?:/);
+    }
   });
 
   it("records the private/public repository split without advancing future milestones", () => {

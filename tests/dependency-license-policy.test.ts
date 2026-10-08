@@ -131,6 +131,20 @@ async function createGraphFixture(options: { installRuntime?: boolean } = {}): P
   return root;
 }
 
+async function createArgparseFixture(): Promise<string> {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "ezra-argparse-license-"));
+  temporaryRoots.push(root);
+  await writeJson(root, "package.json", { name: "argparse-license-fixture", version: "1.0.0", dependencies: { argparse: "2.0.1" } });
+  await writeJson(root, "package-lock.json", {
+    name: "argparse-license-fixture", version: "1.0.0", lockfileVersion: 3,
+    packages: {
+      "": { name: "argparse-license-fixture", version: "1.0.0", dependencies: { argparse: "2.0.1" } },
+      "node_modules/argparse": { name: "argparse", version: "2.0.1", license: "Python-2.0", resolved: "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz" },
+    },
+  });
+  await fs.cp(path.join(process.cwd(), "node_modules", "argparse"), path.join(root, "node_modules", "argparse"), { recursive: true });
+  return root;
+}
 async function createDuckFixture(): Promise<string> {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "ezra-license-duck-"));
   temporaryRoots.push(root);
@@ -443,6 +457,24 @@ describe("dependency license policy", () => {
     ]) expect(canonicalizePublicSourceUrl(location)).toBe(location);
   });
 
+  it("approves only the reviewed argparse license without allowing Python-2.0 generally", async () => {
+    const inventory = await inventoryProductionDependencies(await createArgparseFixture());
+    expect(inventory).toEqual([expect.objectContaining({ packageName: "argparse@2.0.1", license: "Python-2.0" })]);
+    expect(dependencyPolicyFailures(inventory)).toEqual([]);
+    expect(isApprovedProductionLicense("Python-2.0")).toBe(false);
+    for (const packageName of ["other@2.0.1", "argparse@2.0.2"]) {
+      expect(dependencyPolicyFailures([{ ...inventory[0], packageName }])).toEqual([expect.stringContaining("unreviewed license")]);
+    }
+  });
+
+  it("fails closed when argparse license evidence is altered or missing", async () => {
+    const altered = await createArgparseFixture();
+    await fs.appendFile(path.join(altered, "node_modules", "argparse", "LICENSE"), "altered\n");
+    await expect(inventoryProductionDependencies(altered)).rejects.toThrow(/argparse@2\.0\.1.*evidence/i);
+    const missing = await createArgparseFixture();
+    await fs.unlink(path.join(missing, "node_modules", "argparse", "LICENSE"));
+    await expect(inventoryProductionDependencies(missing)).rejects.toThrow(/argparse@2\.0\.1.*evidence/i);
+  });
   it("verifies the exact reviewed duck license evidence before applying its override", async () => {
     const validRoot = await createDuckFixture();
     const licensePath = path.join(validRoot, "node_modules", "duck", "LICENSE");

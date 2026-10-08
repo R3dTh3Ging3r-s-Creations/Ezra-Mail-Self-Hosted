@@ -1,0 +1,10 @@
+import {fireEvent,render,screen} from "@testing-library/react";
+import {beforeEach,describe,expect,it,vi} from "vitest";
+import {TodoView} from "@/components/ezra/TodoView";
+const mocks=vi.hoisted(()=>({api:vi.fn(),post:vi.fn()}));vi.mock("@/components/ezra/api",()=>mocks);
+const account={accountId:"ms",provider:"microsoft",expectedEmail:"owner@hotmail.test"};
+describe("provider To Do view",()=>{
+ beforeEach(()=>{vi.clearAllMocks();mocks.api.mockResolvedValue({accounts:[{account,availableScopes:[],unavailable:["To Do needs explicit personal Microsoft task consent."]}]});});
+ it("missing consent never starts OAuth automatically",async()=>{render(<TodoView/>);fireEvent.change(await screen.findByLabelText("Personal account"),{target:{value:"ms"}});expect(await screen.findByText("Connect personal To Do")).toBeInTheDocument();expect(mocks.post).not.toHaveBeenCalled();});
+ it("requires explicit list selection and renders task text safely",async()=>{mocks.api.mockResolvedValue({accounts:[{account,availableScopes:["tasks.read","tasks.create"],unavailable:[]}]});mocks.post.mockImplementation(async(url:string)=>url.endsWith("resources")?{resources:[{title:"My list",target:{account,kind:"task_list",id:"list"}}]}:{complete:true,fetchedAt:"2026-01-01T00:00:00Z",tasks:[{id:"t",title:"Literal <img>",body:"<script>bad</script>",importance:"normal",due:{kind:"date",date:"2026-11-06",timezone:"America/Chicago"},reminder:null,revision:'W/"1"',status:"notStarted",recurring:false}]});render(<TodoView/>);fireEvent.change(await screen.findByLabelText("Personal account"),{target:{value:"ms"}});expect(mocks.post).not.toHaveBeenCalled();fireEvent.click(screen.getByText("Load task lists"));await screen.findByText("My list");fireEvent.change(screen.getByLabelText("Task list"),{target:{value:"list"}});fireEvent.click(screen.getByText("Refresh tasks"));expect(await screen.findByText("Literal <img>")).toBeInTheDocument();expect(screen.getByText("<script>bad</script>").querySelector("script")).toBeNull();expect(screen.getByText(/stale/i)).toBeInTheDocument();expect(screen.getByText(/2026-11-06/)).toBeInTheDocument();});
+});

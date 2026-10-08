@@ -1,6 +1,6 @@
 import styles from "./EzraMail.module.css";
 
-const publicRepository = "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail-Self-Hosted";
+const publicRepository = "https://github.com/R3dTh3Ging3r-s-Creations/Ezra-Mail";
 
 export function OpenSourceNotice() {
   return (

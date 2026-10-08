@@ -1,0 +1,49 @@
+# Template only. Replace REVISION with the qualified release and TUNNEL_ID with
+# the owner-created private tunnel ID before systemd-analyze verify/install.
+[Unit]
+Description=Ezra Mail private cloud MCP tunnel
+Wants=network-online.target
+After=network-online.target
+ConditionPathIsDirectory=/APP_PRIVATE_PATH
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Type=simple
+User=ezra-mcp
+Group=ezra-mcp
+WorkingDirectory=/opt/ezra-mail-cloud-mcp/releases/REVISION
+ExecStart=/opt/ezra-mail-cloud-mcp/tunnel-client-runtime run --control-plane.tunnel-id=TUNNEL_ID --control-plane.api-key=file:%d/openai-runtime-key "--mcp.command=/usr/local/bin/node /opt/ezra-mail-cloud-mcp/releases/REVISION/bridge.cjs" --health.listen-addr=127.0.0.1:0 --log.level=info --log.format=json
+LoadCredentialEncrypted=ezra-agent-key:/etc/credstore.encrypted/ezra-mail-agent-key
+LoadCredentialEncrypted=openai-runtime-key:/etc/credstore.encrypted/ezra-mail-openai-runtime-key
+UnsetEnvironment=NODE_OPTIONS NODE_PATH NODE_TLS_REJECT_UNAUTHORIZED NODE_EXTRA_CA_CERTS LD_PRELOAD LD_LIBRARY_PATH OPENAI_API_KEY CONTROL_PLANE_API_KEY
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+# REQUIRED: replace APP_PRIVATE_PATH with the absolute application directory,
+# and add every separate provider-token/database/backup directory on this host.
+# This required path intentionally prevents startup before operator configuration.
+InaccessiblePaths=/APP_PRIVATE_PATH
+LimitCORE=0
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

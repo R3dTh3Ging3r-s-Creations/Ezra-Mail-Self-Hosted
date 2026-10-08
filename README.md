@@ -53,6 +53,19 @@ Continue with configuration, build and first-owner setup in the installation
 guide before starting the worker. Guided Windows and Ubuntu installers are
 included for evaluation; their broader installation acceptance is still open.
 
+## Use Ezra from a conversation
+
+The personal MCP integration connects a privately hosted Ezra installation to a
+normal ChatGPT conversation. In the maintainer's October 8 acceptance run, both
+Gmail and personal Microsoft calendars passed create, title edit and delete;
+Microsoft To Do passed create, title edit and completion. Mail search, pagination,
+provider message reads, calendar reads and private task-list reads also passed.
+
+This is an advanced integration with installation-specific setup, scoped access
+and provider qualification. It is not a shared service or a one-click public
+plugin. Read the [personal plugin guide](docs/PERSONAL_PLUGIN.md) for the current
+setup boundary, data flow, supported actions and remaining work.
+
 ## Where data goes
 
 Mail, calendar records, credentials and attachments belong to your installation,

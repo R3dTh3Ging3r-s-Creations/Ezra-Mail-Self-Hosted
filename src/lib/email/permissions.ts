@@ -35,13 +35,10 @@ export async function getProviderPermissions(input: { workspaceId?: string } = {
      ORDER BY a.provider DESC, a.label ASC`,
     account ? [account.accountId, account.provider] : provider === "all" ? [] : [provider],
   );
-  const [gmailCapabilities, integrationRows] = await Promise.all([
-    getGmailAuthorizationCapabilities(),
-    execute(
+  const integrationRows = await execute(
       `SELECT account_id, feature, access, status, last_connected_at, last_error, updated_at
        FROM account_integrations`,
-    ),
-  ]);
+    );
   const integrations = new Map<string, IntegrationRow[]>();
   for (const row of integrationRows.rows) {
     const accountId = String(row.account_id);
@@ -57,7 +54,7 @@ export async function getProviderPermissions(input: { workspaceId?: string } = {
     integrations.set(accountId, items);
   }
   const accounts = await Promise.all(rows.rows.map((row) =>
-    permissionAccount(row, integrations.get(String(row.id)) || [], gmailCapabilities.modify),
+    permissionAccount(row, integrations.get(String(row.id)) || []),
   ));
   const summary = {
     accounts: accounts.length,
@@ -78,11 +75,12 @@ export async function getProviderPermissions(input: { workspaceId?: string } = {
 async function permissionAccount(
   row: Row,
   integrations: IntegrationRow[],
-  gmailModifyAuthorized: boolean,
 ): Promise<ProviderPermissionAccount> {
   const provider = providerOrNull(row.provider) || "gmail";
   const accountId = String(row.id);
   const accountStatus = accountStatusOrDefault(row.status);
+  const gmailCapabilities = provider === "gmail" ? await getGmailAuthorizationCapabilities(String(row.email)) : null;
+  const gmailModifyAuthorized = gmailCapabilities?.modify === true;
   const microsoftAccess = provider === "microsoft"
     ? await getServiceState(`microsoft_access:${String(row.email).toLowerCase()}`)
     : null;
@@ -93,10 +91,12 @@ async function permissionAccount(
   const calendarError = row.calendar_error ? String(row.calendar_error) : null;
   const features = [
     mailReadFeature(provider, accountStatus, row),
-    mailActionsFeature(provider, accountStatus, gmailModifyAuthorized, microsoftAccess),
-    sendFeature(provider, accountStatus, gmailModifyAuthorized, microsoftAccess, microsoftScopes),
+    mailActionsFeature(provider, accountStatus, gmailModifyAuthorized, microsoftScopes),
+    sendFeature(provider, accountStatus, gmailCapabilities?.send === true, microsoftAccess, microsoftScopes),
     calendarReadFeature(provider, accountStatus, calendarIntegration, row),
-    calendarWriteFeature(provider, accountStatus, calendarIntegration, row),
+    calendarWriteFeature(provider, accountStatus, calendarIntegration, row,
+      provider === "gmail" ? gmailCapabilities?.calendarWrite === true : microsoftScopes.some(s => s.toLowerCase() === "calendars.readwrite"),
+      provider === "gmail" ? gmailCapabilities?.known === true : microsoftScopes.length > 0),
   ];
   const tokenStatus = tokenStatusFor(provider, accountStatus, microsoftAccess, gmailModifyAuthorized, calendarIntegration);
   const lastError = [
@@ -145,7 +145,7 @@ function mailActionsFeature(
   provider: AccountProvider,
   accountStatus: ProviderPermissionAccount["accountStatus"],
   gmailModifyAuthorized: boolean,
-  microsoftAccess: string | null,
+  microsoftScopes: string[],
 ): ProviderPermissionFeature {
   if (accountStatus !== "connected") {
     return feature("mail_actions", "Mail actions", accountStatus === "error" ? "error" : "needs_setup", "none", "Mail actions need a connected account.", null, null);
@@ -163,15 +163,15 @@ function mailActionsFeature(
       null,
     );
   }
-  const writable = microsoftAccess === "maintenance" || microsoftAccess === "calendar" || microsoftAccess === "send" || microsoftAccess === "full";
+  const writable = microsoftScopes.some(scope => scope.toLowerCase() === "mail.readwrite");
   return feature(
     "mail_actions",
     "Mail actions",
-    writable ? "connected" : "read_only",
+    writable ? "connected" : microsoftScopes.length ? "read_only" : "unknown",
     writable ? "write" : "read",
     writable
       ? "Microsoft Mail.ReadWrite access is available for mark read, trash, junk, and maintenance actions."
-      : "Hotmail is connected for reading only. Reconnect Hotmail with mail actions access for provider writes.",
+      : "Microsoft Mail.ReadWrite permission has not been verified for this account.",
     null,
     null,
   );
@@ -191,11 +191,11 @@ function sendFeature(
     return feature(
       "send",
       "Send",
-      "connected",
-      "write",
+      gmailModifyAuthorized ? "connected" : "unknown",
+      gmailModifyAuthorized ? "write" : "none",
       gmailModifyAuthorized
         ? "Gmail exact-review sending is available through Outbox after explicit approval."
-        : "Gmail exact-review sending is available through Outbox; reconnect Gmail if the provider reports a send-scope error.",
+        : "Gmail send permission has not been verified for this account.",
       null,
       null,
     );
@@ -205,11 +205,11 @@ function sendFeature(
   return feature(
     "send",
     "Send",
-    connected ? "connected" : "needs_setup",
+    connected ? "connected" : microsoftScopes.length ? "needs_setup" : "unknown",
     connected ? "write" : "none",
     connected
       ? "Microsoft Mail.Send access is available for exact-review Hotmail sends."
-      : "Reconnect Hotmail with Send access before approved Hotmail drafts can leave Outbox.",
+      : "Microsoft Mail.Send permission has not been verified for this account.",
     null,
     null,
   );
@@ -253,15 +253,17 @@ function calendarWriteFeature(
   accountStatus: ProviderPermissionAccount["accountStatus"],
   integration: IntegrationRow | null,
   row: Row,
+  writable: boolean,
+  known: boolean,
 ): ProviderPermissionFeature {
-  const access = integration?.access || "none";
   const status = calendarStatus(accountStatus, integration, row);
+  const enabled = accountStatus === "connected" && writable;
   return feature(
     "calendar_write",
     "Calendar write",
-    status === "connected" && access === "write" ? "connected" : status,
-    access === "write" ? "write" : "none",
-    status === "connected" && access === "write"
+    status === "error" ? "error" : enabled ? "connected" : known ? "read_only" : "unknown",
+    enabled && status !== "error" ? "write" : "none",
+    enabled
       ? `${providerLabel(provider)} calendar event creation is available after explicit approval.`
       : status === "error"
         ? (row.calendar_error ? String(row.calendar_error) : integration?.lastError || "Calendar write access reported an error.")

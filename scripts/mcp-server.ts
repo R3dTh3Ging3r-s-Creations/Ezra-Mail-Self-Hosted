@@ -12,9 +12,16 @@ import {
   switchModel,
 } from "../src/lib/email/service";
 
-loadEnvConfig(process.cwd());
+loadEnvConfig(process.cwd(), undefined, { info: () => undefined, error: () => process.stderr.write("Ezra Mail environment configuration could not be loaded.\n") });
 
 async function main() {
+  const args = process.argv.slice(2);
+  if (args.length === 1 && args[0] === "--personal") {
+    const { createPersonalAgentServer } = await import("../src/lib/email/agent-mcp");
+    await createPersonalAgentServer().connect(new StdioServerTransport());
+    return;
+  }
+  if (args.length) throw new Error("Unsupported MCP startup profile.");
   const server = new McpServer({
     name: "ezra-email",
     version: "1.0.0",
@@ -107,7 +114,7 @@ async function main() {
   await server.connect(new StdioServerTransport());
 }
 
-void main().catch((error) => {
-  process.stderr.write(error instanceof Error ? error.stack || error.message : String(error));
+void main().catch(() => {
+  process.stderr.write("Ezra Mail MCP startup failed. Check the approved local configuration.\n");
   process.exitCode = 1;
 });

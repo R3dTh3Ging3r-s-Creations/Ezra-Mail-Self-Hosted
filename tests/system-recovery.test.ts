@@ -198,3 +198,46 @@ describe("Safe Recovery operations", () => {
     expect(names.filter((name) => name.includes("-weekly-") && name.endsWith(".manifest.json")).length).toBe(8);
   });
 });
+
+describe("restored agent access", () => {
+  it("rejects the active database including aliases", async () => {
+    const directory = path.join(process.cwd(), "data", "tests", `agent-restore-active-${randomUUID()}`);
+    await fs.mkdir(directory, { recursive: true });
+    const active = path.join(directory, "active.sqlite");
+    configureEmailDatabaseForTests(`file:${active.replace(/\\/g, "/")}`);
+    try {
+      await execute("SELECT 1");
+      const recovery = await import("@/lib/email/system-recovery");
+      await expect(recovery.prepareRestoredAgentAccess(active)).rejects.toThrow(/active database/i);
+      const alias = path.join(directory, "alias.sqlite");
+      await fs.link(active, alias);
+      await expect(recovery.prepareRestoredAgentAccess(alias)).rejects.toThrow(/active database/i);
+    } finally { await closeEmailDatabaseForTests(); }
+  });
+  it("backup_then_revoke_then_restore disables old credentials and preserves provenance", async () => {
+    const { createClient } = await import("@libsql/client");
+    const directory = path.join(process.cwd(), "data", "tests", `agent-restore-${randomUUID()}`);
+    await fs.mkdir(directory, { recursive: true });
+    const active = path.join(directory, "active.sqlite");
+    const staged = path.join(directory, "staged.sqlite");
+    configureEmailDatabaseForTests(`file:${active.replace(/\\/g, "/")}`);
+    try {
+      await execute("SELECT 1");
+      await execute("INSERT INTO agent_grants(key_id,secret_digest,grant_json,revision,created_at,expires_at) VALUES ('synthetic','fixture-digest','{}',1,'2026-10-01T00:00:00Z','2099-01-01T00:00:00Z')");
+      await execute("INSERT INTO agent_key_bindings VALUES ('synthetic',1,'request','payload','legacy','historical-operation')");
+      await execute("PRAGMA wal_checkpoint(TRUNCATE)");
+      await fs.copyFile(active, staged);
+      await execute("UPDATE agent_grants SET revoked_at='2026-10-05T00:00:00Z'");
+      const recovery = await import("@/lib/email/system-recovery");
+      expect(await recovery.prepareRestoredAgentAccess(staged)).toEqual({ revokedKeys: 1 });
+      expect(await recovery.prepareRestoredAgentAccess(staged)).toEqual({ revokedKeys: 0 });
+      const restored = createClient({ url: `file:${staged.replace(/\\/g, "/")}` });
+      try {
+        const row = (await restored.execute("SELECT * FROM agent_grants")).rows[0];
+        expect(row.revoked_at).toBeTruthy();
+        expect(row.secret_digest).toBe("fixture-digest");
+        expect((await restored.execute("SELECT operation_id FROM agent_key_bindings")).rows).toEqual([{ operation_id: "historical-operation" }]);
+      } finally { restored.close(); }
+    } finally { await closeEmailDatabaseForTests(); }
+  });
+});

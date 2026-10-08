@@ -3,6 +3,8 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { EZRA_MAIL_PRODUCT_VERSION } from "@/components/ezra/version";
 
+const privateExecutionLogPath = path.join(process.cwd(), "docs", "VERSION_EXECUTION_LOG.md");
+const isPrivateWorkspace = existsSync(privateExecutionLogPath);
 const publicRoadmapPath = existsSync(path.join(process.cwd(), "public-release", "EZRA_MAIL_ROADMAP.md"))
   ? path.join(process.cwd(), "public-release", "EZRA_MAIL_ROADMAP.md")
   : path.join(process.cwd(), "docs", "EZRA_MAIL_ROADMAP.md");
@@ -50,8 +52,53 @@ describe("Ezra Mail release version", () => {
     expect(publicRoadmap).not.toMatch(/- \[ \] \*\*v0\.7\.5\b/);
     expect(uiAuditMilestone).toBeGreaterThan(-1);
     expect(generalAvailabilityMilestone).toBeGreaterThan(uiAuditMilestone);
-    expect(publicRoadmap).toContain("experimental source release");
-    expect(publicRoadmap).not.toMatch(/actions\/runs\/|\b[a-f0-9]{40}\b|\.sqlite/);
+    expect(publicRoadmap).toContain("d162e55");
+    expect(publicRoadmap).toContain("32679351293");
+    expect(publicRoadmap).toContain("32679404193");
+    expect(publicRoadmap).toContain("4f533de");
+    expect(publicRoadmap).toContain("32707261292");
+    expect(publicRoadmap).toContain("32707260801");
   });
 
+  it.skipIf(!isPrivateWorkspace)("records the deployed v0.7.7 production checkpoint", () => {
+    const executionLog = readFileSync(privateExecutionLogPath, "utf8");
+
+    expect(executionLog).toMatch(/\*\*Active version:\*\* v0\.8\.0\b/);
+    expect(executionLog).toMatch(/\*\*Last exact repository-recorded Thing1 revision:\*\* v0\.7\.7\b[^\n]*`4f533de`/);
+    expect(executionLog).toMatch(/exact\s+deployed revision and matching health evidence were not recorded/);
+    expect(executionLog).toContain("32707261292");
+    expect(executionLog).toContain("32707260801");
+    expect(executionLog).toContain("ezra-mail-20260824T090244Z.sqlite");
+    expect(executionLog).toContain("95a451fc67d77fb619fbc3d89046cc87403cbcda5ad4e2ab3d41778a5ff3a82b");
+    expect(executionLog).not.toContain("does not qualify the corrected bytes");
+    expect(executionLog).not.toContain("refreshed final evidence remains required");
+    expect(executionLog).not.toContain("no combined-tree export/test has run");
+    expect(executionLog).not.toContain("combined-tree public-mirror qualification remains required");
+    expect(executionLog).not.toMatch(/v0\.7\.7 is not deployed to\s+Thing1/i);
+    expect(executionLog).toMatch(/no\s+live-provider\s+mutation/i);
+    expect(executionLog).toMatch(/Windows gate\s+was\s+deferred and never passed/);
+    expect(executionLog).toMatch(/Ubuntu rehearsal remains unperformed/);
+  });
+
+  it.skipIf(!isPrivateWorkspace)("marks the detailed safe-preview slice locally complete", () => {
+    const roadmap = readFileSync(path.join(process.cwd(), "docs", "EZRA_MAIL_ROADMAP.md"), "utf8");
+    const previewSection = roadmap.match(/## Safe In-App Attachment Viewing\s+([\s\S]*?)(?=\n## )/)?.[1] ?? "";
+
+    expect(previewSection).toContain("v0.7.7 local implementation is complete.");
+    expect(previewSection).not.toContain("v0.7.7 is in progress.");
+  });
+
+  it.skipIf(!isPrivateWorkspace)("records the approved clean-history reconciliation provenance", () => {
+    const plan = readFileSync(
+      path.join(process.cwd(), "docs", "superpowers", "plans", "2026-08-22-v0.7.7-release-reconciliation.md"),
+      "utf8",
+    );
+    const executionLog = readFileSync(privateExecutionLogPath, "utf8");
+
+    for (const record of [plan, executionLog]) {
+      expect(record).toContain("Clean-history reconstruction");
+      expect(record).toMatch(/`c17713c` is not an ancestor/);
+      expect(record).toMatch(/not a merge commit/i);
+    }
+  });
 });

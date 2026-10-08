@@ -46,3 +46,6 @@ installer/output
 *.pfx
 .DS_Store
 Thumbs.db
+
+scripts/ezra-agent-activation.json
+plugins/ezra-mail/scripts/ezra-agent-activation.json

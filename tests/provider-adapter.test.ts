@@ -280,7 +280,7 @@ describe("provider maintenance adapter", () => {
       .resolves.toMatchObject({ provider: "microsoft", userCode: "ABCD", expiresIn: 900 });
 
     expect(providerCalls.isMicrosoftAuthConfigured).toHaveBeenCalledOnce();
-    expect(providerCalls.startMicrosoftDeviceAuthorization).toHaveBeenCalledWith("full");
+    expect(providerCalls.startMicrosoftDeviceAuthorization).toHaveBeenCalledWith("full", undefined);
   });
 
   it("keeps Gmail authorization unavailable when the local bridge is missing", async () => {
